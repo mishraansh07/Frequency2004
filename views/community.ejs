@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= community.name %> — Yeh Un Dino Ki Baat Hai Social</title>
+  <link rel="stylesheet" href="/css/retro.css">
+  <style>
+    body {
+      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container">
+    <div class="xp-window">
+      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+        <span class="xp-titlebar__title">🏘️ Community — <%= community.name %></span>
+        <div class="xp-titlebar__buttons">
+          <button class="xp-titlebar__btn">_</button>
+          <button class="xp-titlebar__btn">□</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+        </div>
+      </div>
+      <div class="xp-window__body" style="background: #fff;">
+        
+        <!-- Community Banner Details -->
+        <div class="profile-header" style="background: #FFF0F5; border-color: #ED1A7B;">
+          <img src="<%= community.avatar_url %>" alt="" class="profile-avatar" style="border-radius: 4px;">
+          <div class="profile-info">
+            <h1 style="color: #ED1A7B;"><%= community.name %></h1>
+            <div class="profile-stats">
+              <span>Category: <strong><%= community.category %></strong></span>
+              <span>Members: <strong><%= memberCount %></strong></span>
+              <span>Created: <strong><%= new Date(community.created_at).toLocaleDateString() %></strong></span>
+            </div>
+            <p style="font-size: 13px; color: #333; margin: 8px 0;"><%= community.description %></p>
+
+            <div class="profile-actions" style="margin-top: 12px;">
+              <% if (currentUser) { %>
+                <% if (isMember) { %>
+                  <span class="xp-btn xp-btn--green" style="cursor: default;">Joined ✓</span>
+                  <form method="POST" action="/communities/<%= community.id %>/leave" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Are you sure you want to leave this community?">Leave Group</button>
+                  </form>
+                <% } else { %>
+                  <form method="POST" action="/communities/<%= community.id %>/join" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--primary">➕ Join Community</button>
+                  </form>
+                <% } %>
+              <% } %>
+              <a href="/communities" class="xp-btn">← Back to Communities</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="layout-two-col">
+          <!-- Left: Discussion Forum -->
+          <div class="layout-two-col__main">
+            
+            <!-- Create a New Topic Form -->
+            <% if (currentUser && isMember) { %>
+              <div class="xp-fieldset">
+                <legend>✏️ Post a New Topic</legend>
+                <form method="POST" action="/communities/<%= community.id %>/post">
+                  <div class="form-group mb-sm">
+                    <input type="text" name="title" class="xp-input w-100" placeholder="Topic Title..." required>
+                  </div>
+                  <div class="form-group mb-sm">
+                    <textarea name="content" class="xp-textarea w-100" rows="3" placeholder="Write something to discuss..." required></textarea>
+                  </div>
+                  <button type="submit" class="xp-btn xp-btn--primary">Post Topic</button>
+                </form>
+              </div>
+            <% } else if (currentUser && !isMember) { %>
+              <div class="outset-panel text-center text-small text-muted" style="padding: 10px; border-color: #ED1A7B;">
+                🔒 You must join this community to start or reply to topics.
+              </div>
+            <% } %>
+
+            <!-- Forum Topics list -->
+            <div class="xp-fieldset">
+              <legend>💬 Discussion Forum</legend>
+              <% if (posts && posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                  <div class="post-item" style="border-bottom: 2px solid #f0ccd7; padding-bottom: 12px; margin-bottom: 12px;">
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                      <img src="<%= post.author_avatar %>" alt="" style="width: 32px; height: 32px; border-radius: 4px;">
+                      <div>
+                        <a href="/communities/<%= community.id %>/post/<%= post.id %>" class="post-item__title" style="color: #ED1A7B; font-weight: bold; font-size: 14px; text-decoration: none;">
+                          <%= post.title || 'Untitled Post' %>
+                        </a>
+                        <div class="post-item__meta" style="font-size: 11px; color: #666; margin-top: 2px;">
+                          Posted by <a href="/profile/<%= post.author_username %>"><%= post.author_display_name %></a> 
+                          on <%= new Date(post.created_at).toLocaleString() %>
+                        </div>
+                        <div class="post-item__content" style="margin-top: 8px; font-size: 13px; line-height: 1.4; color: #333; word-break: break-word;">
+                          <%= post.content %>
+                        </div>
+                        <div class="mt-sm">
+                          <a href="/communities/<%= community.id %>/post/<%= post.id %>" style="font-size: 12px; font-weight: bold; color: #4A7EBB;">
+                            💬 View discussion / replies →
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <p class="text-muted text-small text-center" style="padding: 20px;">No topics discussed yet. Be the first to start a conversation!</p>
+              <% } %>
+            </div>
+
+          </div>
+
+          <!-- Right: Members Sidebar -->
+          <div class="layout-two-col__sidebar" style="width: 240px;">
+            <div class="outset-panel" style="background: #FFF0F5; border-color: #ED1A7B;">
+              <div class="section-header section-header--pink">🏘️ Members (<%= memberCount %>)</div>
+              
+              <div class="top8-grid" style="grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 4px;">
+                <% members.forEach(member => { %>
+                  <div class="top8-card" style="padding: 4px; background: #fff; border-color: #f0ccd7;">
+                    <img src="<%= member.avatar_url %>" alt="" style="width: 40px; height: 40px; border-radius: 4px;">
+                    <a href="/profile/<%= member.username %>" style="font-size: 10px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ED1A7B;">
+                      <%= member.display_name %>
+                    </a>
+                    <span class="text-muted" style="font-size: 9px; display: block;"><%= member.role %></span>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+</body>
+</html>

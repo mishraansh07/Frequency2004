@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — Yeh Un Dino Ki Baat Hai Social</title>
+  <meta name="description" content="View <%= profileUser.display_name %>'s retro profile on Yeh Un Dino Ki Baat Hai Social.">
+  <link rel="stylesheet" href="/css/retro.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container">
+    <div class="xp-window">
+
+      <!-- ══ TITLEBAR ══ -->
+      <div class="xp-titlebar">
+        <span class="xp-titlebar__title">👤 <%= profileUser.display_name %>'s Profile — [<%= profileUser.username %>]</span>
+        <div class="xp-titlebar__buttons">
+          <button class="xp-titlebar__btn">_</button>
+          <button class="xp-titlebar__btn">□</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+        </div>
+      </div>
+
+      <div class="xp-window__body profile-content">
+
+        <!-- ══ PROFILE HEADER ══ -->
+        <div class="profile-header">
+          <img src="<%= profileUser.avatar_url %>" alt="<%= profileUser.display_name %>" class="profile-avatar">
+
+          <div class="profile-info">
+            <h1><%= profileUser.display_name %></h1>
+            <div class="profile-headline"><%= profileUser.headline %></div>
+
+            <div class="profile-stats">
+              <span>📍 <strong><%= profileUser.location || 'Somewhere on the internet' %></strong></span>
+              <span>👤 <strong><%= profileUser.gender || '?' %></strong></span>
+              <span>🎂 <strong><%= profileUser.age || '?' %></strong> years old</span>
+            </div>
+
+            <div class="profile-mood"><%= profileUser.mood %></div>
+
+            <% if (degrees !== null && degrees !== undefined && !isOwner) { %>
+              <div class="degrees-badge mt-sm">
+                🔗 <%= degrees === 0 ? 'This is you!' : degrees + ' degree' + (degrees > 1 ? 's' : '') + ' of separation' %>
+              </div>
+            <% } %>
+
+            <% if (mutualCrush) { %>
+              <div class="mutual-crush mt-sm">💕 It's a MUTUAL CRUSH! 💕 You both like each other!</div>
+            <% } %>
+
+            <!-- Profile Actions -->
+            <div class="profile-actions mt-sm">
+              <% if (currentUser && !isOwner) { %>
+                <% if (isFriend) { %>
+                  <span class="xp-btn xp-btn--green" style="cursor:default;">✅ Friends!</span>
+                  <form method="POST" action="/friends/remove/<%= profileUser.id %>" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Remove this friend?">❌ Unfriend</button>
+                  </form>
+                <% } else if (friendRequestSent) { %>
+                  <span class="xp-btn" style="cursor:default;">⏳ Request Sent</span>
+                <% } else if (friendRequestReceived) { %>
+                  <form method="POST" action="/friends/accept/<%= profileUser.id %>" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--green">✅ Accept Request</button>
+                  </form>
+                  <form method="POST" action="/friends/reject/<%= profileUser.id %>" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--danger">❌ Decline</button>
+                  </form>
+                <% } else { %>
+                  <form method="POST" action="/friends/request/<%= profileUser.id %>" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--primary">➕ Add as Friend</button>
+                  </form>
+                <% } %>
+                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">📒 Scrapbook</a>
+              <% } %>
+              <% if (isOwner) { %>
+                <a href="/profile/<%= profileUser.username %>/edit" class="xp-btn xp-btn--primary" style="text-decoration:none;">✏️ Edit My Profile</a>
+                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">📒 My Scrapbook</a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ TWO COLUMN BODY ══ -->
+        <div class="layout-two-col">
+
+          <!-- ─── LEFT SIDEBAR ─── -->
+          <div class="layout-two-col__sidebar">
+
+            <!-- Member Info -->
+            <div class="outset-panel">
+              <div class="section-header">📋 Member Info</div>
+              <div class="text-small" style="line-height: 2;">
+                <div>📅 Member since <%= new Date(profileUser.created_at).toLocaleDateString() %></div>
+              </div>
+            </div>
+
+            <!-- Ratings (Orkut-style) -->
+            <div class="outset-panel">
+              <div class="section-header section-header--pink">⭐ Ratings</div>
+
+              <div style="font-size:12px;">
+                <% [
+                  { label: 'Trustworthy', key: 'avg_trustworthy' },
+                  { label: 'Cool',        key: 'avg_cool' },
+                  { label: 'Sexy',        key: 'avg_sexy' }
+                ].forEach(r => { %>
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+                  <span style="width:76px; flex-shrink:0;"><%= r.label %>:</span>
+                  <div class="rating-bar" style="flex:1;">
+                    <div class="rating-bar__fill" style="width:<%= avgRatings[r.key] ? (avgRatings[r.key] / 3 * 100) : 0 %>%;"></div>
+                  </div>
+                  <span style="width:30px; text-align:right; color:var(--xp-blue); font-weight:bold;">
+                    <%= avgRatings[r.key] ? avgRatings[r.key].toFixed(1) : '—' %>/3
+                  </span>
+                </div>
+                <% }) %>
+              </div>
+
+              <% if (currentUser && !isOwner) { %>
+                <hr style="border:1px groove #999; margin:8px 0;">
+                <form method="POST" action="/profile/<%= profileUser.username %>/rate" style="font-size:11px;">
+                  <% [
+                    { label: 'Trustworthy', name: 'trustworthy' },
+                    { label: 'Cool',        name: 'cool' },
+                    { label: 'Sexy',        name: 'sexy' }
+                  ].forEach(f => { %>
+                  <div class="mb-sm" style="display:flex; align-items:center; gap:6px;">
+                    <label style="width:76px; flex-shrink:0;"><%= f.label %>:</label>
+                    <select name="<%= f.name %>" class="xp-select" style="width:50px;">
+                      <% [0,1,2,3].forEach(v => { %>
+                        <option value="<%= v %>" <%= myRating && myRating[f.name] === v ? 'selected' : '' %>><%= v %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <% }) %>
+                  <div class="mb-sm">
+                    <label><input type="checkbox" name="is_fan" value="1" <%= myRating && myRating.is_fan ? 'checked' : '' %>> 🌟 I'm a fan!</label>
+                  </div>
+                  <div class="mb-sm">
+                    <label><input type="checkbox" name="is_crush" value="1" <%= myRating && myRating.is_crush ? 'checked' : '' %>> 💘 Crush!</label>
+                  </div>
+                  <button type="submit" class="xp-btn xp-btn--primary">Rate!</button>
+                </form>
+              <% } %>
+            </div>
+
+            <!-- Top Friends -->
+            <% if (top8 && top8.length > 0) { %>
+            <div class="outset-panel">
+              <div class="section-header">🏆 Top <%= top8.length %> Friends</div>
+              <div class="top8-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <% top8.forEach(f => { %>
+                  <div class="top8-card">
+                    <img src="<%= f.avatar_url %>" alt="<%= f.display_name %>">
+                    <a href="/profile/<%= f.username %>"><%= f.display_name %></a>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+            <% } %>
+          </div>
+
+          <!-- ─── RIGHT MAIN ─── -->
+          <div class="layout-two-col__main">
+
+            <!-- About Me -->
+            <div class="xp-window">
+              <div class="xp-titlebar">
+                <span class="xp-titlebar__title">📝 About <%= profileUser.display_name %></span>
+              </div>
+              <div class="xp-window__body">
+                <% if (profileUser.bio) { %>
+                  <div class="xp-fieldset">
+                    <legend>About Me</legend>
+                    <p style="font-size:13px;"><%= profileUser.bio %></p>
+                  </div>
+                <% } %>
+
+                <% if (profileUser.who_id_like_to_meet) { %>
+                  <div class="xp-fieldset">
+                    <legend>Who I'd Like to Meet</legend>
+                    <p style="font-size:13px;"><%= profileUser.who_id_like_to_meet %></p>
+                  </div>
+                <% } %>
+
+                <!-- Interests Table (Orkut/MySpace-style) -->
+                <% const interests = [
+                  { label: 'General',    val: profileUser.interests_general },
+                  { label: 'Music',      val: profileUser.interests_music },
+                  { label: 'Movies',     val: profileUser.interests_movies },
+                  { label: 'Television', val: profileUser.interests_tv },
+                  { label: 'Books',      val: profileUser.interests_books },
+                  { label: 'Heroes',     val: profileUser.interests_heroes }
+                ].filter(i => i.val); %>
+
+                <% if (interests.length > 0) { %>
+                  <table class="interests-table mt-sm">
+                    <% interests.forEach(i => { %>
+                    <tr>
+                      <td class="interests-table__label"><%= i.label %></td>
+                      <td class="interests-table__value"><%= i.val %></td>
+                    </tr>
+                    <% }) %>
+                  </table>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="xp-window mt-md">
+              <div class="xp-titlebar">
+                <span class="xp-titlebar__title">💬 Testimonials (<%= testimonials.length %>)</span>
+              </div>
+              <div class="xp-window__body">
+                <% if (testimonials && testimonials.length > 0) { %>
+                  <% testimonials.forEach(t => { %>
+                    <div class="testimonial-item">
+                      <p>"<%= t.content %>"</p>
+                      <div class="testimonial-item__author">
+                        — <a href="/profile/<%= t.author_username %>"><%= t.author_display_name %></a>
+                        <span class="text-muted text-small"> · <%= new Date(t.created_at).toLocaleDateString() %></span>
+                      </div>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <p class="text-muted text-small">No testimonials yet.</p>
+                <% } %>
+
+                <% if (currentUser && !isOwner) { %>
+                  <hr style="border:1px groove #999; margin:12px 0;">
+                  <form method="POST" action="/profile/<%= profileUser.username %>/testimonial">
+                    <label style="font-size:12px; font-weight:bold;">✍️ Write a testimonial:</label>
+                    <textarea name="content" class="xp-textarea w-100 mt-sm" rows="3"
+                      placeholder="Write something nice about <%= profileUser.display_name %>..." required></textarea>
+                    <button type="submit" class="xp-btn xp-btn--primary mt-sm">Submit Testimonial</button>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Recent Scraps -->
+            <div class="xp-window mt-md">
+              <div class="xp-titlebar">
+                <span class="xp-titlebar__title">📒 Recent Scraps</span>
+              </div>
+              <div class="xp-window__body">
+                <% if (scraps && scraps.length > 0) { %>
+                  <% scraps.forEach(scrap => { %>
+                    <div class="scrap-item">
+                      <img src="<%= scrap.author_avatar %>" alt="" class="scrap-item__avatar">
+                      <div class="scrap-item__body">
+                        <span class="scrap-item__author">
+                          <a href="/profile/<%= scrap.author_username %>"><%= scrap.author_display_name %></a>
+                        </span>
+                        <span class="scrap-item__date"><%= new Date(scrap.created_at).toLocaleDateString() %></span>
+                        <div class="scrap-item__content"><%= scrap.content %></div>
+                      </div>
+                    </div>
+                  <% }) %>
+                  <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn mt-sm" style="text-decoration:none;">View Full Scrapbook →</a>
+                <% } else { %>
+                  <p class="text-muted text-small">No scraps yet!</p>
+                <% } %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Yeh Un Dino Ki Baat Hai FM - A nostalgic retro FM radio application inspired by Windows XP and early 2000s web aesthetics">
+    <title>Yeh Un Dino Ki Baat Hai FM — Retro Radio</title>
+    <style>
+        /* ============================================================
+           CSS VARIABLES — Retro Color Palette & Design Tokens
+           ============================================================ */
+        :root {
+            /* Metallic Grays */
+            --metal-lightest: #e8e8e8;
+            --metal-light: #d4d0c8;
+            --metal-mid: #bfbbb4;
+            --metal-dark: #808080;
+            --metal-darkest: #404040;
+            --metal-shadow: #2a2a2a;
+
+            /* Windows XP Blues */
+            --xp-blue-light: #3a6ea5;
+            --xp-blue: #0a246a;
+            --xp-blue-dark: #08204e;
+            --xp-title-gradient-start: #0054e3;
+            --xp-title-gradient-mid: #2480f0;
+            --xp-title-gradient-end: #0054e3;
+
+            /* LCD / Display */
+            --lcd-bg: #0a1a0a;
+            --lcd-dark: #061206;
+            --lcd-green: #00ff41;
+            --lcd-green-dim: #006b1a;
+            --lcd-green-glow: rgba(0, 255, 65, 0.3);
+            --lcd-amber: #ffb000;
+            --lcd-red: #ff3333;
+
+            /* Shoutbox */
+            --chat-bg: #ffffff;
+            --chat-border: #7f9db9;
+            --chat-header: #ece9d8;
+
+            /* Body */
+            --body-bg: #3a6ea5;
+            --desktop-bg: #008080;
+
+            /* Fonts */
+            --font-system: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+            --font-lcd: 'Courier New', 'Lucida Console', monospace;
+            --font-pixel: 'Courier New', monospace;
+
+            /* Borders (XP-style bevel) */
+            --bevel-light: #ffffff;
+            --bevel-dark: #808080;
+            --bevel-darkest: #404040;
+        }
+
+        /* ============================================================
+           RESET & BASE STYLES
+           ============================================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            image-rendering: pixelated;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
+
+        body {
+            font-family: var(--font-system);
+            font-size: 11px;
+            background: var(--desktop-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ============================================================
+           SCANLINE OVERLAY — CRT Effect
+           ============================================================ */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+            animation: crtFlicker 8s infinite;
+        }
+
+        @keyframes crtFlicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.85; }
+            94% { opacity: 1; }
+            96% { opacity: 0.90; }
+            97% { opacity: 1; }
+        }
+
+        /* ============================================================
+           DESKTOP WALLPAPER PATTERN (tiled retro feel)
+           ============================================================ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 30% 20%, #3a7abd 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, #235c8e 0%, transparent 50%),
+                linear-gradient(135deg, #245a8c 0%, #3a7abd 25%, #1d5280 50%, #3678ad 75%, #245a8c 100%);
+        }
+
+        /* ============================================================
+           MAIN APPLICATION CONTAINER
+           ============================================================ */
+        .app-container {
+            display: flex;
+            gap: 12px;
+            max-width: 1100px;
+            width: 100%;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           WINDOWS XP WINDOW FRAME — Reusable Component
+           ============================================================ */
+        .xp-window {
+            border: 2px solid var(--metal-dark);
+            border-radius: 8px 8px 4px 4px;
+            box-shadow:
+                0 0 0 1px var(--metal-darkest),
+                2px 2px 8px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: var(--metal-light);
+        }
+
+        .xp-titlebar {
+            background: linear-gradient(180deg,
+                var(--xp-title-gradient-start) 0%,
+                var(--xp-title-gradient-mid) 40%,
+                var(--xp-title-gradient-start) 50%,
+                var(--xp-title-gradient-end) 100%
+            );
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            height: 28px;
+            user-select: none;
+        }
+
+        .xp-titlebar-text {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .xp-titlebar-buttons {
+            display: flex;
+            gap: 2px;
+        }
+
+        .xp-btn-minimize,
+        .xp-btn-maximize,
+        .xp-btn-close {
+            width: 21px;
+            height: 21px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .xp-btn-minimize {
+            background: linear-gradient(180deg, #3c8eef 0%, #2266c0 100%);
+        }
+        .xp-btn-maximize {
+            background: linear-gradient(180deg, #3c8eef 0%, #2266c0 100%);
+        }
+        .xp-btn-close {
+            background: linear-gradient(180deg, #e08356 0%, #c53a2a 50%, #b3311f 100%);
+        }
+
+        .xp-btn-minimize:hover, .xp-btn-maximize:hover {
+            background: linear-gradient(180deg, #5cacff 0%, #3388dd 100%);
+        }
+        .xp-btn-close:hover {
+            background: linear-gradient(180deg, #f09070 0%, #e04030 100%);
+        }
+
+        .xp-window-body {
+            padding: 8px;
+        }
+
+        /* ============================================================
+           LEFT PANEL — RETRO FM RADIO
+           ============================================================ */
+        .radio-panel {
+            width: 520px;
+            min-width: 320px;
+            flex-shrink: 0;
+        }
+
+        .radio-body {
+            background: linear-gradient(180deg,
+                #d6d2ca 0%,
+                #c8c4bb 15%,
+                #bab6ad 30%,
+                #c2beb5 50%,
+                #b0aca3 70%,
+                #a8a49b 85%,
+                #9e9a91 100%
+            );
+            padding: 16px;
+            border: 2px outset var(--metal-light);
+            position: relative;
+        }
+
+        /* Metallic noise texture overlay */
+        .radio-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* --- Radio Header --- */
+        .radio-header {
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .radio-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--metal-darkest);
+            text-shadow:
+                1px 1px 0 var(--metal-lightest),
+                -1px -1px 0 var(--metal-dark);
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .radio-title-hindi {
+            font-size: 13px;
+            color: #5a4a3a;
+            font-style: italic;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .radio-subtitle {
+            font-size: 10px;
+            color: var(--metal-dark);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        /* Decorative screw heads */
+        .screw {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ccc, #888 40%, #666 100%);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .screw::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 1px;
+            right: 1px;
+            height: 1.5px;
+            background: #555;
+            border-radius: 1px;
+        }
+
+        .screw-tl { top: 8px; left: 8px; }
+        .screw-tr { top: 8px; right: 8px; }
+        .screw-bl { bottom: 8px; left: 8px; }
+        .screw-br { bottom: 8px; right: 8px; }
+
+        /* --- LCD Display --- */
+        .lcd-container {
+            background: #1a1a1a;
+            border: 3px inset var(--metal-dark);
+            border-radius: 4px;
+            padding: 3px;
+            margin-bottom: 16px;
+            box-shadow:
+                inset 0 0 15px rgba(0, 0, 0, 0.8),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .lcd-screen {
+            background: var(--lcd-bg);
+            border: 1px solid #050f05;
+            border-radius: 2px;
+            padding: 12px 16px;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        /* Scanline effect on LCD */
+        .lcd-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 20, 0, 0.15) 1px,
+                rgba(0, 20, 0, 0.15) 2px
+            );
+        }
+
+        .lcd-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-family: var(--font-lcd);
+            font-size: 10px;
+            color: var(--lcd-green-dim);
+        }
+
+        .lcd-indicators {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .lcd-indicator {
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 1px 4px;
+            border: 1px solid var(--lcd-green-dim);
+            border-radius: 2px;
+            color: var(--lcd-green-dim);
+            transition: color 0.3s, border-color 0.3s, text-shadow 0.3s;
+        }
+
+        .lcd-indicator.active {
+            color: var(--lcd-green);
+            border-color: var(--lcd-green);
+            text-shadow: 0 0 6px var(--lcd-green-glow);
+        }
+
+        .lcd-indicator.live {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .lcd-signal {
+            font-size: 10px;
+            font-family: var(--font-lcd);
+        }
+
+        .lcd-signal-label {
+            color: var(--lcd-green-dim);
+            font-size: 8px;
+            margin-right: 3px;
+        }
+
+        .lcd-signal-bar {
+            color: var(--lcd-green);
+            text-shadow: 0 0 4px var(--lcd-green-glow);
+            letter-spacing: -1px;
+        }
+
+        .lcd-frequency-display {
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .lcd-frequency-number {
+            font-family: var(--font-lcd);
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--lcd-green);
+            text-shadow:
+                0 0 10px var(--lcd-green-glow),
+                0 0 20px var(--lcd-green-glow),
+                0 0 40px rgba(0, 255, 65, 0.15);
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        .lcd-frequency-unit {
+            font-family: var(--font-lcd);
+            font-size: 14px;
+            color: var(--lcd-green);
+            text-shadow: 0 0 6px var(--lcd-green-glow);
+            margin-left: 4px;
+            vertical-align: super;
+        }
+
+        .lcd-marquee-container {
+            overflow: hidden;
+            margin-top: 8px;
+            border-top: 1px solid #0a2a0a;
+            padding-top: 6px;
+        }
+
+        .lcd-marquee {
+            font-family: var(--font-lcd);
+            font-size: 11px;
+            color: var(--lcd-green);
+            text-shadow: 0 0 6px var(--lcd-green-glow);
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .lcd-station-name {
+            font-family: var(--font-lcd);
+            font-size: 12px;
+            color: var(--lcd-amber);
+            text-shadow: 0 0 8px rgba(255, 176, 0, 0.4);
+            text-align: center;
+            margin-top: 4px;
+            min-height: 16px;
+        }
+
+        /* --- Control Buttons --- */
+        .controls-section {
+            margin-bottom: 16px;
+        }
+
+        .controls-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--metal-darkest);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Chunky 3D media buttons */
+        .media-btn {
+            font-family: var(--font-system);
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 16px;
+            border: 2px outset var(--metal-light);
+            border-radius: 4px;
+            background: linear-gradient(180deg,
+                #ece9e0 0%,
+                #d4d0c8 30%,
+                #c0bcb4 70%,
+                #b4b0a8 100%
+            );
+            color: var(--metal-darkest);
+            cursor: pointer;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            box-shadow:
+                1px 1px 0 var(--bevel-light) inset,
+                -1px -1px 0 var(--bevel-dark) inset,
+                2px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.05s;
+            min-width: 70px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .media-btn:hover {
+            background: linear-gradient(180deg,
+                #f0ede5 0%,
+                #dbd7cf 30%,
+                #ccc8c0 70%,
+                #c0bcb4 100%
+            );
+        }
+
+        .media-btn:active,
+        .media-btn.pressed {
+            border-style: inset;
+            box-shadow:
+                -1px -1px 0 var(--bevel-light) inset,
+                1px 1px 0 var(--bevel-dark) inset,
+                inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 9px 15px 7px 17px;
+            background: linear-gradient(180deg,
+                #b4b0a8 0%,
+                #c0bcb4 30%,
+                #d4d0c8 70%,
+                #ccc8c0 100%
+            );
+        }
+
+        .media-btn .btn-icon {
+            font-size: 14px;
+        }
+
+        .media-btn.play-btn { color: #006400; }
+        .media-btn.stop-btn { color: #8b0000; }
+        .media-btn.mute-btn { min-width: 80px; }
+
+        .media-btn.active-btn {
+            background: linear-gradient(180deg,
+                #c0d8f0 0%,
+                #a0c0e0 30%,
+                #80a8d0 70%,
+                #6890c0 100%
+            );
+            color: #003366;
+        }
+
+        /* --- Volume Control --- */
+        .volume-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: center;
+        }
+
+        .volume-label {
+            font-size: 9px;
+            color: var(--metal-darkest);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .volume-icon {
+            font-size: 14px;
+        }
+
+        /* --- Frequency Dial Section --- */
+        .tuner-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--metal-dark);
+        }
+
+        .tuner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .tuner-title {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--metal-darkest);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .tuner-freq-readout {
+            font-family: var(--font-lcd);
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            background: #e8e4d8;
+            border: 1px inset var(--metal-dark);
+            padding: 2px 8px;
+            border-radius: 2px;
+        }
+
+        .tuner-dial-container {
+            position: relative;
+            padding: 12px 0;
+        }
+
+        /* Tick marks ruler */
+        .tuner-ticks {
+            position: relative;
+            height: 30px;
+            margin: 0 10px;
+            border-bottom: 2px solid var(--metal-dark);
+        }
+
+        .tuner-tick {
+            position: absolute;
+            bottom: 0;
+            width: 1px;
+            background: var(--metal-darkest);
+        }
+
+        .tuner-tick.major {
+            height: 18px;
+        }
+
+        .tuner-tick.minor {
+            height: 10px;
+            background: var(--metal-dark);
+        }
+
+        .tuner-tick-label {
+            position: absolute;
+            bottom: 20px;
+            font-size: 8px;
+            color: var(--metal-darkest);
+            transform: translateX(-50%);
+            font-family: var(--font-system);
+        }
+
+        /* Slider track and thumb */
+        .tuner-slider-container {
+            padding: 0 10px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tuner-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(180deg, #888 0%, #aaa 40%, #999 100%);
+            border: 1px inset var(--metal-dark);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .tuner-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 28px;
+            background: linear-gradient(180deg,
+                #e0dcd4 0%,
+                #d0ccc4 20%,
+                #b8b4ac 50%,
+                #a8a49c 80%,
+                #989490 100%
+            );
+            border: 1px outset var(--metal-light);
+            border-radius: 3px;
+            cursor: grab;
+            box-shadow:
+                1px 1px 0 var(--bevel-light) inset,
+                -1px -1px 0 var(--bevel-dark) inset,
+                2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tuner-slider::-moz-range-thumb {
+            width: 18px;
+            height: 28px;
+            background: linear-gradient(180deg,
+                #e0dcd4 0%,
+                #d0ccc4 20%,
+                #b8b4ac 50%,
+                #a8a49c 80%,
+                #989490 100%
+            );
+            border: 1px outset var(--metal-light);
+            border-radius: 3px;
+            cursor: grab;
+            box-shadow:
+                1px 1px 0 var(--bevel-light) inset,
+                -1px -1px 0 var(--bevel-dark) inset,
+                2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tuner-slider:active::-webkit-slider-thumb {
+            cursor: grabbing;
+            background: linear-gradient(180deg,
+                #c8c4bc 0%,
+                #b8b4ac 20%,
+                #a8a49c 50%,
+                #989490 80%,
+                #888480 100%
+            );
+        }
+
+        /* Metallic tuning knob */
+        .tuning-knob {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #c0c0c0 0deg,
+                #e8e8e8 30deg,
+                #a0a0a0 60deg,
+                #d8d8d8 90deg,
+                #909090 120deg,
+                #c8c8c8 150deg,
+                #b0b0b0 180deg,
+                #e0e0e0 210deg,
+                #989898 240deg,
+                #d0d0d0 270deg,
+                #a8a8a8 300deg,
+                #c0c0c0 360deg
+            );
+            border: 2px solid #666;
+            box-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.4),
+                inset 0 0 8px rgba(255, 255, 255, 0.2);
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.1s;
+        }
+
+        .tuning-knob::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 12px;
+            background: #444;
+            border-radius: 1px;
+        }
+
+        /* Speaker grill decoration */
+        .speaker-grill {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--metal-dark);
+        }
+
+        .speaker {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #666 0%, #888 30%, #777 60%, #666 100%);
+            border: 2px solid #555;
+            box-shadow:
+                inset 0 0 15px rgba(0, 0, 0, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .speaker::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #888 0%, #555 100%);
+            border: 1px solid #444;
+        }
+
+        .speaker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            background: repeating-radial-gradient(
+                circle at center,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 0, 0, 0.1) 3px,
+                rgba(0, 0, 0, 0.1) 4px
+            );
+        }
+
+        /* Brand plate */
+        .brand-plate {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--metal-dark);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        /* ============================================================
+           RIGHT PANEL — RETRO SHOUTBOX
+           ============================================================ */
+        .shoutbox-panel {
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+        }
+
+        .shoutbox-body {
+            background: var(--chat-header);
+            padding: 0;
+        }
+
+        /* Toolbar */
+        .shoutbox-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 6px;
+            background: var(--chat-header);
+            border-bottom: 1px solid var(--metal-dark);
+            font-size: 10px;
+        }
+
+        .toolbar-btn {
+            font-family: var(--font-system);
+            font-size: 10px;
+            padding: 2px 6px;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            color: var(--metal-darkest);
+        }
+
+        .toolbar-btn:hover {
+            border: 1px outset var(--metal-light);
+            background: var(--metal-lightest);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 16px;
+            background: var(--metal-dark);
+            margin: 0 2px;
+        }
+
+        /* Chat area */
+        .shoutbox-messages {
+            background: var(--chat-bg);
+            border: 2px inset var(--metal-dark);
+            margin: 6px;
+            height: 360px;
+            overflow-y: scroll;
+            padding: 8px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* Custom XP-style scrollbar */
+        .shoutbox-messages::-webkit-scrollbar {
+            width: 17px;
+        }
+
+        .shoutbox-messages::-webkit-scrollbar-track {
+            background: var(--metal-light);
+            border-left: 1px solid var(--metal-dark);
+        }
+
+        .shoutbox-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg,
+                var(--metal-lightest) 0%,
+                var(--metal-light) 40%,
+                var(--metal-mid) 100%
+            );
+            border: 1px outset var(--metal-light);
+            border-radius: 0;
+        }
+
+        .shoutbox-messages::-webkit-scrollbar-button {
+            background: var(--metal-light);
+            border: 1px outset var(--metal-light);
+            height: 17px;
+        }
+
+        /* Message styles */
+        .msg {
+            margin-bottom: 4px;
+            word-wrap: break-word;
+        }
+
+        .msg-time {
+            color: #808080;
+            font-size: 9px;
+            font-family: var(--font-lcd);
+        }
+
+        .msg-user {
+            font-weight: bold;
+            cursor: default;
+        }
+
+        .msg-text {
+            color: #333;
+        }
+
+        /* User colors */
+        .user-blue { color: #0000cc; }
+        .user-red { color: #cc0000; }
+        .user-green { color: #006600; }
+        .user-purple { color: #660099; }
+        .user-orange { color: #cc6600; }
+        .user-teal { color: #006666; }
+        .user-brown { color: #663300; }
+        .user-magenta { color: #990066; }
+
+        /* Input area */
+        .shoutbox-input-area {
+            display: flex;
+            gap: 4px;
+            padding: 0 6px 6px 6px;
+        }
+
+        .shoutbox-input {
+            flex: 1;
+            font-family: var(--font-system);
+            font-size: 11px;
+            padding: 4px 6px;
+            border: 2px inset var(--metal-dark);
+            background: white;
+            outline: none;
+        }
+
+        .shoutbox-input:focus {
+            border-color: var(--xp-blue-light);
+        }
+
+        .shoutbox-send-btn {
+            font-family: var(--font-system);
+            font-size: 11px;
+            padding: 4px 16px;
+            border: 2px outset var(--metal-light);
+            border-radius: 0;
+            background: linear-gradient(180deg,
+                #ece9e0 0%,
+                #d4d0c8 30%,
+                #c0bcb4 70%,
+                #b4b0a8 100%
+            );
+            cursor: pointer;
+            color: var(--metal-darkest);
+        }
+
+        .shoutbox-send-btn:active {
+            border-style: inset;
+        }
+
+        /* Status bar */
+        .shoutbox-statusbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 6px;
+            border-top: 1px solid var(--metal-dark);
+            background: var(--chat-header);
+            font-size: 9px;
+            color: var(--metal-dark);
+        }
+
+        .status-users {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00aa00;
+            display: inline-block;
+        }
+
+        /* ============================================================
+           TASKBAR — Windows XP Style
+           ============================================================ */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(180deg,
+                #3168d5 0%,
+                #2454c7 3%,
+                #1941a5 6%,
+                #2551c3 50%,
+                #1941a5 94%,
+                #1635a0 97%,
+                #102e94 100%
+            );
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            z-index: 1000;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid #5990e0;
+        }
+
+        .start-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            height: 24px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            border-radius: 6px;
+            background: linear-gradient(180deg,
+                #3ab54a 0%,
+                #2a9e39 50%,
+                #21912e 100%
+            );
+            color: white;
+            font-family: var(--font-system);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-style: italic;
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(180deg, #45c555 0%, #30ae42 50%, #28a036 100%);
+        }
+
+        .start-btn::before {
+            content: '⊞';
+            font-size: 14px;
+            font-style: normal;
+        }
+
+        .taskbar-items {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-left: 8px;
+            flex: 1;
+        }
+
+        .taskbar-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            height: 22px;
+            background: linear-gradient(180deg,
+                #3c7fde 0%,
+                #2c6fd0 50%,
+                #2460c2 100%
+            );
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .taskbar-item.active {
+            background: linear-gradient(180deg,
+                #2254a8 0%,
+                #1e4a98 50%,
+                #183f88 100%
+            );
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-clock {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: white;
+            font-size: 10px;
+            padding: 0 8px;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(180deg,
+                #1b57ad 0%,
+                #154899 50%,
+                #103c88 100%
+            );
+        }
+
+        .taskbar-clock .clock-icon {
+            font-size: 14px;
+        }
+
+        /* Volume Slider (shared style) */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: linear-gradient(180deg, #888 0%, #aaa 40%, #999 100%);
+            border: 1px inset var(--metal-dark);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 20px;
+            background: linear-gradient(180deg,
+                #e0dcd4 0%,
+                #c8c4bc 50%,
+                #b0aca4 100%
+            );
+            border: 1px outset var(--metal-light);
+            border-radius: 2px;
+            cursor: grab;
+            box-shadow:
+                1px 1px 0 rgba(255,255,255,0.5) inset,
+                -1px -1px 0 rgba(0,0,0,0.2) inset;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 20px;
+            background: linear-gradient(180deg,
+                #e0dcd4 0%,
+                #c8c4bc 50%,
+                #b0aca4 100%
+            );
+            border: 1px outset var(--metal-light);
+            border-radius: 2px;
+            cursor: grab;
+        }
+
+        /* Override for tuner slider (bigger thumb) */
+        .tuner-slider::-webkit-slider-thumb {
+            width: 18px;
+            height: 28px;
+        }
+
+        .tuner-slider::-moz-range-thumb {
+            width: 18px;
+            height: 28px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .page-footer {
+            margin-top: 16px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .page-footer a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .visitor-counter {
+            margin-top: 4px;
+            font-family: var(--font-lcd);
+            font-size: 11px;
+            background: #000;
+            color: #00ff00;
+            display: inline-block;
+            padding: 2px 12px;
+            border: 2px inset #666;
+        }
+
+        /* ============================================================
+           RESPONSIVE DESIGN
+           ============================================================ */
+        @media (max-width: 900px) {
+            .app-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .radio-panel {
+                width: 100%;
+                max-width: 520px;
+            }
+
+            .shoutbox-panel {
+                width: 100%;
+                max-width: 520px;
+            }
+
+            .speaker-grill {
+                gap: 12px;
+            }
+
+            .speaker {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .radio-title {
+                font-size: 16px;
+            }
+
+            .lcd-frequency-number {
+                font-size: 32px;
+            }
+
+            .controls-row {
+                gap: 4px;
+            }
+
+            .media-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                min-width: 56px;
+            }
+
+            .speaker-grill {
+                gap: 8px;
+            }
+
+            .speaker {
+                width: 48px;
+                height: 48px;
+            }
+
+            .shoutbox-messages {
+                height: 260px;
+            }
+
+            .taskbar-items {
+                display: none;
+            }
+        }
+
+        /* ============================================================
+           UTILITY: Pixel font for LCD
+           ============================================================ */
+        @font-face {
+            font-family: 'PixelLCD';
+            src: local('Courier New'), local('Lucida Console');
+        }
+
+        /* ============================================================
+           POWER LED
+           ============================================================ */
+        .power-led {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #004400;
+            border: 1px solid #333;
+            margin-right: 6px;
+            transition: all 0.3s;
+        }
+
+        .power-led.on {
+            background: #00ff00;
+            box-shadow: 0 0 6px #00ff00, 0 0 12px rgba(0, 255, 0, 0.3);
+        }
+
+        /* ============================================================
+           EQUALIZER BARS (decorative)
+           ============================================================ */
+        .eq-bars {
+            display: flex;
+            gap: 2px;
+            align-items: flex-end;
+            height: 24px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+
+        .eq-bar {
+            width: 4px;
+            background: var(--lcd-green);
+            box-shadow: 0 0 4px var(--lcd-green-glow);
+            transition: height 0.15s ease;
+            min-height: 2px;
+        }
+
+        .eq-bars.inactive .eq-bar {
+            height: 2px !important;
+            background: var(--lcd-green-dim);
+            box-shadow: none;
+        }
+
+        /* ============================================================
+           ANTENNA (decorative)
+           ============================================================ */
+        .antenna {
+            position: absolute;
+            top: -40px;
+            right: 40px;
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(180deg, #aaa, #888);
+            border-radius: 2px 2px 0 0;
+            transform-origin: bottom center;
+            transform: rotate(-15deg);
+        }
+
+        .antenna::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -2px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ccc, #888);
+        }
+
+        /* Prevent body scroll under taskbar */
+        body {
+            padding-bottom: 48px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         MAIN APPLICATION
+         ============================================================ -->
+    <div class="app-container">
+
+        <!-- ========================================================
+             LEFT PANEL: RETRO FM RADIO
+             ======================================================== -->
+        <div class="radio-panel xp-window" id="radio-window">
+            <!-- XP Titlebar -->
+            <div class="xp-titlebar">
+                <span class="xp-titlebar-text">
+                    📻 Yeh Un Dino Ki Baat Hai FM — Radio Player
+                </span>
+                <div class="xp-titlebar-buttons">
+                    <button class="xp-btn-minimize" title="Minimize">_</button>
+                    <button class="xp-btn-maximize" title="Maximize">□</button>
+                    <button class="xp-btn-close" title="Close">✕</button>
+                </div>
+            </div>
+
+            <!-- Radio Body -->
+            <div class="radio-body xp-window-body" style="position:relative;">
+                <!-- Decorative screws -->
+                <div class="screw screw-tl"></div>
+                <div class="screw screw-tr"></div>
+                <div class="screw screw-bl"></div>
+                <div class="screw screw-br"></div>
+
+                <!-- Antenna -->
+                <div class="antenna"></div>
+
+                <!-- Header -->
+                <div class="radio-header">
+                    <div class="radio-title">Yeh Un Dino Ki Baat Hai FM</div>
+                    <div class="radio-title-hindi">ये उन दिनों की बात है</div>
+                    <div class="radio-subtitle">✦ Relive the Golden Days... ✦</div>
+                </div>
+
+                <!-- LCD Display -->
+                <div class="lcd-container">
+                    <div class="lcd-screen" id="lcd-screen">
+                        <!-- Status Indicators -->
+                        <div class="lcd-status-bar">
+                            <div class="lcd-indicators">
+                                <span class="lcd-indicator active" id="ind-fm">FM</span>
+                                <span class="lcd-indicator" id="ind-stereo">STEREO</span>
+                                <span class="lcd-indicator live" id="ind-live">● LIVE</span>
+                            </div>
+                            <div class="lcd-signal">
+                                <span class="lcd-signal-label">Signal</span>
+                                <span class="lcd-signal-bar" id="signal-bars">████████</span>
+                            </div>
+                        </div>
+
+                        <!-- Frequency Display -->
+                        <div class="lcd-frequency-display">
+                            <span class="lcd-frequency-number" id="lcd-freq">98.0</span>
+                            <span class="lcd-frequency-unit">MHz</span>
+                        </div>
+
+                        <!-- Station Name -->
+                        <div class="lcd-station-name" id="lcd-station">— No Station —</div>
+
+                        <!-- EQ Bars -->
+                        <div class="eq-bars inactive" id="eq-bars">
+                            <div class="eq-bar" style="height:8px"></div>
+                            <div class="eq-bar" style="height:14px"></div>
+                            <div class="eq-bar" style="height:6px"></div>
+                            <div class="eq-bar" style="height:18px"></div>
+                            <div class="eq-bar" style="height:10px"></div>
+                            <div class="eq-bar" style="height:22px"></div>
+                            <div class="eq-bar" style="height:12px"></div>
+                            <div class="eq-bar" style="height:16px"></div>
+                            <div class="eq-bar" style="height:8px"></div>
+                            <div class="eq-bar" style="height:20px"></div>
+                            <div class="eq-bar" style="height:6px"></div>
+                            <div class="eq-bar" style="height:14px"></div>
+                        </div>
+
+                        <!-- Marquee -->
+                        <div class="lcd-marquee-container">
+                            <div class="lcd-marquee" id="lcd-marquee">
+                                ★ Currently Tuning... ★ Drag the dial to find your favorite station ★ Yeh Un Dino Ki Baat Hai ★ Those Were The Days ★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Power LED -->
+                <div style="display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
+                    <span class="power-led on" id="power-led"></span>
+                    <span style="font-size:8px; text-transform:uppercase; letter-spacing:2px; color:#666;">Power</span>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-section">
+                    <span class="controls-label">Playback Controls</span>
+                    <div class="controls-row">
+                        <button class="media-btn play-btn" id="btn-play" onclick="playRadio()" title="Play">
+                            <span class="btn-icon">▶</span> Play
+                        </button>
+                        <button class="media-btn stop-btn" id="btn-stop" onclick="stopRadio()" title="Stop">
+                            <span class="btn-icon">■</span> Stop
+                        </button>
+                        <button class="media-btn mute-btn" id="btn-mute" onclick="toggleMute()" title="Mute/Unmute">
+                            <span class="btn-icon">🔊</span> Mute
+                        </button>
+                        <button class="media-btn" id="btn-fav" onclick="toggleFavorite()" title="Favorites">
+                            <span class="btn-icon">☆</span> Fav
+                        </button>
+                    </div>
+
+                    <!-- Volume -->
+                    <div class="volume-section">
+                        <span class="volume-icon">🔈</span>
+                        <span class="volume-label">Vol</span>
+                        <input type="range" id="volume-slider" min="0" max="100" value="75"
+                               style="width:120px;" oninput="setVolume(this.value)">
+                        <span class="volume-label" id="volume-display">75%</span>
+                    </div>
+                </div>
+
+                <!-- Frequency Dial / Tuner -->
+                <div class="tuner-section">
+                    <div class="tuner-header">
+                        <span class="tuner-title">◈ Frequency Tuner</span>
+                        <span class="tuner-freq-readout" id="freq-readout">98.0 MHz</span>
+                    </div>
+
+                    <!-- Tick Marks (generated by JS) -->
+                    <div class="tuner-dial-container">
+                        <div class="tuner-ticks" id="tuner-ticks"></div>
+
+                        <div class="tuner-slider-container">
+                            <input type="range" class="tuner-slider" id="tuner-slider"
+                                   min="880" max="1080" value="980" step="1"
+                                   oninput="onTunerChange(this.value)">
+                            <div class="tuning-knob" id="tuning-knob" title="Tuning Knob"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decorative Speaker Grills -->
+                <div class="speaker-grill">
+                    <div class="speaker"></div>
+                    <div class="speaker"></div>
+                </div>
+
+                <!-- Brand Plate -->
+                <div class="brand-plate">
+                    ✦ RetroSonic ✦ Model XP-2003 ✦ Made in Nostalgia ✦
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================
+             RIGHT PANEL: RETRO SHOUTBOX
+             ======================================================== -->
+        <div class="shoutbox-panel xp-window" id="shoutbox-window">
+            <!-- XP Titlebar -->
+            <div class="xp-titlebar">
+                <span class="xp-titlebar-text">
+                    💬 Retro Shoutbox — Online Chat
+                </span>
+                <div class="xp-titlebar-buttons">
+                    <button class="xp-btn-minimize" title="Minimize">_</button>
+                    <button class="xp-btn-maximize" title="Maximize">□</button>
+                    <button class="xp-btn-close" title="Close">✕</button>
+                </div>
+            </div>
+
+            <!-- Shoutbox Body -->
+            <div class="shoutbox-body xp-window-body" style="padding:0;">
+                <!-- Toolbar -->
+                <div class="shoutbox-toolbar">
+                    <button class="toolbar-btn">File</button>
+                    <button class="toolbar-btn">Edit</button>
+                    <button class="toolbar-btn">View</button>
+                    <div class="toolbar-separator"></div>
+                    <button class="toolbar-btn">😀</button>
+                    <button class="toolbar-btn">🖼️</button>
+                    <button class="toolbar-btn" title="Send Nudge">👋</button>
+                </div>
+
+                <!-- Messages -->
+                <div class="shoutbox-messages" id="shoutbox-messages">
+                    <!-- Messages populated by JS -->
+                </div>
+
+                <!-- Input Area -->
+                <div class="shoutbox-input-area">
+                    <input type="text" class="shoutbox-input" id="shoutbox-input"
+                           placeholder="Type a message... (shoutbox is read-only 😅)"
+                           maxlength="200">
+                    <button class="shoutbox-send-btn" onclick="sendShoutboxMessage()">Send</button>
+                </div>
+
+                <!-- Status Bar -->
+                <div class="shoutbox-statusbar">
+                    <div class="status-users">
+                        <span class="status-dot"></span>
+                        <span id="online-count">14 users online</span>
+                    </div>
+                    <span>Lag: 456ms | Dial-up 56k</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer">
+        Best viewed in Internet Explorer 6 at 800x600 resolution<br>
+        © 2003 Yeh Un Dino Ki Baat Hai FM. All rights reserved.<br>
+        <div class="visitor-counter" id="visitor-counter">Visitors: 004,832</div>
+    </div>
+
+    <!-- ============================================================
+         TASKBAR
+         ============================================================ -->
+    <div class="taskbar">
+        <button class="start-btn" id="start-btn">start</button>
+        <div class="taskbar-items">
+            <div class="taskbar-item active">
+                📻 Yeh Un Dino FM
+            </div>
+            <div class="taskbar-item">
+                💬 Retro Shoutbox
+            </div>
+        </div>
+        <div class="taskbar-clock">
+            <span class="clock-icon">🕐</span>
+            <span id="taskbar-time">12:00 AM</span>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         JAVASCRIPT — Application Logic
+         ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * RETRO FM RADIO — Application State
+         * ============================================================
+         */
+        const state = {
+            isPlaying: false,
+            isMuted: false,
+            isFavorite: false,
+            volume: 75,
+            frequency: 98.0,
+            currentStation: null,
+            eqInterval: null,
+        };
+
+        /**
+         * ============================================================
+         * FAKE STATION DATABASE
+         * Simulates radio stations across the FM band
+         * ============================================================
+         */
+        const stations = [
+            { freq: 89.0, name: 'All India Radio', genre: 'News' },
+            { freq: 91.1, name: 'Radio City 91.1 FM', genre: 'Bollywood' },
+            { freq: 92.7, name: 'Big FM 92.7', genre: 'Hindi Hits' },
+            { freq: 93.5, name: 'Red FM 93.5', genre: 'Bajaate Raho' },
+            { freq: 94.3, name: 'Radio One 94.3', genre: 'Pop/Rock' },
+            { freq: 95.0, name: 'Vividh Bharati', genre: 'Classical' },
+            { freq: 98.3, name: 'Radio Mirchi 98.3', genre: 'Bollywood' },
+            { freq: 100.1, name: 'Retro Hits FM', genre: '90s/2000s' },
+            { freq: 101.6, name: 'Purani Jeans FM', genre: 'Old Hindi' },
+            { freq: 104.0, name: 'Fever 104 FM', genre: 'Contemporary' },
+            { freq: 104.8, name: 'Ishq FM 104.8', genre: 'Love Songs' },
+            { freq: 106.4, name: 'Filmi Gaane FM', genre: 'Retro Hits' },
+        ];
+
+        /**
+         * ============================================================
+         * SHOUTBOX MESSAGES DATA
+         * Nostalgic early-2000s chat messages
+         * ============================================================
+         */
+        const shoutboxMessages = [
+            { time: '09:12', user: 'CoOl_DuDe99', color: 'user-blue', text: 'A/S/L?' },
+            { time: '09:13', user: 'PixelPrincess', color: 'user-purple', text: 'lol dial-up disconnected again :(' },
+            { time: '09:14', user: 'MP3_Hunter', color: 'user-green', text: 'anyone recording songs from the radio? 🎵' },
+            { time: '09:15', user: 'DialUpKing', color: 'user-red', text: 'brb, someone\'s using the phone line ☎️' },
+            { time: '09:17', user: 'SunnyBoy2003', color: 'user-orange', text: 'downloading mp3 at 6 KB/s 😭' },
+            { time: '09:18', user: 'WinampFan', color: 'user-teal', text: 'Winamp really whips the llama\'s ass! 🦙' },
+            { time: '09:20', user: 'SchoolDays_Luv', color: 'user-magenta', text: 'omg this song reminds me of school days ❤️' },
+            { time: '09:21', user: 'Nokia3310', color: 'user-brown', text: 'send me the ringtone pls 📱' },
+            { time: '09:23', user: 'CoOl_DuDe99', color: 'user-blue', text: 'yahoo messenger anyone? buzz buzz!! 🐝' },
+            { time: '09:25', user: 'PixelPrincess', color: 'user-purple', text: 'my orkut profile is SO cool now, added new testimonials ✨' },
+            { time: '09:27', user: 'MP3_Hunter', color: 'user-green', text: 'anyone has the latest himesh song? need for my walkman' },
+            { time: '09:28', user: '~*AnGeL*~', color: 'user-red', text: '..::xXx check out my profile xXx::.. 💫' },
+            { time: '09:30', user: 'SunnyBoy2003', color: 'user-orange', text: 'cybercafe time is almost over, 5 min left 😰' },
+            { time: '09:31', user: 'WinampFan', color: 'user-teal', text: 'just found the coolest winamp skin!! looks like a spaceship 🚀' },
+            { time: '09:33', user: 'SchoolDays_Luv', color: 'user-magenta', text: 'remember taping songs from the radio on cassette?? 📼' },
+            { time: '09:34', user: 'Nokia3310', color: 'user-brown', text: 'my phone has snake game high score 9999 🐍' },
+            { time: '09:36', user: 'DialUpKing', color: 'user-red', text: 'back! mom was on the phone for 20 mins 😤' },
+            { time: '09:37', user: 'CoOl_DuDe99', color: 'user-blue', text: 'bRb GoTtA rEsTaRt WiNdOwS 🖥️' },
+            { time: '09:39', user: 'PixelPrincess', color: 'user-purple', text: 'this song >>>>> everything 🎶 turn up the volume!!' },
+            { time: '09:40', user: 'MP3_Hunter', color: 'user-green', text: 'limewire is downloading... only 3 hours left for 1 song 😅' },
+            { time: '09:42', user: '~*AnGeL*~', color: 'user-red', text: 'does anyone know how to make a website on geocities?? 🌐' },
+            { time: '09:44', user: 'SunnyBoy2003', color: 'user-orange', text: 'yeh un dino ki baat hai... those were the days 🥺' },
+        ];
+
+        /**
+         * ============================================================
+         * INITIALIZATION
+         * ============================================================
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTunerTicks();
+            renderShoutboxMessages();
+            updateClock();
+            setInterval(updateClock, 1000);
+            animateVisitorCounter();
+        });
+
+        /**
+         * ============================================================
+         * RADIO CONTROLS
+         * ============================================================
+         */
+
+        /**
+         * Play the radio — placeholder for future audio integration
+         */
+        function playRadio() {
+            state.isPlaying = true;
+            const btn = document.getElementById('btn-play');
+            btn.classList.add('pressed', 'active-btn');
+            document.getElementById('btn-stop').classList.remove('pressed', 'active-btn');
+
+            // Update LCD
+            updateLCD();
+
+            // Start EQ animation
+            startEQ();
+
+            // Update indicators
+            document.getElementById('ind-stereo').classList.add('active');
+
+            console.log(`[Radio] Playing at ${state.frequency} MHz`);
+
+            // TODO: Integrate with actual audio streaming
+            // playStream(state.currentStation.streamUrl);
+        }
+
+        /**
+         * Stop the radio
+         */
+        function stopRadio() {
+            state.isPlaying = false;
+            const btn = document.getElementById('btn-stop');
+            btn.classList.add('pressed', 'active-btn');
+            document.getElementById('btn-play').classList.remove('pressed', 'active-btn');
+
+            // Stop EQ animation
+            stopEQ();
+
+            // Update indicators
+            document.getElementById('ind-stereo').classList.remove('active');
+
+            // Update marquee
+            document.getElementById('lcd-marquee').textContent =
+                '★ Radio Stopped ★ Drag the dial to find a station ★';
+
+            console.log('[Radio] Stopped');
+
+            // TODO: Stop audio stream
+            // stopStream();
+        }
+
+        /**
+         * Toggle mute
+         */
+        function toggleMute() {
+            state.isMuted = !state.isMuted;
+            const btn = document.getElementById('btn-mute');
+            const icon = btn.querySelector('.btn-icon');
+
+            if (state.isMuted) {
+                btn.classList.add('pressed', 'active-btn');
+                icon.textContent = '🔇';
+                btn.lastChild.textContent = ' Unmute';
+            } else {
+                btn.classList.remove('pressed', 'active-btn');
+                icon.textContent = '🔊';
+                btn.lastChild.textContent = ' Mute';
+            }
+
+            console.log(`[Radio] Muted: ${state.isMuted}`);
+        }
+
+        /**
+         * Toggle favorite
+         */
+        function toggleFavorite() {
+            state.isFavorite = !state.isFavorite;
+            const btn = document.getElementById('btn-fav');
+            const icon = btn.querySelector('.btn-icon');
+
+            if (state.isFavorite) {
+                icon.textContent = '★';
+                btn.classList.add('active-btn');
+            } else {
+                icon.textContent = '☆';
+                btn.classList.remove('active-btn');
+            }
+        }
+
+        /**
+         * Set volume
+         * @param {number} val - Volume level 0-100
+         */
+        function setVolume(val) {
+            state.volume = parseInt(val);
+            document.getElementById('volume-display').textContent = `${val}%`;
+
+            // TODO: Apply volume to audio element
+            // audioElement.volume = val / 100;
+        }
+
+        /**
+         * ============================================================
+         * TUNER / FREQUENCY DIAL
+         * ============================================================
+         */
+
+        /**
+         * Handle frequency slider change
+         * @param {number} val - Slider value (880 to 1080, representing 88.0 to 108.0 MHz)
+         */
+        function onTunerChange(val) {
+            const freq = val / 10;
+            state.frequency = freq;
+
+            // Update displays
+            document.getElementById('lcd-freq').textContent = freq.toFixed(1);
+            document.getElementById('freq-readout').textContent = `${freq.toFixed(1)} MHz`;
+
+            // Rotate tuning knob proportionally
+            const knob = document.getElementById('tuning-knob');
+            const rotation = ((val - 880) / 200) * 270 - 135;
+            knob.style.transform = `rotate(${rotation}deg)`;
+
+            // Detect station
+            tuneStation(freq);
+        }
+
+        /**
+         * Tune to a specific frequency
+         * Detects nearest station within ±0.3 MHz range
+         * @param {number} frequency - Frequency in MHz
+         */
+        function tuneStation(frequency) {
+            const tolerance = 0.3;
+            let nearestStation = null;
+            let minDiff = Infinity;
+
+            for (const station of stations) {
+                const diff = Math.abs(station.freq - frequency);
+                if (diff < minDiff && diff <= tolerance) {
+                    minDiff = diff;
+                    nearestStation = station;
+                }
+            }
+
+            state.currentStation = nearestStation;
+
+            if (nearestStation) {
+                document.getElementById('lcd-station').textContent =
+                    `📡 ${nearestStation.name}`;
+                document.getElementById('signal-bars').textContent = '████████';
+
+                if (state.isPlaying) {
+                    document.getElementById('lcd-marquee').textContent =
+                        `★ Now Playing: ${nearestStation.name} ★ ${nearestStation.genre} ★ ${frequency.toFixed(1)} MHz ★ Yeh Un Dino Ki Baat Hai ★`;
+                }
+            } else {
+                document.getElementById('lcd-station').textContent = '— No Station —';
+
+                // Simulate weaker signal between stations
+                const signalStrength = getSignalStrength(frequency);
+                document.getElementById('signal-bars').textContent = signalStrength;
+
+                if (state.isPlaying) {
+                    document.getElementById('lcd-marquee').textContent =
+                        '★ Searching... ★ Tune to find a station ★';
+                }
+            }
+
+            // TODO: Integrate Radio Browser API
+            // fetchStation(frequency);
+            // playStaticNoise() when between stations
+
+            console.log(`[Tuner] Frequency: ${frequency.toFixed(1)} MHz | Station: ${nearestStation?.name || 'None'}`);
+        }
+
+        /**
+         * Get a visual signal strength indicator
+         * @param {number} freq - Current frequency
+         * @returns {string} Block characters representing signal strength
+         */
+        function getSignalStrength(freq) {
+            let minDist = Infinity;
+            for (const s of stations) {
+                minDist = Math.min(minDist, Math.abs(s.freq - freq));
+            }
+
+            if (minDist <= 0.3) return '████████';
+            if (minDist <= 0.8) return '██████░░';
+            if (minDist <= 1.5) return '████░░░░';
+            if (minDist <= 3.0) return '██░░░░░░';
+            return '░░░░░░░░';
+        }
+
+        /**
+         * ============================================================
+         * PLACEHOLDER FUNCTIONS — For future API integration
+         * ============================================================
+         */
+
+        /**
+         * Play static noise between stations
+         * TODO: Use Web Audio API to generate white noise
+         */
+        function playStaticNoise() {
+            console.log('[Audio] Playing static noise (placeholder)');
+            // Future: Create white noise with Web Audio API
+            // const audioCtx = new AudioContext();
+            // const bufferSize = 2 * audioCtx.sampleRate;
+            // ... generate noise buffer
+        }
+
+        /**
+         * Update LCD display content
+         * Called when station or playback state changes
+         */
+        function updateLCD() {
+            const lcdFreq = document.getElementById('lcd-freq');
+            lcdFreq.textContent = state.frequency.toFixed(1);
+
+            if (state.isPlaying && state.currentStation) {
+                document.getElementById('lcd-marquee').textContent =
+                    `★ Now Playing: ${state.currentStation.name} ★ ${state.currentStation.genre} ★ ${state.frequency.toFixed(1)} MHz ★ Enjoy the music! ★`;
+            } else if (state.isPlaying) {
+                document.getElementById('lcd-marquee').textContent =
+                    '★ Currently Tuning... ★ Find your favorite station ★';
+            }
+        }
+
+        /**
+         * ============================================================
+         * EQUALIZER ANIMATION
+         * ============================================================
+         */
+
+        /**
+         * Start EQ bar animation
+         */
+        function startEQ() {
+            const eqContainer = document.getElementById('eq-bars');
+            eqContainer.classList.remove('inactive');
+            const bars = eqContainer.querySelectorAll('.eq-bar');
+
+            if (state.eqInterval) clearInterval(state.eqInterval);
+
+            state.eqInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    const h = Math.floor(Math.random() * 20) + 3;
+                    bar.style.height = h + 'px';
+                });
+            }, 150);
+        }
+
+        /**
+         * Stop EQ bar animation
+         */
+        function stopEQ() {
+            const eqContainer = document.getElementById('eq-bars');
+            eqContainer.classList.add('inactive');
+
+            if (state.eqInterval) {
+                clearInterval(state.eqInterval);
+                state.eqInterval = null;
+            }
+        }
+
+        /**
+         * ============================================================
+         * TUNER TICK MARKS — Render frequency ruler
+         * ============================================================
+         */
+        function renderTunerTicks() {
+            const container = document.getElementById('tuner-ticks');
+            const minFreq = 88.0;
+            const maxFreq = 108.0;
+            const range = maxFreq - minFreq;
+
+            // Generate ticks every 0.5 MHz, labels every 2 MHz
+            for (let f = minFreq; f <= maxFreq; f += 0.5) {
+                const pct = ((f - minFreq) / range) * 100;
+                const isMajor = (f % 2 === 0);
+                const isLabeled = (f % 4 === 0) || f === minFreq || f === maxFreq;
+
+                const tick = document.createElement('div');
+                tick.className = `tuner-tick ${isMajor ? 'major' : 'minor'}`;
+                tick.style.left = `${pct}%`;
+
+                if (isLabeled) {
+                    const label = document.createElement('span');
+                    label.className = 'tuner-tick-label';
+                    label.textContent = f.toFixed(0);
+                    label.style.left = `${pct}%`;
+                    container.appendChild(label);
+                }
+
+                container.appendChild(tick);
+            }
+        }
+
+        /**
+         * ============================================================
+         * SHOUTBOX — Render messages
+         * ============================================================
+         */
+        function renderShoutboxMessages() {
+            const container = document.getElementById('shoutbox-messages');
+            container.innerHTML = '';
+
+            shoutboxMessages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'msg';
+                div.innerHTML = `
+                    <span class="msg-time">[${msg.time}]</span>
+                    <span class="msg-user ${msg.color}">&lt;${msg.user}&gt;</span>
+                    <span class="msg-text">${escapeHTML(msg.text)}</span>
+                `;
+                container.appendChild(div);
+            });
+
+            // Auto-scroll to bottom
+            container.scrollTop = container.scrollHeight;
+
+            // Start periodic new message simulation
+            simulateNewMessages();
+        }
+
+        /**
+         * Escape HTML to prevent XSS in shoutbox
+         * @param {string} str - Raw string
+         * @returns {string} Escaped string
+         */
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        /**
+         * Send a message (cosmetic only)
+         */
+        function sendShoutboxMessage() {
+            const input = document.getElementById('shoutbox-input');
+            if (!input.value.trim()) return;
+
+            const container = document.getElementById('shoutbox-messages');
+            const now = new Date();
+            const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            const div = document.createElement('div');
+            div.className = 'msg';
+            div.innerHTML = `
+                <span class="msg-time">[${time}]</span>
+                <span class="msg-user user-blue">&lt;You&gt;</span>
+                <span class="msg-text">${escapeHTML(input.value)}</span>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            input.value = '';
+        }
+
+        // Allow sending with Enter key
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('shoutbox-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') sendShoutboxMessage();
+            });
+        });
+
+        /**
+         * Simulate new messages appearing periodically
+         */
+        const loopMessages = [
+            { user: 'DialUpKing', color: 'user-red', text: 'connection dropped AGAIN 😩 stupid modem' },
+            { user: 'CoOl_DuDe99', color: 'user-blue', text: 'lol who remembers doordarshan? 📺' },
+            { user: 'PixelPrincess', color: 'user-purple', text: 'just changed my MSN display name again ✨~*~✨' },
+            { user: 'WinampFan', color: 'user-teal', text: 'this radio is making me so nostalgic rn 😭' },
+            { user: 'Nokia3310', color: 'user-brown', text: 'forwarded that joke sms to everyone in my contacts 😂' },
+            { user: '~*AnGeL*~', color: 'user-red', text: 'pLeAsE sIgN mY gUeStBoOk!! 📝' },
+            { user: 'SchoolDays_Luv', color: 'user-magenta', text: 'can someone send me the latest wallpaper for 240x320? 🖼️' },
+            { user: 'MP3_Hunter', color: 'user-green', text: 'just burned a mix CD for the car 💿🔥' },
+        ];
+
+        let msgIndex = 0;
+
+        function simulateNewMessages() {
+            setInterval(() => {
+                const container = document.getElementById('shoutbox-messages');
+                const msg = loopMessages[msgIndex % loopMessages.length];
+                const now = new Date();
+                const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+                const div = document.createElement('div');
+                div.className = 'msg';
+                div.innerHTML = `
+                    <span class="msg-time">[${time}]</span>
+                    <span class="msg-user ${msg.color}">&lt;${msg.user}&gt;</span>
+                    <span class="msg-text">${escapeHTML(msg.text)}</span>
+                `;
+                container.appendChild(div);
+
+                // Auto-scroll only if near bottom
+                const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+                if (isNearBottom) {
+                    container.scrollTop = container.scrollHeight;
+                }
+
+                // Update online count randomly
+                const count = 12 + Math.floor(Math.random() * 8);
+                document.getElementById('online-count').textContent = `${count} users online`;
+
+                msgIndex++;
+            }, 8000 + Math.random() * 4000); // 8-12 seconds
+        }
+
+        /**
+         * ============================================================
+         * TASKBAR CLOCK
+         * ============================================================
+         */
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const mins = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            document.getElementById('taskbar-time').textContent = `${hours}:${mins} ${ampm}`;
+        }
+
+        /**
+         * ============================================================
+         * VISITOR COUNTER ANIMATION
+         * ============================================================
+         */
+        function animateVisitorCounter() {
+            const el = document.getElementById('visitor-counter');
+            let count = 4832;
+
+            setInterval(() => {
+                count += Math.floor(Math.random() * 3);
+                el.textContent = `Visitors: ${count.toString().padStart(7, '0')}`;
+            }, 15000);
+        }
+
+        /**
+         * ============================================================
+         * INITIALIZATION LOG
+         * ============================================================
+         */
+        console.log('%c╔══════════════════════════════════════════╗', 'color: #00ff41; background: #0a1a0a;');
+        console.log('%c║   Yeh Un Dino Ki Baat Hai FM — v1.0     ║', 'color: #00ff41; background: #0a1a0a;');
+        console.log('%c║   Those Were The Days...                 ║', 'color: #00ff41; background: #0a1a0a;');
+        console.log('%c║   Best viewed in IE6 at 800x600          ║', 'color: #00ff41; background: #0a1a0a;');
+        console.log('%c╚══════════════════════════════════════════╝', 'color: #00ff41; background: #0a1a0a;');
+    </script>
+</body>
+</html>

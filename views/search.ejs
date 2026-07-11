@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results for "<%= q %>" — Yeh Un Dino Ki Baat Hai Social</title>
+  <link rel="stylesheet" href="/css/retro.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container">
+    <div class="xp-window">
+      <div class="xp-titlebar">
+        <span class="xp-titlebar__title">🔍 Search Results</span>
+        <div class="xp-titlebar__buttons">
+          <button class="xp-titlebar__btn">_</button>
+          <button class="xp-titlebar__btn">□</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+        </div>
+      </div>
+      <div class="xp-window__body">
+        
+        <div class="outset-panel">
+          <form action="/search" method="GET" style="display:flex; gap:10px; align-items:center;">
+            <label style="font-weight:bold; font-size:12px;">Search Again:</label>
+            <input type="text" name="q" class="xp-input" value="<%= q %>" style="flex:1;" placeholder="Search for people or communities...">
+            <button type="submit" class="xp-btn xp-btn--primary">Search</button>
+          </form>
+          <p class="text-muted text-small mt-sm">Showing search results for "<%= q %>"</p>
+        </div>
+
+        <div class="layout-two-col">
+          <!-- Left: People results -->
+          <div class="layout-two-col__main" style="flex:1;">
+            <div class="xp-fieldset">
+              <legend>👤 People Results (<%= users.length %>)</legend>
+              
+              <% if (users && users.length > 0) { %>
+                <ul class="search-results">
+                  <% users.forEach(user => { %>
+                    <li class="search-result-item" style="padding:10px; border-bottom:1px dotted #ccc; display:flex; align-items:center; gap:12px;">
+                      <img src="<%= user.avatar_url %>" alt="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; border:1px solid #999;">
+                      <div style="flex:1;">
+                        <a href="/profile/<%= user.username %>" style="font-weight:bold; font-size:13px;"><%= user.display_name %></a>
+                        <span class="text-muted text-small" style="margin-left:8px;">[<%= user.username %>]</span>
+                        <div class="text-small text-muted" style="margin-top:2px;"><%= user.headline %></div>
+                      </div>
+                      <a href="/profile/<%= user.username %>" class="xp-btn">View Profile</a>
+                    </li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                <p class="text-muted text-small text-center" style="padding:20px;">No people found matching "<%= q %>"</p>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Right: Communities results -->
+          <div class="layout-two-col__sidebar" style="width:320px;">
+            <div class="xp-fieldset">
+              <legend>🏘️ Communities (<%= communities.length %>)</legend>
+              
+              <% if (communities && communities.length > 0) { %>
+                <ul class="search-results">
+                  <% communities.forEach(c => { %>
+                    <li class="search-result-item" style="padding:10px; border-bottom:1px dotted #ccc; display:flex; align-items:center; gap:12px;">
+                      <img src="<%= c.avatar_url %>" alt="" style="width:32px; height:32px; border-radius:4px; object-fit:cover;">
+                      <div style="flex:1; overflow:hidden;">
+                        <a href="/communities/<%= c.id %>" style="font-weight:bold; font-size:12px; display:block; text-overflow:ellipsis; white-space:nowrap; overflow:hidden;"><%= c.name %></a>
+                        <span class="text-muted text-small"><%= c.category %></span>
+                      </div>
+                      <a href="/communities/<%= c.id %>" class="xp-btn" style="font-size:11px; padding:2px 6px;">View</a>
+                    </li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                <p class="text-muted text-small text-center" style="padding:20px;">No groups found matching "<%= q %>"</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+</body>
+</html>

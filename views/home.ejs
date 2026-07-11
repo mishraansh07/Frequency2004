@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — Yeh Un Dino Ki Baat Hai Social</title>
+  <meta name="description" content="Your retro social network dashboard — scraps, friends, communities, and early 2000s nostalgia.">
+  <link rel="stylesheet" href="/css/retro.css">
+</head>
+<body>
+  <!-- ═══ NAVBAR ═══ -->
+  <%- include('partials/navbar') %>
+
+  <div class="page-container">
+    <!-- ═══ WELCOME BANNER ═══ -->
+    <div class="dashboard-welcome">
+      <h2>~*~ Welcome back, <%= currentUser.display_name %>! ~*~</h2>
+      <p>Mood: <%= currentUser.mood %> | Last seen: Just now! | Profile views: <strong><%= currentUser.profile_views %></strong></p>
+    </div>
+
+    <div class="retro-marquee mb-md">
+      <span class="retro-marquee__inner">
+        ★ NEW: Communities are live! ★ Join the Bollywood Music Lovers community! ★ Don't forget to update your Top 8! ★ Shoutbox is buzzing! ★ Check out the FM Radio! ★
+      </span>
+    </div>
+
+    <div class="layout-two-col">
+      <!-- ═══ SIDEBAR ═══ -->
+      <div class="layout-two-col__sidebar">
+        <!-- Profile Card -->
+        <div class="outset-panel">
+          <div class="text-center">
+            <img src="<%= currentUser.avatar_url %>" alt="Your avatar" class="profile-avatar" style="width:100px;height:100px;display:block;margin:0 auto var(--space-sm);">
+            <a href="/profile/<%= currentUser.username %>" style="font-weight:bold;"><%= currentUser.display_name %></a>
+            <div class="text-small text-muted mt-sm"><%= currentUser.headline %></div>
+          </div>
+          <hr style="border:1px groove #999;margin:8px 0;">
+          <div class="text-small">
+            <div>📍 <%= currentUser.location || 'Unknown' %></div>
+            <div>👤 <%= currentUser.gender || '?' %>, <%= currentUser.age || '?' %></div>
+            <div>👁️ Profile views: <strong><%= currentUser.profile_views %></strong></div>
+          </div>
+          <a href="/profile/<%= currentUser.username %>/edit" class="xp-btn w-100 mt-sm" style="display:block;text-align:center;text-decoration:none;">✏️ Edit Profile</a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="outset-panel">
+          <div class="section-header">📌 Quick Links</div>
+          <div style="font-size:12px;line-height:2;">
+            <a href="/friends">👥 My Friends (<%= friends.length %>)</a><br>
+            <a href="/scrapbook/<%= currentUser.username %>">📒 My Scrapbook</a><br>
+            <a href="/communities">🏘️ Communities</a><br>
+            <a href="/radio">📻 FM Radio</a><br>
+            <% if (pendingCount > 0) { %>
+              <a href="/friends" style="color:red;font-weight:bold;">🔔 Pending Requests (<%= pendingCount %>)</a><br>
+            <% } %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ MAIN CONTENT ═══ -->
+      <div class="layout-two-col__main">
+        <!-- Cool People Suggestions -->
+        <% if (coolPeople && coolPeople.length > 0) { %>
+        <div class="outset-panel">
+          <div class="section-header--orange section-header">🌟 Cool New People</div>
+          <div class="cool-people">
+            <% coolPeople.forEach(person => { %>
+              <div class="cool-person">
+                <img src="<%= person.avatar_url %>" alt="<%= person.display_name %>">
+                <a href="/profile/<%= person.username %>"><%= person.display_name %></a>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Recent Scraps -->
+        <div class="xp-window">
+          <div class="xp-titlebar">
+            <span class="xp-titlebar__title">📒 Recent Scraps</span>
+          </div>
+          <div class="xp-window__body" style="max-height:400px;overflow-y:auto;">
+            <% if (scraps && scraps.length > 0) { %>
+              <% scraps.forEach(scrap => { %>
+                <div class="scrap-item">
+                  <img src="<%= scrap.author_avatar %>" alt="" class="scrap-item__avatar">
+                  <div class="scrap-item__body">
+                    <span class="scrap-item__author">
+                      <a href="/profile/<%= scrap.author_username %>"><%= scrap.author_display_name %></a>
+                    </span>
+                    <span class="scrap-item__date"><%= new Date(scrap.created_at).toLocaleDateString() %></span>
+                    <div class="scrap-item__content"><%= scrap.content %></div>
+                  </div>
+                </div>
+              <% }) %>
+              <a href="/scrapbook/<%= currentUser.username %>" class="xp-btn mt-sm">View All Scraps →</a>
+            <% } else { %>
+              <p class="text-muted text-small">No scraps yet! Ask your friends to send you some 💌</p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- My Communities -->
+        <div class="xp-window mt-md">
+          <div class="xp-titlebar">
+            <span class="xp-titlebar__title">🏘️ My Communities</span>
+          </div>
+          <div class="xp-window__body">
+            <% if (communities && communities.length > 0) { %>
+              <ul class="community-list">
+                <% communities.forEach(c => { %>
+                  <li>
+                    <img src="<%= c.avatar_url %>" alt="" class="community-list__avatar">
+                    <div class="community-list__info">
+                      <a href="/communities/<%= c.id %>" class="community-list__name"><%= c.name %></a>
+                      <div class="community-list__meta"><%= c.category %></div>
+                    </div>
+                  </li>
+                <% }) %>
+              </ul>
+              <a href="/communities" class="xp-btn mt-sm">Browse All Communities →</a>
+            <% } else { %>
+              <p class="text-muted text-small">You haven't joined any communities yet! <a href="/communities">Browse communities</a></p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- My Friends -->
+        <div class="xp-window mt-md">
+          <div class="xp-titlebar">
+            <span class="xp-titlebar__title">👥 My Friends (<%= friends.length %>)</span>
+          </div>
+          <div class="xp-window__body">
+            <% if (friends && friends.length > 0) { %>
+              <div class="friend-grid">
+                <% friends.slice(0, 8).forEach(f => { %>
+                  <div class="friend-card">
+                    <img src="<%= f.avatar_url %>" alt="<%= f.display_name %>">
+                    <a href="/profile/<%= f.username %>"><%= f.display_name %></a>
+                  </div>
+                <% }) %>
+              </div>
+              <% if (friends.length > 8) { %>
+                <a href="/friends" class="xp-btn mt-sm">View All Friends →</a>
+              <% } %>
+            <% } else { %>
+              <p class="text-muted text-small">No friends yet! <a href="/search">Search for people</a> to connect with.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TASKBAR ═══ -->
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+</body>
+</html>

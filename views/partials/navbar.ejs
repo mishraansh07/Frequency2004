@@ -1,0 +1,30 @@
+<!-- ═══════════════════════════════════════════════════════
+     Retro Navbar (Orkut-inspired top navigation bar)
+     ═══════════════════════════════════════════════════════ -->
+<nav class="retro-navbar">
+  <a href="/home" class="retro-navbar__brand">✿ Frequency 2004</a>
+
+  <div class="retro-navbar__links">
+    <a href="/home">🏠 Home</a>
+    <a href="/profile/<%= currentUser ? currentUser.username : '' %>">👤 Profile</a>
+    <a href="/friends">👥 Friends</a>
+    <a href="/scrapbook/<%= currentUser ? currentUser.username : '' %>">📒 Scrapbook</a>
+    <a href="/communities">🏘️ Communities</a>
+    <a href="/radio">🎵 Music</a>
+  </div>
+
+  <form class="retro-navbar__search" action="/search" method="GET">
+    <input type="text" name="q" placeholder="🔍 Search people..." class="xp-input">
+    <button type="submit" class="xp-btn">Go!</button>
+  </form>
+
+  <div class="retro-navbar__links">
+    <% if (currentUser) { %>
+      <span style="color:#FFD700;font-size:11px;">Hi, <%= currentUser.display_name %>!</span>
+      <a href="/logout" style="color:#FF9999;">🚪 Logout</a>
+    <% } else { %>
+      <a href="/login">🔐 Login</a>
+      <a href="/register">📝 Register</a>
+    <% } %>
+  </div>
+</nav>

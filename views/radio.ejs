@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.title || 'Retro Music Player' %> — Frequency 2004</title>
+  <link rel="stylesheet" href="/css/retro.css">
+  <link rel="stylesheet" href="/css/radio.css">
+</head>
+<body>
+  <audio id="radio-audio" preload="none"></audio>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container">
+    <div class="app-container" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:20px;">
+      
+      <!-- ========================================================
+           LEFT PANEL: RETRO FM RADIO (Skeuomorphic)
+           ======================================================== -->
+          <!-- iPod Body -->
+          <div class="ipod-body" id="radio-window">
+            
+            <!-- iPod Screen -->
+            <div class="ipod-screen-container">
+              <div class="ipod-screen">
+                <!-- Status Bar -->
+                <div class="ipod-statusbar">
+                  <span id="ipod-status-title">iPod</span>
+                  <span class="ipod-battery">🔋</span>
+                </div>
+
+                <!-- Menu View -->
+                <div class="ipod-menu" id="ipod-menu">
+                  <!-- JS will populate menu items here -->
+                </div>
+
+                <!-- Now Playing View -->
+                <div class="ipod-now-playing" id="ipod-now-playing" style="display:none;">
+                  <div class="ipod-np-title" id="ipod-np-title">Now Playing</div>
+                  <div class="ipod-np-artist" id="ipod-np-artist">Loading...</div>
+                  
+                  <div class="ipod-np-progress">
+                    <div class="ipod-np-bar">
+                      <div class="ipod-np-fill" id="ipod-np-fill"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Click Wheel -->
+            <div class="ipod-wheel-container">
+              <div class="ipod-wheel">
+                <button class="ipod-wheel-btn ipod-btn-menu" id="btn-ipod-menu" onclick="ipodMenu()">MENU</button>
+                <button class="ipod-wheel-btn ipod-btn-prev" id="btn-ipod-prev" onclick="ipodPrev()">|&lt;&lt;</button>
+                <button class="ipod-wheel-btn ipod-btn-next" id="btn-ipod-next" onclick="ipodNext()">&gt;&gt;|</button>
+                <button class="ipod-wheel-btn ipod-btn-play" id="btn-ipod-play" onclick="ipodPlayPause()">&gt;||</button>
+                
+                <div class="ipod-center-btn" id="btn-ipod-center" onclick="ipodSelect()"></div>
+              </div>
+            </div>
+            
+          </div>
+
+      <!-- ========================================================
+           RIGHT PANEL: RETRO SHOUTBOX
+           ======================================================== -->
+      <div class="shoutbox-panel xp-window" id="shoutbox-window" style="width:480px; min-width:300px;">
+        <!-- XP Titlebar -->
+        <div class="xp-titlebar">
+          <span class="xp-titlebar__title">
+            💬 Retro Shoutbox — Online Chat
+          </span>
+          <div class="xp-titlebar__buttons">
+            <button class="xp-titlebar__btn">_</button>
+            <button class="xp-titlebar__btn">□</button>
+            <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+          </div>
+        </div>
+
+        <!-- Shoutbox Body -->
+        <div class="shoutbox-body xp-window__body" style="padding:0; background:#ece9d8; display:flex; flex-direction:column; height:450px;">
+          <!-- Toolbar -->
+          <div class="shoutbox-toolbar" style="background:#ece9d8; padding:3px 6px; border-bottom:1px solid #7f9db9; display:flex; gap:6px;">
+            <button class="toolbar-btn xp-btn" style="padding: 1px 6px; font-size:11px;">File</button>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 6px; font-size:11px;">Edit</button>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 6px; font-size:11px;">View</button>
+            <div style="width:1px; height:18px; background:#999; margin: 0 4px;"></div>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;">😀</button>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;">🖼️</button>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;" title="Send Nudge" onclick="alert('👋 Sending a nudge!')">👋</button>
+          </div>
+
+          <!-- Messages container -->
+          <div class="shoutbox shoutbox-messages" id="shoutbox-messages" style="flex:1; margin:6px; border:2px inset #808080; background:#fff; color:#000; font-family:var(--font-system); font-size:13px; padding:0; overflow-y:auto; overflow-x:hidden;">
+            <!-- Messages populated by JS -->
+          </div>
+
+          <!-- Input Area -->
+          <div class="shoutbox-input-area" style="padding:10px; background:#ece9d8; border-top:1px solid #7f9db9; display:flex; gap:6px;">
+            <% if (currentUser) { %>
+              <input type="text" class="shoutbox-input xp-input" id="shoutbox-input"
+                     placeholder="Type a message and press Enter..."
+                     maxlength="200" style="flex:1;">
+              <button class="shoutbox-send-btn xp-btn xp-btn--primary" onclick="sendShoutboxMessage()">Send</button>
+            <% } else { %>
+              <input type="text" class="shoutbox-input xp-input" disabled
+                     placeholder="🔒 Please log in to shout!" style="flex:1; background:#eee;">
+              <a href="/login" class="xp-btn xp-btn--primary" style="text-decoration:none; text-align:center; padding-top:3px;">Log In</a>
+            <% } %>
+          </div>
+
+          <!-- Status Bar -->
+          <div class="shoutbox-statusbar" style="background:#d4d0c8; font-size:11px; padding:4px 8px; border-top:1px solid #808080; display:flex; justify-content:space-between; color:#444;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:inline-block; width:8px; height:8px; background:limegreen; border-radius:50%;"></span>
+              <span>Live FM Chat</span>
+            </div>
+            <span>Lag: 56ms | Dial-up 56k</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+  <script src="/js/radio.js"></script>
+</body>
+</html>

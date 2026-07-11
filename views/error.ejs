@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Error — Yeh Un Dino Ki Baat Hai Social</title>
+  <link rel="stylesheet" href="/css/retro.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="xp-window auth-window" style="width:480px;">
+      <div class="xp-titlebar" style="background: linear-gradient(180deg, #E0734C 0%, #C0513A 100%);">
+        <span class="xp-titlebar__title">⚠️ System Error — Application Exception</span>
+        <div class="xp-titlebar__buttons">
+          <button class="xp-titlebar__btn">_</button>
+          <button class="xp-titlebar__btn">□</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+        </div>
+      </div>
+      <div class="xp-window__body">
+        
+        <div style="display:flex; gap:16px; align-items:flex-start; margin-bottom:15px;">
+          <!-- Giant warning icon -->
+          <div style="width:40px; height:40px; background:#f00; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:bold; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">
+            X
+          </div>
+          <div>
+            <h2 class="text-red text-pixel" style="font-size:20px; margin-bottom:4px;"><%= title || 'Application Error' %></h2>
+            <p style="font-size:12px; line-height:1.4; color:#333;"><%= message || 'An unhandled exception occurred in the social database.' %></p>
+          </div>
+        </div>
+
+        <div class="inset-panel" style="font-family:'Courier New', monospace; font-size:11px; color:#444; background:#fafafa; border-color:#808080; padding:10px; max-height:120px; overflow-y:auto; word-break:break-all;">
+          *** STOP: 0x000000D1 (0x0000000C, 0x00000002, 0x00000000, 0xF86B5A89)<br>
+          *** RETROSOCIAL.SYS - Address F86B5A89 base at F86B2000, DateStamp 3eb423c4<br>
+          <br>
+          If this is the first time you've seen this Stop error screen, restart your computer (or refresh the page).
+        </div>
+
+        <div class="d-flex justify-between align-center mt-md">
+          <a href="javascript:history.back()" class="xp-btn">← Go Back</a>
+          <a href="/home" class="xp-btn xp-btn--primary">🏠 Back Home</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

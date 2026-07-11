@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — Yeh Un Dino Ki Baat Hai Social</title>
+  <link rel="stylesheet" href="/css/retro.css">
+  <style>
+    body {
+      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container" style="max-width: 600px;">
+    <div class="xp-window">
+      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+        <span class="xp-titlebar__title">🏘️ Create a New Community</span>
+        <div class="xp-titlebar__buttons">
+          <button class="xp-titlebar__btn">_</button>
+          <button class="xp-titlebar__btn">□</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close">✕</button>
+        </div>
+      </div>
+      <div class="xp-window__body" style="background: #fff;">
+        <h2 class="text-pink mb-sm text-pixel" style="font-size: 22px;">Start a New Group</h2>
+        <p class="text-small text-muted mb-md">Gather people who share your interests, school memories, or technical struggles!</p>
+
+        <% if (error) { %>
+          <div class="auth-error">⚠️ <%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/communities/create" class="auth-form">
+          <div class="form-group mb-md">
+            <label for="name">🏘️ Community Name:</label>
+            <input type="text" id="name" name="name" class="xp-input w-100" required placeholder="e.g. BSNL Dial-Up Fan Club" maxlength="100">
+          </div>
+
+          <div class="form-group mb-md">
+            <label for="category">🎯 Category:</label>
+            <select id="category" name="category" class="xp-select w-100">
+              <option value="General">General</option>
+              <option value="Music">Music</option>
+              <option value="Movies">Movies</option>
+              <option value="Technology">Technology</option>
+              <option value="School Life">School Life</option>
+              <option value="Nostalgia">Nostalgia</option>
+              <option value="Fun & Games">Fun & Games</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-md">
+            <label for="description">📝 Description:</label>
+            <textarea id="description" name="description" class="xp-textarea w-100" rows="4" placeholder="What is this community about? Add description here..." required></textarea>
+          </div>
+
+          <div class="d-flex justify-between align-center mt-lg">
+            <button type="submit" class="xp-btn xp-btn--primary">🏘️ Create Group</button>
+            <a href="/communities" class="xp-btn" style="text-decoration: none; text-align: center; display: inline-block; padding-top: 3px;">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/taskbar') %>
+  <script src="/js/app.js"></script>
+</body>
+</html>
