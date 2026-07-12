@@ -1,6 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const multer = require('multer');
 const { requireAuth } = require('../middleware/auth');
+
+// Multer storage for community avatars
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../public/images/avatars'));
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const ext = path.extname(file.originalname) || '.png';
+        cb(null, 'community_upload_' + uniqueSuffix + ext);
+    }
+});
+const upload = multer({ storage });
 
 // ──────────────────────────────────────────────
 // GET / — List all communities with member counts
@@ -356,11 +371,7 @@ router.post('/:id/post/:postId/reply', requireAuth, (req, res) => {
     }
 });
 
-// ──────────────────────────────────────────────
-// POST /:id/avatar — Update community avatar
-// Only owner can update community avatar
-// ──────────────────────────────────────────────
-router.post('/:id/avatar', requireAuth, (req, res) => {
+router.post('/:id/avatar', requireAuth, upload.single('custom_community_avatar'), (req, res) => {
     try {
         const db = req.app.locals.db;
         const communityId = parseInt(req.params.id);
@@ -376,9 +387,14 @@ router.post('/:id/avatar', requireAuth, (req, res) => {
             return res.status(403).render('error', { title: 'Forbidden', message: 'Only the community owner can change the avatar.' });
         }
 
-        const { avatar_url } = req.body;
-        if (avatar_url) {
-            db.db.prepare('UPDATE communities SET avatar_url = ? WHERE id = ?').run(avatar_url, communityId);
+        // If custom file uploaded, use it. Otherwise fallback to preset selected in radio buttons.
+        let resolvedAvatarUrl = req.body.avatar_url || community.avatar_url;
+        if (req.file) {
+            resolvedAvatarUrl = `/images/avatars/${req.file.filename}`;
+        }
+
+        if (resolvedAvatarUrl) {
+            db.db.prepare('UPDATE communities SET avatar_url = ? WHERE id = ?').run(resolvedAvatarUrl, communityId);
         }
 
         res.redirect('back');

@@ -91,7 +91,7 @@
             <% if (currentUser && currentUser.id === community.owner_id) { %>
               <div id="community-avatar-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #ED1A7B; background:#FFF0F5;">
                 <legend><i class="i">&#xe3b0;</i> Select Community Avatar</legend>
-                <form method="POST" action="/communities/<%= community.id %>/avatar">
+                <form method="POST" action="/communities/<%= community.id %>/avatar" enctype="multipart/form-data">
                   <div class="d-flex gap-md" style="flex-wrap:wrap; padding:10px; background:#fff; border:2px inset #999; border-radius:4px; max-height:220px; overflow-y:auto; margin-bottom:10px;">
                     <% 
                       const comPresets = [
@@ -112,6 +112,10 @@
                         <input type="radio" name="avatar_url" value="<%= p.path %>" <%= community.avatar_url === p.path ? 'checked' : '' %> style="margin-top:2px;">
                       </label>
                     <% }) %>
+                  </div>
+                  <div style="margin-bottom:12px; padding:8px; background:#fff; border:1px solid #ccc;">
+                    <label style="font-size:11px; font-weight:bold; display:block; margin-bottom:4px;">Or Upload a Custom Logo:</label>
+                    <input type="file" name="custom_community_avatar" accept="image/*" class="xp-input" style="font-size:11px; padding:2px;">
                   </div>
                   <button type="submit" class="xp-btn xp-btn--primary">Save Avatar</button>
                   <button type="button" class="xp-btn" onclick="document.getElementById('community-avatar-panel').style.display='none'">Cancel</button>

@@ -1,6 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const multer = require('multer');
 const { requireAuth } = require('../middleware/auth');
+
+// Multer storage for custom profile avatars
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../public/images/avatars'));
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const ext = path.extname(file.originalname) || '.png';
+        cb(null, 'user_upload_' + uniqueSuffix + ext);
+    }
+});
+const upload = multer({ storage });
 
 // ──────────────────────────────────────────────
 // BFS: Find degrees of separation between two users
@@ -199,10 +214,7 @@ router.get('/:username/edit', requireAuth, (req, res) => {
     }
 });
 
-// ──────────────────────────────────────────────
-// POST /:username/edit — Save profile changes (owner only)
-// ──────────────────────────────────────────────
-router.post('/:username/edit', requireAuth, (req, res) => {
+router.post('/:username/edit', requireAuth, upload.single('custom_avatar'), (req, res) => {
     try {
         const db = req.app.locals.db;
         const { username } = req.params;
@@ -225,6 +237,12 @@ router.post('/:username/edit', requireAuth, (req, res) => {
             interests_tv, interests_books, interests_heroes,
             custom_css, profile_song, avatar_url
         } = req.body;
+
+        // Resolve uploaded custom photo path if present, otherwise fallback to selected preset or current avatar
+        let resolvedAvatarUrl = avatar_url || user.avatar_url;
+        if (req.file) {
+            resolvedAvatarUrl = `/images/avatars/${req.file.filename}`;
+        }
 
         // Use submitted value if present, otherwise keep the existing stored value.
         // This prevents blank optional fields from wiping saved data.
@@ -273,7 +291,7 @@ router.post('/:username/edit', requireAuth, (req, res) => {
             safeVal(interests_heroes, user.interests_heroes),
             safeVal(custom_css, user.custom_css),
             safeVal(profile_song, user.profile_song),
-            avatar_url || user.avatar_url || '/images/avatars/default.png',
+            resolvedAvatarUrl || '/images/avatars/default.png',
             user.id
         );
 

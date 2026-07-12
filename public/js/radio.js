@@ -38,9 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize iPod Menu directly with static songs
     renderIpodMenu();
 
-    // Initialize Shoutbox
+    // Initialize Shoutbox with WebSockets and fallback to polling
     pollShoutbox();
-    setInterval(pollShoutbox, 5000); // Poll every 5s
+    initShoutboxWebSocket();
 
     // Input handlers for shoutbox
     const input = document.getElementById('shoutbox-input');
@@ -241,6 +241,62 @@ function stopIpodProgress() {
 }
 
 /* ─── Shoutbox Live Integration ──────────────────────── */
+function initShoutboxWebSocket() {
+    try {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}`;
+        const ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            console.log('[ws] Connected to real-time chat socket channel');
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                if (message.type === 'shoutbox') {
+                    // Append incoming broadcast message directly to the shoutbox
+                    appendShoutboxMessage(message.data);
+                }
+            } catch (e) {
+                console.error('[ws] Failed to parse broadcast message:', e);
+            }
+        };
+
+        ws.onerror = (err) => {
+            console.warn('[ws] Connection error. Polling fallback active.', err);
+        };
+
+        ws.onclose = () => {
+            console.warn('[ws] Channel closed. Re-polling fallback...');
+            // Fallback: poll every 6 seconds if WS is disconnected
+            setInterval(pollShoutbox, 6000);
+        };
+    } catch (err) {
+        console.warn('[ws] WS setup failed. Falling back to HTTP polling.', err);
+        setInterval(pollShoutbox, 6000);
+    }
+}
+
+function appendShoutboxMessage(msg) {
+    const container = document.getElementById('shoutbox-messages');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'shoutbox__msg';
+
+    const dateObj = new Date(msg.created_at);
+    const timeStr = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
+
+    div.innerHTML = `
+        <span class="shoutbox__msg-time">[${timeStr}]</span>
+        <span class="shoutbox__msg-author">&lt;${msg.display_name}&gt;</span>
+        <span class="shoutbox__msg-content">${escapeHTML(msg.content)}</span>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
 function pollShoutbox() {
     fetch('/shoutbox/api/messages')
         .then(res => res.json())
@@ -283,13 +339,15 @@ function sendShoutboxMessage() {
     fetch('/shoutbox', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({ content: text })
     })
     .then(() => {
         input.value = '';
-        pollShoutbox();
+        // No need to call pollShoutbox() here because the server 
+        // broadcasts it back via WebSockets immediately!
     })
     .catch(err => {
         console.error('[Send Message failed]:', err);

@@ -170,7 +170,7 @@ app.use((req, res) => {
 });
 
 // ─── Start Server ───────────────────────────────────────
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`
   ╔══════════════════════════════════════════════════╗
   ║   Frequency 2004 Social is LIVE! 🚀     ║
@@ -179,5 +179,17 @@ app.listen(PORT, () => {
   ╚══════════════════════════════════════════════════╝
   `);
 });
+
+// ─── WebSocket Server for Shoutbox Broadcast ────────────
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  console.log('[ws] Client connected to live shoutbox channel');
+  ws.on('close', () => console.log('[ws] Client disconnected'));
+});
+
+// Attach WebSocket Server reference to app locals so routes can broadcast
+app.locals.wss = wss;
 
 module.exports = app;

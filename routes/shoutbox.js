@@ -44,14 +44,42 @@ router.post('/', requireAuth, (req, res) => {
         }
 
         // Insert the shoutbox message
-        db.db.prepare(`
+        const result = db.db.prepare(`
             INSERT INTO shoutbox_messages (user_id, content)
             VALUES (?, ?)
         `).run(currentUserId, content.trim());
 
+        const newMsgId = result.lastInsertRowid;
+
+        // Fetch details of the newly posted message to broadcast
+        const freshMsg = db.db.prepare(`
+            SELECT sm.id, sm.content, sm.created_at, u.username, u.display_name
+            FROM shoutbox_messages sm
+            JOIN users u ON u.id = sm.user_id
+            WHERE sm.id = ?
+        `).get(newMsgId);
+
+        // Broadcast to all active WebSocket connections
+        const wss = req.app.locals.wss;
+        if (wss && wss.clients) {
+            const payload = JSON.stringify({ type: 'shoutbox', data: freshMsg });
+            wss.clients.forEach(client => {
+                if (client.readyState === 1) { // WebSocket.OPEN
+                    client.send(payload);
+                }
+            });
+        }
+
+        // Return JSON if requested as API, or redirect back
+        if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
+            return res.json(freshMsg);
+        }
         res.redirect('/shoutbox');
     } catch (err) {
         console.error('Shoutbox post error:', err);
+        if (req.headers['accept'] && req.headers['accept'].includes('application/json')) {
+            return res.status(500).json({ error: 'Failed to post message' });
+        }
         res.redirect('/shoutbox');
     }
 });
