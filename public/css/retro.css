@@ -1241,6 +1241,24 @@ a:active { color: var(--accent-red); }
   .auth-window {
     width: 100%;
   }
+  
+  /* Private Messenger Mobile Stack */
+  .messenger-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .friends-list-panel {
+    width: 100% !important;
+  }
+  .friends-list-panel .xp-window__body {
+    height: 160px !important;
+  }
+  .chat-window-panel {
+    width: 100% !important;
+  }
+  .chat-log-box {
+    height: 250px !important;
+  }
 }
 
 @media (max-width: 480px) {
