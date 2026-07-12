@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=VT323&size=30&duration=2000&pause=1000&color=FFD700&center=true&vCenter=true&width=500&lines=Welcome+to+Frequency+2004;Relive+the+Golden+Days+of+the+Internet;Yeh+Un+Dino+Ki+Baat+Hai" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=VT323&size=32&duration=1800&pause=1000&color=FFD700&center=true&vCenter=true&width=500&lines=Frequency+2004;Relive+The+Nostalgia;Build+The+Retro+Web" alt="Typing SVG" />
 </p>
 
 <p align="center">
@@ -23,9 +23,9 @@
 ---
 
 ## 🎨 The Aesthetic Philosophy
-Frequency 2004 is a nostalgia machine meticulously designed to recreate the specific visual texture of browsing the web in the early 2000s. The design blends elements from **MySpace (2003-2008)**, **Orkut (2004-2010)**, and the classic **Windows XP / Internet Explorer 6** system interface.
+Frequency 2004 is a nostalgia machine designed to recreate the visual texture of browsing the web in the early 2000s. The design blends elements from **MySpace (2003-2008)**, **Orkut (2004-2010)**, and the classic **Windows XP / Internet Explorer 6** system interface.
 
-*   **VCR OSD Typography**: Features a system-wide font configuration utilizing `VCR OSD Mono` (VCR EAS) to mimic retro VHS and CRT monitors.
+*   **VCR OSD Typography**: System-wide font configuration utilizing `VCR OSD Mono` (VCR EAS) to mimic retro VHS and CRT monitors.
 *   **XP Bliss Windows**: Metallic borders, beveled outset/inset panels, and blue-to-gradient title bars.
 *   **CRT Scanlines**: Subtle styling overlay elements that make the application feel like a physical 2004 monitor screen.
 *   **Sparkle Cursor Trail**: Interactive mouse coordinate tracker emitting trailing custom colored stars.
@@ -83,3 +83,9 @@ Badges are hardcoded case-insensitively for the system's verified authors:
 *   `anshmishra` (Ansh Mishra)
 *   `naitik12` (Naitik)
 *   `Exe_sparsh` (Sparsh)
+
+---
+
+<p align="center">
+  <sub>Frequency 2004 — Relive the Web of Yesterday, Today.</sub>
+</p>
