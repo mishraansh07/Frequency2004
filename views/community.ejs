@@ -127,6 +127,22 @@
           <!-- Left: Discussion Forum -->
           <div class="layout-two-col__main">
             
+            <!-- MusicZone Song Player -->
+            <% if (community.category === 'MusicZone') { %>
+              <% 
+                const cleanName = community.name.replace('Zone', '').trim().toLowerCase();
+                const station = stations.find(s => s.name.toLowerCase().includes(cleanName) || cleanName.includes(s.name.toLowerCase()));
+              %>
+              <% if (station) { %>
+                <div class="xp-fieldset mb-md" style="background:#f4f3ee; border-color:#8a8a8a; padding:12px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <legend style="font-weight:bold; color:#0055ff; font-size:11px;"><i class="i">&#xe618;</i> Playing Song in this Zone</legend>
+                  <div style="font-weight:bold; font-size:14px; color:#333;"><%= station.name %></div>
+                  <div style="font-size:11px; color:#666;"><%= station.genre %></div>
+                  <audio src="<%= station.url %>" controls style="width:100%; max-width:400px; height:32px; margin-top:4px;"></audio>
+                </div>
+              <% } %>
+            <% } %>
+            
             <!-- Create a New Topic Form -->
             <% if (currentUser && isMember) { %>
               <div class="xp-fieldset">
