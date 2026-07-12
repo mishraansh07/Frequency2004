@@ -590,6 +590,7 @@ function initialize() {
 
     if (needReSeed) {
       console.log("[database] Dev database version outdated. Dropping tables to re-seed Dev Vaishnavi + MusicZones...");
+      db.prepare("PRAGMA foreign_keys = OFF").run();
       const tables = [
         'users', 'friendships', 'top_friends', 'scraps', 'testimonials', 
         'ratings', 'communities', 'community_members', 'community_posts', 
@@ -598,6 +599,7 @@ function initialize() {
       for (const table of tables) {
         db.prepare(`DROP TABLE IF EXISTS ${table}`).run();
       }
+      db.prepare("PRAGMA foreign_keys = ON").run();
     }
 
     createTables();
