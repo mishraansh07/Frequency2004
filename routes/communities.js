@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const fs = require('fs');
 const multer = require('multer');
 const { requireAuth } = require('../middleware/auth');
 
@@ -16,6 +17,36 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage });
+
+// Programmatic directory check for audio uploads
+const audioDir = path.join(__dirname, '../public/audio');
+if (!fs.existsSync(audioDir)) {
+    fs.mkdirSync(audioDir, { recursive: true });
+}
+
+// Multer storage for community audio uploads
+const audioStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, audioDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const ext = path.extname(file.originalname) || '.mp3';
+        cb(null, 'community_audio_' + uniqueSuffix + ext);
+    }
+});
+const uploadAudio = multer({ 
+    storage: audioStorage,
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /mp3|mpeg|wav|ogg|m4a|mp4/;
+        const mimeType = allowedTypes.test(file.mimetype);
+        const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        if (mimeType && extName) {
+            return cb(null, true);
+        }
+        cb(new Error('Only audio files are allowed!'));
+    }
+});
 
 // ──────────────────────────────────────────────
 // GET / — List all communities with member counts
@@ -439,6 +470,38 @@ router.post('/:id/edit', requireAuth, (req, res) => {
     } catch (err) {
         console.error('Edit community error:', err);
         res.redirect('back');
+    }
+});
+
+// POST /communities/:id/upload-song — Handle song file upload for MusicZone
+router.post('/:id/upload-song', requireAuth, uploadAudio.single('song_file'), (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const communityId = parseInt(req.params.id);
+        const currentUserId = req.session.userId;
+
+        // Verify community exists and current user is owner
+        const community = db.db.prepare('SELECT * FROM communities WHERE id = ?').get(communityId);
+        if (!community) {
+            return res.status(404).render('error', { title: 'Not Found', message: 'Community not found' });
+        }
+        if (community.owner_id !== currentUserId) {
+            return res.status(403).render('error', { title: 'Forbidden', message: 'Only the zone owner can upload songs.' });
+        }
+
+        if (!req.file) {
+            return res.redirect('back');
+        }
+
+        const songUrl = '/audio/' + req.file.filename;
+
+        // Update database
+        db.db.prepare('UPDATE communities SET song_url = ? WHERE id = ?').run(songUrl, communityId);
+
+        res.redirect(`/communities/${communityId}`);
+    } catch (err) {
+        console.error('Audio upload error:', err);
+        res.status(500).render('error', { title: 'Error', message: 'Failed to upload audio file.' });
     }
 });
 
