@@ -202,7 +202,39 @@ function seedData() {
     profile_views:1337, avatar_url:'/images/avatars/pixel1.png', profile_id:1001
   });
 
-  // id=2: CoOl_DuDe99
+  // id=2: naitik12 (Developer)
+  insUser.run({
+    username:'naitik12', email:'naitik12@example.com', hash,
+    display_name:'Naitik',
+    headline:'Verified Developer of Frequency 2004',
+    bio:'Hey! I am Naitik, a developer on Frequency 2004. Glad to be building this retro corner of the web!',
+    mood:'Coding...',
+    location:'Delhi, India', gender:'Male', age:20,
+    custom_css:'',
+    interests_music:'Lucky Ali, Strings, KK, Classic Bollywood',
+    interests_movies:'Dil Chahta Hai, Kal Ho Naa Ho',
+    interests_general:'Web Development, Retro Design, Cybercafes',
+    interests_heroes:'Steve Jobs, Linus Torvalds',
+    profile_views:99, avatar_url:'/images/avatars/pixel3.png', profile_id:1002
+  });
+
+  // id=3: Exe_sparsh (Developer)
+  insUser.run({
+    username:'Exe_sparsh', email:'exe_sparsh@example.com', hash,
+    display_name:'Sparsh',
+    headline:'Verified Developer of Frequency 2004',
+    bio:'Hey! I am Sparsh, a developer on Frequency 2004. Welcome to my retro profile!',
+    mood:'Coding...',
+    location:'Delhi, India', gender:'Male', age:20,
+    custom_css:'',
+    interests_music:'Linkin Park, Euphoria, Strings',
+    interests_movies:'The Matrix, Pirates of Silicon Valley',
+    interests_general:'Programming, Retro Design, Computer hardware',
+    interests_heroes:'Linus Torvalds, Dennis Ritchie',
+    profile_views:99, avatar_url:'/images/avatars/pixel4.png', profile_id:1003
+  });
+
+  // id=4: CoOl_DuDe99
   insUser.run({
     username:'CoOl_DuDe99', email:'cooldude99@yahoo.com', hash,
     display_name:'~*CoOl DuDe*~', headline:'~*~LiViNg ThE dReAm~*~',
@@ -213,10 +245,10 @@ function seedData() {
     interests_movies:'Kal Ho Naa Ho, DDLJ, Lagaan, Dil Chahta Hai',
     interests_general:'Cricket, Yahoo Messenger, MP3 collecting, Cybercafes',
     interests_heroes:'Sachin Tendulkar, Shah Rukh Khan',
-    profile_views:342, avatar_url:'/images/avatars/pixel1.png', profile_id:1002
+    profile_views:342, avatar_url:'/images/avatars/pixel1.png', profile_id:1004
   });
 
-  // id=3: PixelPrincess
+  // id=5: PixelPrincess
   insUser.run({
     username:'PixelPrincess', email:'pixelprincess@hotmail.com', hash,
     display_name:'Pixel Princess', headline:'Princess of Pixels',
@@ -227,10 +259,10 @@ function seedData() {
     interests_movies:'Mean Girls, A Walk to Remember, Harry Potter',
     interests_general:'HTML/CSS design, Geocities, cats, glitter graphics',
     interests_heroes:'My mom, Hello Kitty',
-    profile_views:521, avatar_url:'/images/avatars/pixel2.png', profile_id:1003
+    profile_views:521, avatar_url:'/images/avatars/pixel2.png', profile_id:1005
   });
 
-  // id=4: MP3_Hunter
+  // id=6: MP3_Hunter
   insUser.run({
     username:'MP3_Hunter', email:'mp3hunter@rediffmail.com', hash,
     display_name:'MP3 Hunter', headline:'Sharing is Caring | 56kbps Warrior',
@@ -241,10 +273,10 @@ function seedData() {
     interests_movies:'The Matrix, Fight Club, Gladiator',
     interests_general:'MP3 downloading, CD burning, gaming, file sharing',
     interests_heroes:'Eminem, Chester Bennington',
-    profile_views:298, avatar_url:'/images/avatars/pixel3.png', profile_id:1004
+    profile_views:298, avatar_url:'/images/avatars/pixel3.png', profile_id:1006
   });
 
-  // id=5: DialUpKing
+  // id=7: DialUpKing
   insUser.run({
     username:'DialUpKing', email:'dialupking@vsnl.net', hash,
     display_name:'The Dial-Up King', headline:'Connection Lost... Reconnecting...',
@@ -255,10 +287,10 @@ function seedData() {
     interests_movies:'Hackers, Terminator 2, Alien',
     interests_general:'Computers, modem tweaking, IRC, BSNL helpline complaining',
     interests_heroes:'Kevin Mitnick, Neo',
-    profile_views:187, avatar_url:'/images/avatars/default.png', profile_id:1005
+    profile_views:187, avatar_url:'/images/avatars/default.png', profile_id:1007
   });
 
-  // id=6: SunnyBoy2003
+  // id=8: SunnyBoy2003
   insUser.run({
     username:'SunnyBoy2003', email:'sunnyboy@yahoo.co.in', hash,
     display_name:'Sunny', headline:'Every day is a sunny day',
@@ -269,10 +301,10 @@ function seedData() {
     interests_movies:'Sholay, Koi Mil Gaya, Kaho Naa Pyaar Hai',
     interests_general:'Cricket, Yahoo chatrooms, cycling, tiffin stealing',
     interests_heroes:'Sachin Tendulkar, Shaktimaan',
-    profile_views:145, avatar_url:'/images/avatars/default.png', profile_id:1006
+    profile_views:145, avatar_url:'/images/avatars/default.png', profile_id:1008
   });
 
-  // id=7: xX_AnGeL_Xx
+  // id=9: xX_AnGeL_Xx
   insUser.run({
     username:'xX_AnGeL_Xx', email:'angel_eyes@yahoo.com', hash,
     display_name:'AnGeL', headline:'Love My Friends',
@@ -283,10 +315,10 @@ function seedData() {
     interests_movies:'Dil To Pagal Hai, Kuch Kuch Hota Hai, K3G',
     interests_general:'Passing chits, scrapbook writing, friendship bands',
     interests_heroes:'Shah Rukh Khan, my besties',
-    profile_views:412, avatar_url:'/images/avatars/pixel2.png', profile_id:1007
+    profile_views:412, avatar_url:'/images/avatars/pixel2.png', profile_id:1009
   });
 
-  // id=8: WinampFan
+  // id=10: WinampFan
   insUser.run({
     username:'WinampFan', email:'winamp_llama@gmail.com', hash,
     display_name:'Winamp4Life', headline:'It really whips the llamas ass!',
@@ -297,10 +329,10 @@ function seedData() {
     interests_movies:'High Fidelity, Almost Famous, School of Rock',
     interests_general:'Winamp skinning, audio formats, concert bootleg trading',
     interests_heroes:'Justin Frankel (Winamp creator), Jimmy Page',
-    profile_views:254, avatar_url:'/images/avatars/default.png', profile_id:1008
+    profile_views:254, avatar_url:'/images/avatars/default.png', profile_id:1010
   });
 
-  // id=9: Nokia3310
+  // id=11: Nokia3310
   insUser.run({
     username:'Nokia3310', email:'indestructible_nokia@hotmail.com', hash,
     display_name:'Snake Master', headline:'Snake High Score: 9999',
@@ -311,10 +343,10 @@ function seedData() {
     interests_movies:'Sivaji, Vikram, Anniyan',
     interests_general:'Snake II, composer mode ringtones, T9 fast typing',
     interests_heroes:'Rajinikanth, Nokia engineers',
-    profile_views:310, avatar_url:'/images/avatars/default.png', profile_id:1009
+    profile_views:310, avatar_url:'/images/avatars/default.png', profile_id:1011
   });
 
-  // id=10: BollywoodQueen
+  // id=12: BollywoodQueen
   insUser.run({
     username:'BollywoodQueen', email:'filmi_queen@yahoo.com', hash,
     display_name:'Bollywood Queen', headline:'Bollywood is Life, Bollywood is Love',
@@ -325,10 +357,10 @@ function seedData() {
     interests_movies:'Dilwale Dulhania Le Jayenge, Kabhi Khushi Kabhie Gham, Devdas',
     interests_general:'Cinema, movie poster collecting, gossip magazines, antakshari',
     interests_heroes:'Shah Rukh Khan, Kajol, Aishwarya Rai',
-    profile_views:654, avatar_url:'/images/avatars/pixel2.png', profile_id:1010
+    profile_views:654, avatar_url:'/images/avatars/pixel2.png', profile_id:1012
   });
 
-  // id=11: TechGeek2004
+  // id=13: TechGeek2004
   insUser.run({
     username:'TechGeek2004', email:'lets_cpp@gmail.com', hash,
     display_name:'Tech Geek', headline:'01001000 01100101 01101100 01101100 01101111',
@@ -339,10 +371,10 @@ function seedData() {
     interests_movies:'WarGames, Tron, Pirates of Silicon Valley',
     interests_general:'PC building, Linux, C++, over-clocking, CRT monitors',
     interests_heroes:'Linus Torvalds, Bill Gates (sorry), Yashavant Kanetkar',
-    profile_views:489, avatar_url:'/images/avatars/pixel4.png', profile_id:1011
+    profile_views:489, avatar_url:'/images/avatars/pixel4.png', profile_id:1013
   });
 
-  console.log('[database]   11 users created (1 developer + 10 demo)');
+  console.log('[database]   13 users created (3 developer + 10 demo)');
 
   // ─── Friendships ─────────────────────────────────────
   const insFriend = db.prepare(`INSERT INTO friendships(requester_id,addressee_id,status) VALUES(?,?,'accepted')`);
@@ -370,12 +402,18 @@ function seedData() {
     insCom.run('Retro Games Forever','Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!','Fun & Games',11,'/images/avatars/comm_pixel5.png');
     insCom.run('Frequency 2004 FM Listeners','Official community for Frequency 2004 FM radio listeners. Request songs and share the love for radio!','Music',1,'/images/avatars/comm_pixel1.png');
 
-    [[1,1,'owner'],[1,2,'member'],[1,3,'member'],[1,6,'member'],[1,10,'moderator'],[1,7,'member']].forEach(r=>insMem.run(...r));
-    [[2,7,'owner'],[2,1,'member'],[2,2,'member'],[2,6,'member'],[2,9,'member'],[2,10,'member']].forEach(r=>insMem.run(...r));
-    [[3,5,'owner'],[3,1,'member'],[3,4,'member'],[3,6,'member'],[3,8,'member'],[3,11,'member']].forEach(r=>insMem.run(...r));
-    [[4,9,'owner'],[4,5,'member'],[4,6,'member'],[4,7,'member'],[4,10,'member']].forEach(r=>insMem.run(...r));
-    [[5,11,'owner'],[5,1,'member'],[5,4,'member'],[5,5,'member'],[5,6,'member'],[5,8,'moderator']].forEach(r=>insMem.run(...r));
-    [[6,1,'owner'],[6,2,'member'],[6,3,'member'],[6,7,'member'],[6,10,'member'],[6,6,'member'],[6,8,'member']].forEach(r=>insMem.run(...r));
+    // c1 Bollywood
+    [[1,1,'owner'],[1,4,'member'],[1,5,'member'],[1,8,'member'],[1,12,'moderator'],[1,9,'member']].forEach(r=>insMem.run(...r));
+    // c2 School
+    [[2,9,'owner'],[2,1,'member'],[2,4,'member'],[2,8,'member'],[2,11,'member'],[2,12,'member']].forEach(r=>insMem.run(...r));
+    // c3 Dial-Up
+    [[3,7,'owner'],[3,1,'member'],[3,6,'member'],[3,8,'member'],[3,10,'member'],[3,13,'member']].forEach(r=>insMem.run(...r));
+    // c4 Nokia
+    [[4,11,'owner'],[4,7,'member'],[4,8,'member'],[4,9,'member'],[4,12,'member']].forEach(r=>insMem.run(...r));
+    // c5 Games
+    [[5,13,'owner'],[5,1,'member'],[5,6,'member'],[5,7,'member'],[5,8,'member'],[5,10,'moderator']].forEach(r=>insMem.run(...r));
+    // c6 FM
+    [[6,1,'owner'],[6,4,'member'],[6,5,'member'],[6,9,'member'],[6,12,'member'],[6,8,'member'],[6,10,'member']].forEach(r=>insMem.run(...r));
   })();
   console.log('[database]   6 communities + memberships created');
 
@@ -388,94 +426,94 @@ function seedData() {
 
   // Community 1: Bollywood
   const b1 = ap(1,1,'Welcome to Bollywood Music Lovers!','I created this community for sharing our love of Bollywood. Drop your top 5 songs of 2003 below!');
-  const b2 = ap(1,2,'Best Bollywood song of 2003??','Kal Ho Naa Ho title track is the BEST this year. What do you think?');
-  const b3 = ap(1,10,'Shankar-Ehsaan-Loy appreciation','Dil Chahta Hai, Kal Ho Naa Ho, Bunty Aur Babli... every album is a banger!!');
-  ar(b1,10,'The FM stations keep playing their songs all day and I never get tired of it!');
-  ar(b1, 2,'Kal Ho Naa Ho forever!! SRK is unbeatable.');
-  ar(b2,10,'Kajra Re is also stuck in my head 24/7 lol.');
-  ar(b2, 4,'I have a 320kbps version of the full album if anyone wants it. DM me on Yahoo!');
+  const b2 = ap(1,4,'Best Bollywood song of 2003??','Kal Ho Naa Ho title track is the BEST this year. What do you think?');
+  const b3 = ap(1,12,'Shankar-Ehsaan-Loy appreciation','Dil Chahta Hai, Kal Ho Naa Ho, Bunty Aur Babli... every album is a banger!!');
+  ar(b1,12,'The FM stations keep playing their songs all day and I never get tired of it!');
+  ar(b1, 4,'Kal Ho Naa Ho forever!! SRK is unbeatable.');
+  ar(b2,12,'Kajra Re is also stuck in my head 24/7 lol.');
+  ar(b2, 6,'I have a 320kbps version of the full album if anyone wants it. DM me on Yahoo!');
 
   // Community 2: School Days
-  const s1 = ap(2,7,'Things only 90s kids remember','SLAM BOOKS!! Remember filling them for all your friends?? I still have mine from 8th class!');
-  const s2 = ap(2,6,'PT period was the best period!!','No books, no homework, just playing in the ground!');
-  ar(s1, 3,'OMG SLAM BOOKS YES!! My favorite color answer was always PINK.');
-  ar(s1, 6,'Remember those friendship bands?? We used to make them in art class on Friendship Day.');
-  ar(s2, 2,'Dude the best was tiffin sharing. My mom made the best parathas and everyone wanted to trade.');
+  const s1 = ap(2,9,'Things only 90s kids remember','SLAM BOOKS!! Remember filling them for all your friends?? I still have mine from 8th class!');
+  const s2 = ap(2,8,'PT period was the best period!!','No books, no homework, just playing in the ground!');
+  ar(s1, 5,'OMG SLAM BOOKS YES!! My favorite color answer was always PINK.');
+  ar(s1, 8,'Remember those friendship bands?? We used to make them in art class on Friendship Day.');
+  ar(s2, 4,'Dude the best was tiffin sharing. My mom made the best parathas and everyone wanted to trade.');
 
   // Community 3: Dial-Up
-  const d1 = ap(3,5,'BSNL broadband launch date confirmed??','I heard BSNL is launching broadband next month!! 256 kbps for Rs. 500/month!! NO MORE DIAL-UP!!');
-  const d2 = ap(3,11,'Tips to speed up dial-up','Close all background programs. Disable images in browser. Download files at night.');
-  ar(d1, 5,'FINALLY!! No more download resume issues at 3 AM!!');
-  ar(d2, 7,'DISABLE IMAGES?? But how will I see the cool profile pictures on Orkut??');
-  ar(d2, 9,'Pro tip: download between 2-5 AM. Fastest speeds because everyone is sleeping.');
+  const d1 = ap(3,7,'BSNL broadband launch date confirmed??','I heard BSNL is launching broadband next month!! 256 kbps for Rs. 500/month!! NO MORE DIAL-UP!!');
+  const d2 = ap(3,13,'Tips to speed up dial-up','Close all background programs. Disable images in browser. Download files at night.');
+  ar(d1, 7,'FINALLY!! No more download resume issues at 3 AM!!');
+  ar(d2, 9,'DISABLE IMAGES?? But how will I see the cool profile pictures on Orkut??');
+  ar(d2, 11,'Pro tip: download between 2-5 AM. Fastest speeds because everyone is sleeping.');
 
   // Community 4: Nokia
-  const n1 = ap(4,9,'Post your Snake high scores!!','My current high score is 9999 (maxed it out). I play during every boring class. What is yours??');
-  const n2 = ap(4,6,'Best self-composed ringtone?','I spent 3 hours composing Kal Ho Naa Ho on my Nokia. It sounds 80% like the original!');
-  ar(n1, 6,'My score is 7832. How do you get 9999?? Are you playing during EVERY class??');
-  ar(n1, 9,'I got 8500 once but my friend called and I lost focus. Phone calls ruin everything.');
+  const n1 = ap(4,11,'Post your Snake high scores!!','My current high score is 9999 (maxed it out). I play during every boring class. What is yours??');
+  const n2 = ap(4,8,'Best self-composed ringtone?','I spent 3 hours composing Kal Ho Naa Ho on my Nokia. It sounds 80% like the original!');
+  ar(n1, 8,'My score is 7832. How do you get 9999?? Are you playing during EVERY class??');
+  ar(n1, 11,'I got 8500 once but my friend called and I lost focus. Phone calls ruin everything.');
 
   // Community 5: Games
-  const g1 = ap(5,11,'NFS II SE or Road Rash - which is better??','ULTIMATE debate. NFS II SE has better graphics. Road Rash has the thrill of hitting people with clubs lol.');
-  const g2 = ap(5, 8,'Dave is the most underrated game ever','Everyone talks about Mario and Contra but NO ONE talks about Dangerous Dave!!');
+  const g1 = ap(5,13,'NFS II SE or Road Rash - which is better??','ULTIMATE debate. NFS II SE has better graphics. Road Rash has the thrill of hitting people with clubs lol.');
+  const g2 = ap(5, 10,'Dave is the most underrated game ever','Everyone talks about Mario and Contra but NO ONE talks about Dangerous Dave!!');
   const g3 = ap(5, 1,'Contra: Up Up Down Down Left Right Left Right B A','If you know this code, you are a real gamer. 30 lives! We used to play 2-player at my friends house every Sunday.');
-  ar(g1, 2,'ROAD RASH any day!! The feeling of kicking someone off their bike at 200 km/h is unmatched.');
-  ar(g1, 6,'NFS II SE! That Monolithic Studios track with the McLaren F1 is the GOAT racing experience.');
-  ar(g3,11,'The Konami Code!! Essential knowledge. Without 30 lives that game is impossible.');
-  ar(g3, 8,'I once completed Contra without the code. Took 3 weeks of practice. My proudest achievement.');
+  ar(g1, 4,'ROAD RASH any day!! The feeling of kicking someone off their bike at 200 km/h is unmatched.');
+  ar(g1, 8,'NFS II SE! That Monolithic Studios track with the McLaren F1 is the GOAT racing experience.');
+  ar(g3,13,'The Konami Code!! Essential knowledge. Without 30 lives that game is impossible.');
+  ar(g3, 10,'I once completed Contra without the code. Took 3 weeks of practice. My proudest achievement.');
 
   // Community 6: FM Radio
   const f1 = ap(6,1,'Song request thread!','Post your song requests here! Most requested so far: Kal Ho Naa Ho. Keep them coming!');
-  const f2 = ap(6,10,'The midnight show is the best!','Does anyone else stay up late to listen?? Slow romantic songs + no ads = perfection.');
-  ar(f1,10,'Please play Tere Bina by A.R. Rahman!! I love that song so much.');
-  ar(f1, 7,'Can you play some sad songs at night?? Tujhe Bhula Diya and Aadat pls!!');
-  ar(f1, 3,'Play some Backstreet Boys too!! Not everything has to be Bollywood.');
+  const f2 = ap(6,12,'The midnight show is the best!','Does anyone else stay up late to listen?? Slow romantic songs + no ads = perfection.');
+  ar(f1,12,'Please play Tere Bina by A.R. Rahman!! I love that song so much.');
+  ar(f1, 9,'Can you play some sad songs at night?? Tujhe Bhula Diya and Aadat pls!!');
+  ar(f1, 5,'Play some Backstreet Boys too!! Not everything has to be Bollywood.');
   console.log('[database]   Community posts + replies created');
 
   // ─── Scraps ──────────────────────────────────────────
   const insScrap = db.prepare(`INSERT INTO scraps(author_id,recipient_id,content) VALUES(?,?,?)`);
   db.transaction(() => {
-    insScrap.run(2, 1,'bro this site is AMAZING!! you built this whole thing?? add me on Yahoo Messenger lets chat!!');
-    insScrap.run(3, 1,'heyyy!! your profile looks so cool!! can you teach me how to code too?? pls pls pls!!');
-    insScrap.run(11,1,'nice work on Frequency 2004! The retro XP theme is a nice touch. Did you use EJS for the templates?');
-    insScrap.run(10,1,'I am your biggest fan!! This website is so cool. Please add a Bollywood songs section!!');
-    insScrap.run(2, 3,'hey pixel princess!! love ur new profile style!! the pink theme is SO pretty!');
-    insScrap.run(3, 2,'aww thank you!! I spent 3 hours on the custom CSS hehe. How did you find this site??');
-    insScrap.run(4, 2,'PixelPrincess can you burn me a CD of your fav songs?? I can pay 20 rupees!!');
-    insScrap.run(5, 4,'bro I have been disconnected 5 times today. MOM KEEPS PICKING UP THE PHONE!!!!');
-    insScrap.run(9,10,'bollywood queen do an antakshari with me!! I bet I know more SRK songs than you!!');
-    insScrap.run(10,9,'CHALLENGE ACCEPTED!! Meet me at the cybercafe at 5pm!!');
-    insScrap.run(8,11,'bro your pc build sounds epic. How did you get the GeForce MX 440 so cheap from Nehru Place??');
-    insScrap.run(11,8,'haha the shopkeeper gave me wholesale price. Go early morning — that is the trick!');
+    insScrap.run(4, 1,'bro this site is AMAZING!! you built this whole thing?? add me on Yahoo Messenger lets chat!!');
+    insScrap.run(5, 1,'heyyy!! your profile looks so cool!! can you teach me how to code too?? pls pls pls!!');
+    insScrap.run(13,1,'nice work on Frequency 2004! The retro XP theme is a nice touch. Did you use EJS for the templates?');
+    insScrap.run(12,1,'I am your biggest fan!! This website is so cool. Please add a Bollywood songs section!!');
+    insScrap.run(4, 5,'hey pixel princess!! love ur new profile style!! the pink theme is SO pretty!');
+    insScrap.run(5, 4,'aww thank you!! I spent 3 hours on the custom CSS hehe. How did you find this site??');
+    insScrap.run(6, 4,'PixelPrincess can you burn me a CD of your fav songs?? I can pay 20 rupees!!');
+    insScrap.run(7, 6,'bro I have been disconnected 5 times today. MOM KEEPS PICKING UP THE PHONE!!!!');
+    insScrap.run(11,12,'bollywood queen do an antakshari with me!! I bet I know more SRK songs than you!!');
+    insScrap.run(12,11,'CHALLENGE ACCEPTED!! Meet me at the cybercafe at 5pm!!');
+    insScrap.run(10,13,'bro your pc build sounds epic. How did you get the GeForce MX 440 so cheap from Nehru Place??');
+    insScrap.run(13,10,'haha the shopkeeper gave me wholesale price. Go early morning — that is the trick!');
   })();
   console.log('[database]   Scraps created');
 
   // ─── Testimonials on Ansh Mishra profile ─────────────
   const insTest = db.prepare(`INSERT INTO testimonials(author_id,recipient_id,content,approved) VALUES(?,?,?,1)`);
   db.transaction(() => {
-    insTest.run(11,1,'Ansh built this entire platform from scratch. Node.js backend, SQLite database, custom retro CSS, the works. Absolute legend. This is the coolest indie project I have seen!! Future Google founder right here.');
-    insTest.run(2, 1,'Dude bro this site is SICK!! It reminds me of Orkut but 10x cooler. I have been on it every day since I joined. Add me as friend if you have not already!!');
-    insTest.run(10,1,'Ansh created a website that feels like 2004 but works perfectly today. The nostalgia hit me like a train. Thank you for building this!! It brought back so many school memories.');
+    insTest.run(13,1,'Ansh built this entire platform from scratch. Node.js backend, SQLite database, custom retro CSS, the works. Absolute legend. This is the coolest indie project I have seen!! Future Google founder right here.');
+    insTest.run(4, 1,'Dude bro this site is SICK!! It reminds me of Orkut but 10x cooler. I have been on it every day since I joined. Add me as friend if you have not already!!');
+    insTest.run(12,1,'Ansh created a website that feels like 2004 but works perfectly today. The nostalgia hit me like a train. Thank you for building this!! It brought back so many school memories.');
   })();
   console.log('[database]   Testimonials created');
 
   // ─── Shoutbox ────────────────────────────────────────
   const insShout = db.prepare(`INSERT INTO shoutbox_messages(user_id,content) VALUES(?,?)`);
   db.transaction(() => {
-    insShout.run(2, 'A/S/L? lol old school but had to do it');
-    insShout.run(5, 'lol dial-up disconnected again :( this is the 5th time today. MOM!!');
-    insShout.run(4, 'anyone recording songs from the radio?? I need the new Atif Aslam song!!');
-    insShout.run(5, 'brb, someone picked up the phone line again. My downloading speed just died.');
-    insShout.run(8, 'Winamp really whips the llamas ass!! Best media player ever made fight me.');
-    insShout.run(7, 'omg this song reminds me of school days!! 10th class memories hitting different.');
-    insShout.run(9, 'send me the ringtone pls!! what are the keystrokes for Kal Ho Naa Ho?');
-    insShout.run(6, 'yahoo messenger anyone?? my ID is sunny_boy_jpr');
-    insShout.run(3, 'hiiii everyone!! just updated my profile!! come see my new pink theme!!');
-    insShout.run(10,'Kajra Re Kajra Re... cant stop singing this song!!');
-    insShout.run(11,'just compiled my first C++ program without errors!! cout << "hello world"');
-    insShout.run(2, 'who wants to play counter strike at cybercafe this weekend??');
-    insShout.run(9, 'new snake high score: 9247!! come at me!!');
-    insShout.run(7, 'friendship day coming soon!! making friendship bands for everyone!!');
+    insShout.run(4, 'A/S/L? lol old school but had to do it');
+    insShout.run(7, 'lol dial-up disconnected again :( this is the 5th time today. MOM!!');
+    insShout.run(6, 'anyone recording songs from the radio?? I need the new Atif Aslam song!!');
+    insShout.run(7, 'brb, someone picked up the phone line again. My downloading speed just died.');
+    insShout.run(10, 'Winamp really whips the llamas ass!! Best media player ever made fight me.');
+    insShout.run(9, 'omg this song reminds me of school days!! 10th class memories hitting different.');
+    insShout.run(11, 'send me the ringtone pls!! what are the keystrokes for Kal Ho Naa Ho?');
+    insShout.run(8, 'yahoo messenger anyone?? my ID is sunny_boy_jpr');
+    insShout.run(5, 'hiiii everyone!! just updated my profile!! come see my new pink theme!!');
+    insShout.run(12,'Kajra Re Kajra Re... cant stop singing this song!!');
+    insShout.run(13,'just compiled my first C++ program without errors!! cout << "hello world"');
+    insShout.run(4, 'who wants to play counter strike at cybercafe this weekend??');
+    insShout.run(11, 'new snake high score: 9247!! come at me!!');
+    insShout.run(9, 'friendship day coming soon!! making friendship bands for everyone!!');
     insShout.run(1, 'Welcome to Frequency 2004 everyone!! Hope you enjoy the site. Drop me a scrap!');
   })();
   console.log('[database]   Shoutbox messages created');
@@ -483,15 +521,15 @@ function seedData() {
   // ─── Ratings ─────────────────────────────────────────
   const insRating = db.prepare(`INSERT INTO ratings(rater_id,rated_id,trustworthy,cool,sexy,is_fan,is_crush) VALUES(?,?,?,?,?,?,?)`);
   db.transaction(() => {
-    insRating.run(2, 1, 3,3,1,1,0);  // CoOl_DuDe99 -> Ansh
-    insRating.run(11,1, 3,3,1,1,0);  // TechGeek -> Ansh
-    insRating.run(10,1, 3,2,1,1,0);  // BollywoodQueen -> Ansh
-    insRating.run(3, 2, 3,3,2,1,0);  // PixelPrincess -> CoOl_DuDe99
-    insRating.run(2, 3, 3,3,3,1,1);  // CoOl_DuDe99 -> PixelPrincess (crush!)
-    insRating.run(6, 7, 3,3,2,0,1);  // SunnyBoy -> Angel (crush!)
-    insRating.run(7, 6, 3,2,2,0,1);  // Angel -> SunnyBoy (mutual!)
-    insRating.run(10,2, 3,2,1,1,0);  // BollywoodQueen -> CoOl_DuDe99
-    insRating.run(4,11, 3,3,1,1,0);  // MP3_Hunter -> TechGeek
+    insRating.run(4, 1, 3,3,1,1,0);  // CoOl_DuDe99 -> Ansh
+    insRating.run(13,1, 3,3,1,1,0);  // TechGeek -> Ansh
+    insRating.run(12,1, 3,2,1,1,0);  // BollywoodQueen -> Ansh
+    insRating.run(5, 4, 3,3,2,1,0);  // PixelPrincess -> CoOl_DuDe99
+    insRating.run(4, 5, 3,3,3,1,1);  // CoOl_DuDe99 -> PixelPrincess (crush!)
+    insRating.run(8, 9, 3,3,2,0,1);  // SunnyBoy -> Angel (crush!)
+    insRating.run(9, 8, 3,2,2,0,1);  // Angel -> SunnyBoy (mutual!)
+    insRating.run(12,4, 3,2,1,1,0);  // BollywoodQueen -> CoOl_DuDe99
+    insRating.run(6,13, 3,3,1,1,0);  // MP3_Hunter -> TechGeek
   })();
   console.log('[database]   Ratings created');
 
