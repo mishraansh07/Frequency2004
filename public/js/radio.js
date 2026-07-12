@@ -9,12 +9,12 @@
 
 // Static playlist with ultra-reliable fallback MP3s to guarantee playback
 let stations = [
-    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho%20Naa%20Pyaar%20Hai.mp3' },
-    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/NA%20TUM%20JANO%20NA%20HUM.mp3' },
-    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/EK%20PAL%20KA%20JEENA.mp3' },
-    { name: 'Kal Ho Naa Ho (Theme)', genre: 'Sonu Nigam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-    { name: 'It\'s The Time To Disco (Beat)', genre: 'Shaan & KK', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-    { name: 'Mahi Ve (Theme)', genre: 'Sadhana Sargam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+    { name: 'Kal Ho Naa Ho (Theme)', genre: 'Sonu Nigam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+    { name: 'It\'s The Time To Disco (Beat)', genre: 'Shaan & KK', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+    { name: 'Mahi Ve (Theme)', genre: 'Sadhana Sargam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' }
 ];
 
 const ipodState = {
