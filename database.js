@@ -448,22 +448,22 @@ function seedData() {
 
   // ─── 4. Communities ────────────────────────────────────
   const insertCommunity = db.prepare(`
-    INSERT INTO communities (name, description, category, owner_id)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO communities (name, description, category, owner_id, avatar_url)
+    VALUES (?, ?, ?, ?, COALESCE(?, '/images/avatars/community_default.png'))
   `);
 
   const communities = [
-    ['Bollywood Music Lovers 🎵', 'For those who live and breathe Bollywood music! Share your fav songs, discuss latest albums, and relive the golden era of 90s-2000s Bollywood.', 'Music', 1],
-    ['School Days Nostalgia 🏫', 'Remember the good old school days? Tiffin sharing, PT periods, annual day, and bunking classes. Share your memories here!', 'Nostalgia', 6],
-    ['Dial-Up Survivors Club 📞', 'If you have ever been disconnected because someone picked up the phone, this community is for you. We understand your pain.', 'Technology', 4],
-    ['Nokia 3310 Appreciation Society 📱', 'The phone that refused to die. Share your Snake scores, compose ringtones, and celebrate the greatest phone ever made.', 'Fun & Games', 8],
-    ['Retro Games Forever 🎮', 'Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!', 'Fun & Games', 10],
-    ['Yeh Un Dino FM Listeners 📻', 'Official community for Yeh Un Dino Ki Baat Hai FM radio listeners. Request songs, discuss shows, and share the love for radio!', 'Music', 1],
+    ['Bollywood Music Lovers 🎵', 'For those who live and breathe Bollywood music! Share your fav songs, discuss latest albums, and relive the golden era of 90s-2000s Bollywood.', 'Music', 1, '/images/avatars/comm_pixel1.png'],
+    ['School Days Nostalgia 🏫', 'Remember the good old school days? Tiffin sharing, PT periods, annual day, and bunking classes. Share your memories here!', 'Nostalgia', 6, '/images/avatars/comm_pixel2.png'],
+    ['Dial-Up Survivors Club 📞', 'If you have ever been disconnected because someone picked up the phone, this community is for you. We understand your pain.', 'Technology', 4, '/images/avatars/comm_pixel3.png'],
+    ['Nokia 3310 Appreciation Society 📱', 'The phone that refused to die. Share your Snake scores, compose ringtones, and celebrate the greatest phone ever made.', 'Fun & Games', 8, '/images/avatars/comm_pixel4.png'],
+    ['Retro Games Forever 🎮', 'Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!', 'Fun & Games', 10, '/images/avatars/comm_pixel5.png'],
+    ['Yeh Un Dino FM Listeners 📻', 'Official community for Yeh Un Dino Ki Baat Hai FM radio listeners. Request songs, discuss shows, and share the love for radio!', 'Music', 1, '/images/avatars/comm_pixel1.png'],
   ];
 
   const insertCommunitiesTransaction = db.transaction(() => {
-    for (const [name, desc, cat, owner] of communities) {
-      insertCommunity.run(name, desc, cat, owner);
+    for (const [name, desc, cat, owner, avatar] of communities) {
+      insertCommunity.run(name, desc, cat, owner, avatar);
     }
   });
   insertCommunitiesTransaction();
