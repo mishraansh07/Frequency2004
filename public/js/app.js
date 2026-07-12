@@ -70,7 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── XP Window Close Buttons ────────────────────────
   document.querySelectorAll('.xp-titlebar__btn--close').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      const closeTo = btn.getAttribute('data-close-to');
+      if (closeTo) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = closeTo;
+        return;
+      }
+
       const win = btn.closest('.xp-window');
       if (win) {
         win.style.transition = 'opacity 0.3s, transform 0.3s';
