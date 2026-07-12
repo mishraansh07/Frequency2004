@@ -7,14 +7,15 @@
  * ============================================================
  */
 
-// Static playlist with ultra-reliable fallback MP3s to guarantee playback
 let stations = [
-    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-    { name: 'Kal Ho Naa Ho (Theme)', genre: 'Sonu Nigam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-    { name: 'It\'s The Time To Disco (Beat)', genre: 'Shaan & KK', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
-    { name: 'Mahi Ve (Theme)', genre: 'Sadhana Sargam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' }
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho Naa Pyaar Hai.mp3' },
+    { name: 'O Sanam', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky Ali - Sunoh (1996)/01 - Lucky Ali - O Sanam .mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY ALI AKS/EK PAL KA JEENA.mp3' },
+    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY ALI AKS/NA TUM JANO NA HUM.mp3' },
+    { name: 'Dil Chahta Hai', genre: 'Shankar Mahadevan', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/1. Dil Chahta Hai - hindiganadownload.com.mp3' },
+    { name: 'Jaane Kyon Log Pyaar', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/2. Jaane Kyon - hindiganadownload.com.mp3' },
+    { name: 'Woh Ladki Hai Kahan', genre: 'Shaan & Kavita Krishnamurthy', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/3. Woh Ladki Hai Kahan - hindiganadownload.com.mp3' },
+    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/7. Tanhayee - hindiganadownload.com.mp3' }
 ];
 
 const ipodState = {
