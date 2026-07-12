@@ -226,11 +226,11 @@
       const isMe = msg.sender_id === currentUserId;
       const senderName = isMe ? currentUserName : friendObj.display_name;
       const headerClass = isMe ? 'msg-header sent' : 'msg-header received';
-      const timeStr = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const timeStr = formatMsgTime(msg.created_at);
 
       msgBlock.innerHTML = `
         <div class="${headerClass}">${senderName} (${timeStr}) says:</div>
-        <div class="msg-content">${escapeHTML(msg.content)}</div>
+        <div class="msg-content">${formatMessageContent(msg.content)}</div>
       `;
 
       log.appendChild(msgBlock);
@@ -528,6 +528,27 @@
           '"': '&quot;'
         }[tag] || tag)
       );
+    }
+
+    function formatMsgTime(timeStr) {
+      if (!timeStr) return '';
+      // SQLite datetime strings are UTC and look like: 'YYYY-MM-DD HH:MM:SS'
+      // If no timezone suffix exists, replace space with 'T' and add 'Z' so browser treats it as UTC
+      if (!timeStr.endsWith('Z') && !timeStr.includes('+') && !timeStr.includes('-')) {
+        timeStr = timeStr.replace(' ', 'T') + 'Z';
+      }
+      return new Date(timeStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatMessageContent(content) {
+      let escaped = escapeHTML(content);
+      // Replace /radio?room=some_user with a clickable link
+      const roomRegex = /\/radio\?room=([a-zA-Z0-9_%+-]+)/g;
+      escaped = escaped.replace(roomRegex, (match, roomName) => {
+        const decodedRoom = decodeURIComponent(roomName);
+        return `<a href="/radio?room=${encodeURIComponent(decodedRoom)}" class="listening-party-link" style="color:#0055ff; text-decoration:underline; font-weight:bold;">/radio?room=${escapeHTML(decodedRoom)}</a>`;
+      });
+      return escaped;
     }
   </script>
 </body>
