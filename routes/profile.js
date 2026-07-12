@@ -101,6 +101,19 @@ router.get('/:username', (req, res) => {
             ORDER BY t.created_at DESC
         `).all(profileUser.id);
 
+        // Load pending testimonials if the viewer is the profile owner
+        let pendingTestimonials = [];
+        if (isOwner) {
+            pendingTestimonials = db.db.prepare(`
+                SELECT t.*, u.username AS author_username, u.display_name AS author_display_name,
+                       u.avatar_url AS author_avatar
+                FROM testimonials t
+                JOIN users u ON u.id = t.author_id
+                WHERE t.recipient_id = ? AND t.approved = 0
+                ORDER BY t.created_at DESC
+            `).all(profileUser.id);
+        }
+
         // Calculate average ratings
         const avgRatings = db.db.prepare(`
             SELECT
@@ -174,6 +187,7 @@ router.get('/:username', (req, res) => {
             top8,
             scraps,
             testimonials,
+            pendingTestimonials,
             avgRatings: avgRatings || { avg_trustworthy: null, avg_cool: null, avg_sexy: null },
             fanCount,
             isFriend,
@@ -331,6 +345,50 @@ router.post('/:username/testimonial', requireAuth, (req, res) => {
         res.redirect(`/profile/${username}`);
     } catch (err) {
         console.error('Testimonial error:', err);
+        res.redirect(`/profile/${req.params.username}`);
+    }
+});
+
+// ──────────────────────────────────────────────
+// POST /:username/testimonial/:id/approve — Approve testimonial
+// ──────────────────────────────────────────────
+router.post('/:username/testimonial/:id/approve', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const { username, id } = req.params;
+        const currentUserId = req.session.userId;
+
+        const profileUser = db.db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+        if (!profileUser || profileUser.id !== currentUserId) {
+            return res.status(403).render('error', { title: 'Forbidden', message: 'You can only approve testimonials on your own profile.' });
+        }
+
+        db.db.prepare('UPDATE testimonials SET approved = 1 WHERE id = ? AND recipient_id = ?').run(id, currentUserId);
+        res.redirect(`/profile/${username}`);
+    } catch (err) {
+        console.error('Testimonial approve error:', err);
+        res.redirect(`/profile/${req.params.username}`);
+    }
+});
+
+// ──────────────────────────────────────────────
+// POST /:username/testimonial/:id/reject — Reject/Delete testimonial
+// ──────────────────────────────────────────────
+router.post('/:username/testimonial/:id/reject', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const { username, id } = req.params;
+        const currentUserId = req.session.userId;
+
+        const profileUser = db.db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+        if (!profileUser || profileUser.id !== currentUserId) {
+            return res.status(403).render('error', { title: 'Forbidden', message: 'You can only manage testimonials on your own profile.' });
+        }
+
+        db.db.prepare('DELETE FROM testimonials WHERE id = ? AND recipient_id = ?').run(id, currentUserId);
+        res.redirect(`/profile/${username}`);
+    } catch (err) {
+        console.error('Testimonial reject error:', err);
         res.redirect(`/profile/${req.params.username}`);
     }
 });
