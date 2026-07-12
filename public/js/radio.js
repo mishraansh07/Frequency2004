@@ -8,21 +8,21 @@
  */
 
 let stations = [
-    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho Naa Pyaar Hai.mp3' },
-    { name: 'O Sanam', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky Ali - Sunoh (1996)/01 - Lucky Ali - O Sanam .mp3' },
-    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY ALI AKS/EK PAL KA JEENA.mp3' },
-    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY ALI AKS/NA TUM JANO NA HUM.mp3' },
-    { name: 'Dil Chahta Hai', genre: 'Shankar Mahadevan', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/1. Dil Chahta Hai - hindiganadownload.com.mp3' },
-    { name: 'Jaane Kyon Log Pyaar', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/2. Jaane Kyon - hindiganadownload.com.mp3' },
-    { name: 'Woh Ladki Hai Kahan', genre: 'Shaan & Kavita Krishnamurthy', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/3. Woh Ladki Hai Kahan - hindiganadownload.com.mp3' },
-    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/7. Tanhayee - hindiganadownload.com.mp3' },
-    { name: 'Wada Raha (Khakee)', genre: 'Arnab Chakraborty & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/01 - Wada Raha.mp3' },
-    { name: 'Dil Dooba (Khakee)', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/04 - Dil Dooba.mp3' },
-    { name: 'Aisa Jadoo (Khakee)', genre: 'Sunidhi Chauhan', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/02 - Aisa Jadoo.mp3' },
-    { name: 'Yun Hi Tumse Pyar', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/03 - Youn Hi Hum Tumse Pyar Karte Rahein.mp3' },
-    { name: 'Sunoh (Lucky Ali)', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky Ali - Sunoh (1996)/02 - Lucky Ali - Sunoh.mp3' },
-    { name: 'Kabhi Aisa Lagta Hai', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky ALi - Kabhi Aisa Lagta Hai/kalh1(www.songs.pk).mp3' },
-    { name: 'Teri Yaadein Aati Hain', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky ALi - Kabhi Aisa Lagta Hai/kalh2(www.songs.pk).mp3' }
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho%20Naa%20Pyaar%20Hai.mp3' },
+    { name: 'O Sanam', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20Ali%20-%20Sunoh%20(1996)/01%20-%20Lucky%20Ali%20-%20O%20Sanam%20.mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/EK%20PAL%20KA%20JEENA.mp3' },
+    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/NA%20TUM%20JANO%20NA%20HUM.mp3' },
+    { name: 'Dil Chahta Hai', genre: 'Shankar Mahadevan', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/1.%20Dil%20Chahta%20Hai%20-%20hindiganadownload.com.mp3' },
+    { name: 'Jaane Kyon Log Pyaar', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/2.%20Jaane%20Kyon%20-%20hindiganadownload.com.mp3' },
+    { name: 'Woh Ladki Hai Kahan', genre: 'Shaan & Kavita Krishnamurthy', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/3.%20Woh%20Ladki%20Hai%20Kahan%20-%20hindiganadownload.com.mp3' },
+    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/7.%20Tanhayee%20-%20hindiganadownload.com.mp3' },
+    { name: 'Wada Raha (Khakee)', genre: 'Arnab Chakraborty & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/01%20-%20Wada%20Raha.mp3' },
+    { name: 'Dil Dooba (Khakee)', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/04%20-%20Dil%20Dooba.mp3' },
+    { name: 'Aisa Jadoo (Khakee)', genre: 'Sunidhi Chauhan', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/02%20-%20Aisa%20Jadoo.mp3' },
+    { name: 'Yun Hi Tumse Pyar', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/03%20-%20Youn%20Hi%20Hum%20Tumse%20Pyar%20Karte%20Rahein.mp3' },
+    { name: 'Sunoh (Lucky Ali)', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20Ali%20-%20Sunoh%20(1996)/02%20-%20Lucky%20Ali%20-%20Sunoh.mp3' },
+    { name: 'Kabhi Aisa Lagta Hai', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20ALi%20-%20Kabhi%20Aisa%20Lagta%20Hai/kalh1(www.songs.pk).mp3' },
+    { name: 'Teri Yaadein Aati Hain', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20ALi%20-%20Kabhi%20Aisa%20Lagta%20Hai/kalh2(www.songs.pk).mp3' }
 ];
 
 let activeRoom = null;
@@ -488,38 +488,43 @@ function leaveParty() {
     window.location.href = '/radio';
 }
 
-function sendInvite() {
-    const select = document.getElementById('invite-friend-select');
-    if (!select) return;
-    const friendId = select.value;
-    if (!friendId) {
-        alert("Please select a friend to invite!");
+function sendMultipleInvites() {
+    const checkboxes = document.querySelectorAll('input[name="invite-friend-check"]:checked');
+    if (checkboxes.length === 0) {
+        alert("Please select at least one friend to invite!");
         return;
     }
 
-    fetch('/radio/invite', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            friendId: friendId,
-            room: activeRoom
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const status = document.getElementById('invite-status');
-            if (status) {
-                status.style.display = 'block';
-                setTimeout(() => status.style.display = 'none', 3000);
-            }
-        } else {
-            alert("Failed to send invite: " + (data.error || "unknown error"));
+    const friendIds = Array.from(checkboxes).map(chk => chk.value);
+    const promises = friendIds.map(friendId => {
+        return fetch('/radio/invite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                friendId: friendId,
+                room: activeRoom
+            })
+        }).then(res => res.json());
+    });
+
+    Promise.all(promises)
+    .then(results => {
+        // Uncheck all boxes
+        checkboxes.forEach(chk => chk.checked = false);
+        
+        const status = document.getElementById('invite-status');
+        if (status) {
+            status.style.display = 'block';
+            status.textContent = `Sent ${friendIds.length} invite(s)! ✉`;
+            setTimeout(() => status.style.display = 'none', 3000);
         }
     })
-    .catch(err => console.error("Error sending invite:", err));
+    .catch(err => {
+        console.error("Error sending invites:", err);
+        alert("Failed to send invitations.");
+    });
 }
 
 function showPartyAlert(text) {
@@ -575,9 +580,11 @@ function appendSystemMessage(text) {
 
     const div = document.createElement('div');
     div.className = 'shoutbox__msg';
+    // Override the negative text-indent of .shoutbox__msg to prevent text clipping
+    div.style.padding = '4px 10px';
+    div.style.textIndent = '0';
     div.style.color = '#7f8c8d';
     div.style.fontStyle = 'italic';
-    div.style.padding = '3px 8px';
     div.innerHTML = `📢 ${escapeHTML(text)}`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
