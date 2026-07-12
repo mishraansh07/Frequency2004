@@ -107,6 +107,25 @@ try {
 // can access it as `req.app.locals.db`
 app.locals.db = database;
 
+// Attach song list to app.locals so it is globally available in templates
+app.locals.stations = [
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho%20Naa%20Pyaar%20Hai.mp3' },
+    { name: 'O Sanam', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20Ali%20-%20Sunoh%20(1996)/01%20-%20Lucky%20Ali%20-%20O%20Sanam%20.mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/EK%20PAL%20KA%20JEENA.mp3' },
+    { name: 'Na Tum Jano Na Hum', genre: 'Lucky Ali (Kaho Naa Pyaar Hai)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/LUCKY%20ALI%20AKS/NA%20TUM%20JANO%20NA%20HUM.mp3' },
+    { name: 'Dil Chahta Hai', genre: 'Shankar Mahadevan', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/1.%20Dil%20Chahta%20Hai%20-%20hindiganadownload.com.mp3' },
+    { name: 'Jaane Kyon Log Pyaar', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/2.%20Jaane%20Kyon%20-%20hindiganadownload.com.mp3' },
+    { name: 'Woh Ladki Hai Kahan', genre: 'Shaan & Kavita Krishnamurthy', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/3.%20Woh%20Ladki%20Hai%20Kahan%20-%20hindiganadownload.com.mp3' },
+    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/7.%20Tanhayee%20-%20hindiganadownload.com.mp3' },
+    { name: 'Wada Raha (Khakee)', genre: 'Arnab Chakraborty & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/01%20-%20Wada%20Raha.mp3' },
+    { name: 'Dil Dooba (Khakee)', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/04%20-%20Dil%20Dooba.mp3' },
+    { name: 'Aisa Jadoo (Khakee)', genre: 'Sunidhi Chauhan', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/02%20-%20Aisa%20Jadoo.mp3' },
+    { name: 'Yun Hi Tumse Pyar', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/03%20-%20Youn%20Hi%20Hum%20Tumse%20Pyar%20Karte%20Rahein.mp3' },
+    { name: 'Sunoh (Lucky Ali)', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20Ali%20-%20Sunoh%20(1996)/02%20-%20Lucky%20Ali%20-%20Sunoh.mp3' },
+    { name: 'Kabhi Aisa Lagta Hai', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20ALi%20-%20Kabhi%20Aisa%20Lagta%20Hai/kalh1(www.songs.pk).mp3' },
+    { name: 'Teri Yaadein Aati Hain', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20ALi%20-%20Kabhi%20Aisa%20Lagta%20Hai/kalh2(www.songs.pk).mp3' }
+];
+
 // ─── Auth Middleware ────────────────────────────────────
 const { requireAuth, loadUser } = require('./middleware/auth');
 
@@ -137,6 +156,7 @@ const authRoutes        = require('./routes/auth');
 const profileRoutes     = require('./routes/profile');
 const friendsRoutes     = require('./routes/friends');
 const communitiesRoutes = require('./routes/communities');
+const musiczonesRoutes  = require('./routes/musiczones');
 const scrapbookRoutes   = require('./routes/scrapbook');
 const shoutboxRoutes    = require('./routes/shoutbox');
 const messagesRoutes    = require('./routes/messages');
@@ -154,6 +174,7 @@ app.use('/search',  profileRoutes);
 app.use('/friends',     friendsRoutes);
 app.use('/communities', communitiesRoutes);
 app.use('/community',   communitiesRoutes);
+app.use('/musiczones',  musiczonesRoutes);
 app.use('/scrapbook',   scrapbookRoutes);
 app.use('/shoutbox',    shoutboxRoutes);
 app.use('/messages',    messagesRoutes);
