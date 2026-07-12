@@ -1125,7 +1125,7 @@ a:active { color: var(--accent-red); }
 }
 .retro-marquee__inner {
   display: inline-block;
-  animation: marquee-scroll 20s linear infinite;
+  animation: marquee-scroll 10s linear infinite;
 }
 @keyframes marquee-scroll {
   0% { transform: translateX(100%); }
