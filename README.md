@@ -22,6 +22,7 @@
 
 <p align="center">
   <a href="#the-aesthetic-philosophy">Philosophy</a> •
+  <a href="#custom-avatar-showcase">Avatars</a> •
   <a href="#key-features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#local-setup">Local Setup</a> •
@@ -37,6 +38,21 @@ Frequency 2004 is a nostalgia machine designed to recreate the visual texture of
 *   **XP Bliss Windows**: Metallic borders, beveled outset/inset panels, and blue-to-gradient title bars.
 *   **CRT Scanlines**: Subtle styling overlay elements that make the application feel like a physical 2004 monitor screen.
 *   **Sparkle Cursor Trail**: Interactive mouse coordinate tracker emitting trailing custom colored stars.
+
+---
+
+## Custom Avatar Showcase
+The platform features an expanded selection of unique 8-bit retro pixel avatars. Here are some of the design presets:
+
+<p align="center">
+  <img src="public/images/avatars/pixel_boy_blue_1783831781477.png" width="80" alt="Pixel Boy Blue" /> &nbsp;
+  <img src="public/images/avatars/pixel_girl_pink_1783831809448.png" width="80" alt="Pixel Girl Pink" /> &nbsp;
+  <img src="public/images/avatars/cyber_cat_1783831823440.png" width="80" alt="Cyber Cat" /> &nbsp;
+  <img src="public/images/avatars/crt_monitor_1783831864729.png" width="80" alt="CRT Monitor" /> &nbsp;
+  <img src="public/images/avatars/nokia_3310_1783831838880.png" width="80" alt="Nokia 3310" /> &nbsp;
+  <img src="public/images/avatars/retro_gameboy_1783831852295.png" width="80" alt="Retro Gameboy" /> &nbsp;
+  <img src="public/images/avatars/winamp_mascot_1783831890370.png" width="80" alt="Llama" />
+</p>
 
 ---
 
