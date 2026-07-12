@@ -53,10 +53,12 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ─── Session Configuration ──────────────────────────────
+const sessionDbDir = process.env.DATABASE_URL ? path.dirname(process.env.DATABASE_URL) : __dirname;
+
 app.use(session({
   store: new SQLiteStore({
     db:  'sessions.db',         // SQLite file for session persistence
-    dir: __dirname,             // Store sessions.db in project root
+    dir: sessionDbDir,          // Store sessions.db in the resolved persistent directory
   }),
   secret:            process.env.SESSION_SECRET || 'retro-fallback-secret',
   resave:            false,
