@@ -356,4 +356,36 @@ router.post('/:id/post/:postId/reply', requireAuth, (req, res) => {
     }
 });
 
+// ──────────────────────────────────────────────
+// POST /:id/avatar — Update community avatar
+// Only owner can update community avatar
+// ──────────────────────────────────────────────
+router.post('/:id/avatar', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const communityId = parseInt(req.params.id);
+        const currentUserId = req.session.userId;
+
+        // Check if user is owner of the community
+        const community = db.db.prepare('SELECT * FROM communities WHERE id = ?').get(communityId);
+        if (!community) {
+            return res.status(404).render('error', { title: '404', message: 'Community not found.' });
+        }
+
+        if (community.owner_id !== currentUserId) {
+            return res.status(403).render('error', { title: 'Forbidden', message: 'Only the community owner can change the avatar.' });
+        }
+
+        const { avatar_url } = req.body;
+        if (avatar_url) {
+            db.db.prepare('UPDATE communities SET avatar_url = ? WHERE id = ?').run(avatar_url, communityId);
+        }
+
+        res.redirect('back');
+    } catch (err) {
+        console.error('Update community avatar error:', err);
+        res.redirect('back');
+    }
+});
+
 module.exports = router;
