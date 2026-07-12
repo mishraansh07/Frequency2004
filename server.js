@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  Yeh Un Dino Ki Baat Hai Social — Main Express Server
+ *  Frequency 2004 Social — Main Express Server
  * ============================================================
  *
  * A retro social network inspired by the golden age of
@@ -149,7 +149,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`
   ╔══════════════════════════════════════════════════╗
-  ║   Yeh Un Dino Ki Baat Hai Social is LIVE! 🚀     ║
+  ║   Frequency 2004 Social is LIVE! 🚀     ║
   ║   http://localhost:${PORT}                         ║
   ║   Press Ctrl+C to stop                           ║
   ╚══════════════════════════════════════════════════╝

@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  Yeh Un Dino Ki Baat Hai Social — iPod Player & Shoutbox JS
+ *  Frequency 2004 Social — iPod Player & Shoutbox JS
  * ============================================================
  *  Combines early 2000s iPod click wheel logic, menu navigation,
  *  and live chat shoutbox polling.

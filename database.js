@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  Yeh Un Dino Ki Baat Hai Social — Database Module
+ *  Frequency 2004 Social — Database Module
  * ============================================================
  *
  * Provides the SQLite database layer using better-sqlite3.
@@ -482,7 +482,7 @@ function seedData() {
     ['Dial-Up Survivors Club 📞', 'If you have ever been disconnected because someone picked up the phone, this community is for you. We understand your pain.', 'Technology', 4, '/images/avatars/comm_pixel3.png'],
     ['Nokia 3310 Appreciation Society 📱', 'The phone that refused to die. Share your Snake scores, compose ringtones, and celebrate the greatest phone ever made.', 'Fun & Games', 8, '/images/avatars/comm_pixel4.png'],
     ['Retro Games Forever 🎮', 'Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!', 'Fun & Games', 10, '/images/avatars/comm_pixel5.png'],
-    ['Yeh Un Dino FM Listeners 📻', 'Official community for Yeh Un Dino Ki Baat Hai FM radio listeners. Request songs, discuss shows, and share the love for radio!', 'Music', 1, '/images/avatars/comm_pixel1.png'],
+    ['Frequency 2004 FM Listeners 📻', 'Official community for Frequency 2004 FM radio listeners. Request songs, discuss shows, and share the love for radio!', 'Music', 1, '/images/avatars/comm_pixel1.png'],
   ];
 
   const insertCommunitiesTransaction = db.transaction(() => {
@@ -518,7 +518,7 @@ function seedData() {
     [5, 10, 'owner'], [5, 1, 'member'], [5, 3, 'member'],
     [5, 4, 'member'], [5, 5, 'member'], [5, 7, 'moderator'],
     [5, 8, 'member'],
-    // Yeh Un Dino FM Listeners (community 6, owner: 1)
+    // Frequency 2004 FM Listeners (community 6, owner: 1)
     [6, 1, 'owner'], [6, 2, 'member'], [6, 3, 'member'],
     [6, 6, 'member'], [6, 9, 'member'], [6, 5, 'member'],
     [6, 7, 'member'], [6, 10, 'member'],
@@ -575,7 +575,7 @@ function seedData() {
     [5, 1, 'Contra: Up Up Down Down Left Right Left Right B A',
       'If you know this code, you are a real gamer 💪 30 lives in Contra!! We used to play 2-player at my friend\'s house every Sunday. Those were the days... 🎮'],
 
-    // Yeh Un Dino FM Listeners
+    // Frequency 2004 FM Listeners
     [6, 1, 'Song request thread!! 📻',
       'Post your song requests here and I\'ll try to play them on the radio! Currently our most requested song is "Kal Ho Naa Ho" (surprise surprise lol)'],
     [6, 9, 'The midnight show is the best!! 💫',

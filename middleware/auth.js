@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  Yeh Un Dino Ki Baat Hai Social - Authentication Middleware
+ *  Frequency 2004 Social - Authentication Middleware
  * ============================================================
  *
  * Two middleware functions for protecting routes and loading

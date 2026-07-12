@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  Yeh Un Dino Ki Baat Hai Social — Frontend JavaScript
+ *  Frequency 2004 Social — Frontend JavaScript
  * ============================================================
  *  Retro effects, taskbar clock, sparkles, and interactivity
  * ============================================================
@@ -113,6 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     el.title = el.dataset.tooltip;
   });
 
-  console.log('✨ Yeh Un Dino Ki Baat Hai Social — loaded! ✨');
+  console.log('✨ Frequency 2004 Social — loaded! ✨');
   console.log('🕹️ Best viewed at 1024x768 in Internet Explorer 6.0');
 });
