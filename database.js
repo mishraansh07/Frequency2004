@@ -108,6 +108,7 @@ function createTables() {
       category TEXT,
       owner_id INTEGER NOT NULL REFERENCES users(id),
       avatar_url TEXT DEFAULT '/images/avatars/community_default.png',
+      song_url TEXT DEFAULT '',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -408,22 +409,22 @@ function seedData() {
   console.log('[database]   Friendships created');
 
   // ─── Communities ─────────────────────────────────────
-  const insCom = db.prepare(`INSERT INTO communities(name,description,category,owner_id,avatar_url) VALUES(?,?,?,?,?)`);
+  const insCom = db.prepare(`INSERT INTO communities(name,description,category,owner_id,avatar_url,song_url) VALUES(?,?,?,?,?,?)`);
   const insMem = db.prepare(`INSERT INTO community_members(community_id,user_id,role) VALUES(?,?,?)`);
 
   db.transaction(() => {
-    insCom.run('Bollywood Music Lovers','For those who live and breathe Bollywood music! Share your fav songs, discuss latest albums, and relive the golden era.','Music',1,'/images/avatars/comm_pixel1.png');
-    insCom.run('School Days Nostalgia','Remember the good old school days? Tiffin sharing, PT periods, annual day, and bunking classes. Share your memories!','Nostalgia',7,'/images/avatars/comm_pixel2.png');
-    insCom.run('Dial-Up Survivors Club','If you have ever been disconnected because someone picked up the phone, this community is for you.','Technology',5,'/images/avatars/comm_pixel3.png');
-    insCom.run('Nokia 3310 Appreciation Society','The phone that refused to die. Share your Snake scores and ringtones!','Fun & Games',9,'/images/avatars/comm_pixel4.png');
-    insCom.run('Retro Games Forever','Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!','Fun & Games',11,'/images/avatars/comm_pixel5.png');
-    insCom.run('Frequency 2004 FM Listeners','Official community for Frequency 2004 FM radio listeners. Request songs and share the love for radio!','Music',1,'/images/avatars/comm_pixel1.png');
+    insCom.run('Bollywood Music Lovers','For those who live and breathe Bollywood music! Share your fav songs, discuss latest albums, and relive the golden era.','Music',1,'/images/avatars/comm_pixel1.png','');
+    insCom.run('School Days Nostalgia','Remember the good old school days? Tiffin sharing, PT periods, annual day, and bunking classes. Share your memories!','Nostalgia',7,'/images/avatars/comm_pixel2.png','');
+    insCom.run('Dial-Up Survivors Club','If you have ever been disconnected because someone picked up the phone, this community is for you.','Technology',5,'/images/avatars/comm_pixel3.png','');
+    insCom.run('Nokia 3310 Appreciation Society','The phone that refused to die. Share your Snake scores and ringtones!','Fun & Games',9,'/images/avatars/comm_pixel4.png','');
+    insCom.run('Retro Games Forever','Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!','Fun & Games',11,'/images/avatars/comm_pixel5.png','');
+    insCom.run('Frequency 2004 FM Listeners','Official community for Frequency 2004 FM radio listeners. Request songs and share the love for radio!','Music',1,'/images/avatars/comm_pixel1.png','');
 
     // Music Zones (Communities with category = 'MusicZone')
-    insCom.run('O Sanam Zone','Official zone for O Sanam by Lucky Ali. Listen to the track and chat with fellow fans!','MusicZone',7,'/images/avatars/comm_music_1783822902926.png');
-    insCom.run('Dil Chahta Hai Zone','Official zone for the ultimate friendship anthem Dil Chahta Hai!','MusicZone',3,'/images/avatars/comm_music_1783822902926.png');
-    insCom.run('Wada Raha Zone','Official zone for Wada Raha Pyaar Se from Khakee. Discuss the beautiful lyrics!','MusicZone',9,'/images/avatars/comm_music_1783822902926.png');
-    insCom.run('Kaho Naa Pyaar Hai Zone','Official zone for Kaho Naa Pyaar Hai. Discuss the iconic steps!','MusicZone',1,'/images/avatars/comm_music_1783822902926.png');
+    insCom.run('O Sanam Zone','Official zone for O Sanam by Lucky Ali. Listen to the track and chat with fellow fans!','MusicZone',7,'/images/avatars/comm_music_1783822902926.png','https://archive.org/download/MainTumhaaraHiRahoon320/Lucky%20Ali%20-%20Sunoh%20(1996)/01%20-%20Lucky%20Ali%20-%20O%20Sanam%20.mp3');
+    insCom.run('Dil Chahta Hai Zone','Official zone for the ultimate friendship anthem Dil Chahta Hai!','MusicZone',3,'/images/avatars/comm_music_1783822902926.png','https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil%20Chahta%20Hai/1.%20Dil%20Chahta%20Hai%20-%20hindiganadownload.com.mp3');
+    insCom.run('Wada Raha Zone','Official zone for Wada Raha Pyaar Se from Khakee. Discuss the beautiful lyrics!','MusicZone',9,'/images/avatars/comm_music_1783822902926.png','https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/01%20-%20Wada%20Raha.mp3');
+    insCom.run('Kaho Naa Pyaar Hai Zone','Official zone for Kaho Naa Pyaar Hai. Discuss the iconic steps!','MusicZone',1,'/images/avatars/comm_music_1783822902926.png','https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho%20Naa%20Pyaar%20Hai.mp3');
 
     // c1 Bollywood
     [[1,1,'owner'],[1,4,'member'],[1,5,'member'],[1,8,'member'],[1,12,'moderator'],[1,9,'member']].forEach(r=>insMem.run(...r));
@@ -581,6 +582,13 @@ function initialize() {
       if (uCount.count > 0) {
         const vExists = db.prepare("SELECT id FROM users WHERE username = 'vaishnavi'").get();
         if (!vExists) {
+          needReSeed = true;
+        }
+        
+        // Also check if song_url column exists in communities table
+        try {
+          db.prepare('SELECT song_url FROM communities LIMIT 1').get();
+        } catch(colErr) {
           needReSeed = true;
         }
       }
