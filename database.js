@@ -374,18 +374,35 @@ function seedData() {
     profile_views:489, avatar_url:'/images/avatars/retro_gameboy_1783831852295.png', profile_id:1013
   });
 
-  console.log('[database]   13 users created (3 developer + 10 demo)');
+  // id=14: Vaishnavi (Developer)
+  insUser.run({
+    username:'vaishnavi', email:'vaishnavi@example.com', hash,
+    display_name:'Vaishnavi',
+    headline:'Verified Developer of Frequency 2004 ✿',
+    bio:'Hey! I am Vaishnavi, a core developer of Frequency 2004. I love designing retro interfaces, styling vintage CSS layouts, and building the future of our retro social network. Feel free to leave a scrap or test my code!',
+    mood:'Styling CSS panels...',
+    location:'Delhi, India', gender:'Female', age:20,
+    custom_css:'body{background:#fff0f5!important}.profile-content{color:#c71585!important}a{color:#ff1493!important}',
+    interests_music:'Lucky Ali, Wada Raha, Dil Dooba, Strings, KK',
+    interests_movies:'Dil Chahta Hai, Kal Ho Naa Ho, Jab We Met',
+    interests_general:'Web Development, UI/UX Design, CSS layouts, Pixel Art',
+    interests_heroes:'Ada Lovelace, Grace Hopper',
+    profile_views:120, avatar_url:'/images/avatars/pixel_girl_pink_1783831809448.png', profile_id:1014
+  });
+
+  console.log('[database]   14 users created (4 developer + 10 demo)');
 
   // ─── Friendships ─────────────────────────────────────
   const insFriend = db.prepare(`INSERT INTO friendships(requester_id,addressee_id,status) VALUES(?,?,'accepted')`);
   db.transaction(() => {
-    [[1,2],[1,3],[1,4],[1,11],
-     [2,3],[2,4],[2,6],[2,10],
-     [3,4],[3,7],[3,10],
+    [[1,2],[1,3],[1,4],[1,11],[1,14],
+     [2,3],[2,4],[2,6],[2,10],[2,14],
+     [3,4],[3,7],[3,10],[3,14],
      [4,5],[4,8],[4,11],
      [5,6],[5,9],
      [6,7],[6,10],
-     [7,8],[8,9],[9,10],[10,11]
+     [7,8],[8,9],[9,10],[10,11],
+     [11,14]
     ].forEach(([a,b]) => insFriend.run(a,b));
   })();
   console.log('[database]   Friendships created');
@@ -402,6 +419,12 @@ function seedData() {
     insCom.run('Retro Games Forever','Mario, Contra, Dave, Road Rash, NFS II SE... if these names give you goosebumps, join us!','Fun & Games',11,'/images/avatars/comm_pixel5.png');
     insCom.run('Frequency 2004 FM Listeners','Official community for Frequency 2004 FM radio listeners. Request songs and share the love for radio!','Music',1,'/images/avatars/comm_pixel1.png');
 
+    // Music Zones (Communities with category = 'MusicZone')
+    insCom.run('O Sanam Zone','Official zone for O Sanam by Lucky Ali. Listen to the track and chat with fellow fans!','MusicZone',7,'/images/avatars/comm_music_1783822902926.png');
+    insCom.run('Dil Chahta Hai Zone','Official zone for the ultimate friendship anthem Dil Chahta Hai!','MusicZone',3,'/images/avatars/comm_music_1783822902926.png');
+    insCom.run('Wada Raha Zone','Official zone for Wada Raha Pyaar Se from Khakee. Discuss the beautiful lyrics!','MusicZone',9,'/images/avatars/comm_music_1783822902926.png');
+    insCom.run('Kaho Naa Pyaar Hai Zone','Official zone for Kaho Naa Pyaar Hai. Discuss the iconic steps!','MusicZone',1,'/images/avatars/comm_music_1783822902926.png');
+
     // c1 Bollywood
     [[1,1,'owner'],[1,4,'member'],[1,5,'member'],[1,8,'member'],[1,12,'moderator'],[1,9,'member']].forEach(r=>insMem.run(...r));
     // c2 School
@@ -414,8 +437,17 @@ function seedData() {
     [[5,13,'owner'],[5,1,'member'],[5,6,'member'],[5,7,'member'],[5,8,'member'],[5,10,'moderator']].forEach(r=>insMem.run(...r));
     // c6 FM
     [[6,1,'owner'],[6,4,'member'],[6,5,'member'],[6,9,'member'],[6,12,'member'],[6,8,'member'],[6,10,'member']].forEach(r=>insMem.run(...r));
+
+    // c7 O Sanam Zone (id=7)
+    [[7,7,'owner'],[7,1,'member'],[7,2,'member'],[7,3,'member'],[7,14,'member']].forEach(r=>insMem.run(...r));
+    // c8 Dil Chahta Hai Zone (id=8)
+    [[8,3,'owner'],[8,1,'member'],[8,2,'member'],[8,4,'member'],[8,13,'member'],[8,14,'member']].forEach(r=>insMem.run(...r));
+    // c9 Wada Raha Zone (id=9)
+    [[9,9,'owner'],[9,1,'member'],[9,2,'member'],[9,11,'member'],[9,14,'member']].forEach(r=>insMem.run(...r));
+    // c10 Kaho Naa Pyaar Hai Zone (id=10)
+    [[10,1,'owner'],[10,2,'member'],[10,4,'member'],[10,14,'member']].forEach(r=>insMem.run(...r));
   })();
-  console.log('[database]   6 communities + memberships created');
+  console.log('[database]   10 communities (6 standard + 4 MusicZones) + memberships created');
 
   // ─── Community Posts + Replies ───────────────────────
   // Capture lastInsertRowid after each post to reference it in replies
@@ -541,6 +573,33 @@ function seedData() {
 // ══════════════════════════════════════════════════════════
 function initialize() {
   try {
+    // Check if 'vaishnavi' user exists. If tables exist but she is missing,
+    // we drop tables and re-seed to include her and the MusicZones.
+    let needReSeed = false;
+    try {
+      const uCount = db.prepare("SELECT COUNT(*) as count FROM sqlite_master WHERE type='table' AND name='users'").get();
+      if (uCount.count > 0) {
+        const vExists = db.prepare("SELECT id FROM users WHERE username = 'vaishnavi'").get();
+        if (!vExists) {
+          needReSeed = true;
+        }
+      }
+    } catch(e) {
+      // Tables don't exist yet, standard initialize will handle creation & seeding
+    }
+
+    if (needReSeed) {
+      console.log("[database] Dev database version outdated. Dropping tables to re-seed Dev Vaishnavi + MusicZones...");
+      const tables = [
+        'users', 'friendships', 'top_friends', 'scraps', 'testimonials', 
+        'ratings', 'communities', 'community_members', 'community_posts', 
+        'community_replies', 'shoutbox_messages', 'direct_messages', 'slambook_entries'
+      ];
+      for (const table of tables) {
+        db.prepare(`DROP TABLE IF EXISTS ${table}`).run();
+      }
+    }
+
     createTables();
     console.log('[database] All 13 tables ready');
 
