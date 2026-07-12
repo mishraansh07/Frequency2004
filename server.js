@@ -114,6 +114,24 @@ const { requireAuth, loadUser } = require('./middleware/auth');
 // have access to `currentUser` (null when logged out).
 app.use(loadUser);
 
+// Make formatDate helper available to all EJS templates
+app.use((req, res, next) => {
+  res.locals.formatDate = (dateStr, type = 'datetime') => {
+    if (!dateStr) return '';
+    if (typeof dateStr === 'string' && !dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('-')) {
+      dateStr = dateStr.replace(' ', 'T') + 'Z';
+    }
+    const d = new Date(dateStr);
+    if (type === 'date') {
+      return d.toLocaleDateString();
+    } else if (type === 'time') {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    return d.toLocaleString();
+  };
+  next();
+});
+
 // ─── Route Imports ──────────────────────────────────────
 const authRoutes        = require('./routes/auth');
 const profileRoutes     = require('./routes/profile');
