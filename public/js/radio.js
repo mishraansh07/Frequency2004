@@ -15,7 +15,14 @@ let stations = [
     { name: 'Dil Chahta Hai', genre: 'Shankar Mahadevan', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/1. Dil Chahta Hai - hindiganadownload.com.mp3' },
     { name: 'Jaane Kyon Log Pyaar', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/2. Jaane Kyon - hindiganadownload.com.mp3' },
     { name: 'Woh Ladki Hai Kahan', genre: 'Shaan & Kavita Krishnamurthy', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/3. Woh Ladki Hai Kahan - hindiganadownload.com.mp3' },
-    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/7. Tanhayee - hindiganadownload.com.mp3' }
+    { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/7. Tanhayee - hindiganadownload.com.mp3' },
+    { name: 'Wada Raha (Khakee)', genre: 'Arnab Chakraborty & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/01 - Wada Raha.mp3' },
+    { name: 'Dil Dooba (Khakee)', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/04 - Dil Dooba.mp3' },
+    { name: 'Aisa Jadoo (Khakee)', genre: 'Sunidhi Chauhan', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/02 - Aisa Jadoo.mp3' },
+    { name: 'Yun Hi Tumse Pyar', genre: 'Sonu Nigam & Shreya Ghoshal', url: 'https://archive.org/download/khakee-2004-movie-songs-hindiganadownload.com/Khakee/03 - Youn Hi Hum Tumse Pyar Karte Rahein.mp3' },
+    { name: 'Sunoh (Lucky Ali)', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky Ali - Sunoh (1996)/02 - Lucky Ali - Sunoh.mp3' },
+    { name: 'Kabhi Aisa Lagta Hai', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky ALi - Kabhi Aisa Lagta Hai/kalh1(www.songs.pk).mp3' },
+    { name: 'Teri Yaadein Aati Hain', genre: 'Lucky Ali (Classic Pop)', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/Lucky ALi - Kabhi Aisa Lagta Hai/kalh2(www.songs.pk).mp3' }
 ];
 
 let activeRoom = null;
