@@ -370,7 +370,7 @@ function initShoutboxWebSocket() {
                 
                 // 1. System notices
                 if (message.type === 'user_joined') {
-                    appendSystemMessage(`${message.displayName} joined the listening party room 🎧`);
+                    appendSystemMessage(`${message.displayName} joined the listening party room.`);
                 } else if (message.type === 'user_left') {
                     appendSystemMessage(`${message.displayName} left the party.`);
                 }
@@ -595,7 +595,7 @@ function appendSystemMessage(text) {
     div.style.textIndent = '0';
     div.style.color = '#7f8c8d';
     div.style.fontStyle = 'italic';
-    div.innerHTML = `📢 ${escapeHTML(text)}`;
+    div.innerHTML = `* SYSTEM: ${escapeHTML(text)}`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
