@@ -35,7 +35,7 @@
           <img src="<%= profileUser.avatar_url %>" alt="<%= profileUser.display_name %>" class="profile-avatar">
 
           <div class="profile-info">
-            <h1><%= profileUser.display_name %></h1>
+            <h1><%= profileUser.display_name %> <% if (profileUser.profile_id) { %><span style="background:#2980b9;color:#fff;font-size:11px;padding:2px 6px;border-radius:3px;margin-left:6px;font-weight:normal;vertical-align:middle;">#<%= profileUser.profile_id %></span><% } %></h1>
             <div class="profile-headline"><%= profileUser.headline %></div>
 
             <div class="profile-stats">

@@ -24,7 +24,7 @@
         <div class="outset-panel">
           <form action="/search" method="GET" style="display:flex; gap:10px; align-items:center;">
             <label style="font-weight:bold; font-size:12px;">Search Again:</label>
-            <input type="text" name="q" class="xp-input" value="<%= q %>" style="flex:1;" placeholder="Search for people or communities...">
+            <input type="text" name="q" class="xp-input" value="<%= q %>" style="flex:1;" placeholder="Search by name, username, or #1234 ID...">
             <button type="submit" class="xp-btn xp-btn--primary">Search</button>
           </form>
           <p class="text-muted text-small mt-sm">Showing search results for "<%= q %>"</p>
@@ -44,6 +44,7 @@
                       <div style="flex:1;">
                         <a href="/profile/<%= user.username %>" style="font-weight:bold; font-size:13px;"><%= user.display_name %></a>
                         <span class="text-muted text-small" style="margin-left:8px;">[<%= user.username %>]</span>
+                        <% if (user.profile_id) { %><span style="background:#2980b9;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:6px;">#<%= user.profile_id %></span><% } %>
                         <div class="text-small text-muted" style="margin-top:2px;"><%= user.headline %></div>
                       </div>
                       <a href="/profile/<%= user.username %>" class="xp-btn">View Profile</a>

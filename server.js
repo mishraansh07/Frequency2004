@@ -69,6 +69,9 @@ if (process.env.DATABASE_URL) {
   }
 }
 
+// Trust first proxy (Render, Heroku, etc.) so secure cookies work behind HTTPS
+app.set('trust proxy', 1);
+
 app.use(session({
   store: new SQLiteStore({
     db:  'sessions.db',         // SQLite file for session persistence
@@ -80,7 +83,8 @@ app.use(session({
   cookie: {
     maxAge:   1000 * 60 * 60 * 24 * 7, // 7 days
     httpOnly: true,
-    secure:   false,                     // set true behind HTTPS
+    secure:   process.env.NODE_ENV === 'production', // auto-enable on Render HTTPS
+    sameSite: 'lax',
   },
 }));
 

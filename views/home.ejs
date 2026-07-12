@@ -20,7 +20,9 @@
     <!-- ═══ WELCOME BANNER ═══ -->
     <div class="dashboard-welcome">
       <h2>~*~ Welcome back, <%= currentUser.display_name %>! ~*~</h2>
-      <p>Mood: <%= currentUser.mood %> | Last seen: Just now! | Profile views: <strong><%= currentUser.profile_views %></strong></p>
+      <p>Mood: <%= currentUser.mood %> | Last seen: Just now! | Profile views: <strong><%= currentUser.profile_views %></strong>
+        <% if (currentUser.profile_id) { %> | Your ID: <strong style="background:#2980b9;color:#fff;padding:1px 6px;border-radius:3px;">#<%= currentUser.profile_id %></strong><% } %>
+      </p>
     </div>
 
     <div class="retro-marquee mb-md">

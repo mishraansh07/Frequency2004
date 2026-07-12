@@ -76,6 +76,7 @@ function createTables() {
       profile_song TEXT DEFAULT '',
       custom_css TEXT DEFAULT '',
       profile_views INTEGER DEFAULT 0,
+      profile_id INTEGER UNIQUE,
       last_login DATETIME,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -223,11 +224,11 @@ function seedData() {
     INSERT INTO users
       (username, email, password_hash, display_name, headline, bio,
        mood, location, gender, age, custom_css, interests_music,
-       interests_movies, interests_general, interests_heroes, profile_views, avatar_url)
+       interests_movies, interests_general, interests_heroes, profile_views, avatar_url, profile_id)
     VALUES
       (@username, @email, @hash, @display_name, @headline, @bio,
        @mood, @location, @gender, @age, @custom_css, @interests_music,
-       @interests_movies, @interests_general, @interests_heroes, @profile_views, COALESCE(@avatar_url, '/images/avatars/default.png'))
+       @interests_movies, @interests_general, @interests_heroes, @profile_views, COALESCE(@avatar_url, '/images/avatars/default.png'), @profile_id)
   `);
 
   const users = [
@@ -423,8 +424,11 @@ function seedData() {
     },
   ];
 
+  let initialId = 1000;
   const insertUsersTransaction = db.transaction(() => {
     for (const u of users) {
+      initialId++;
+      u.profile_id = initialId;
       insertUser.run(u);
     }
   });
@@ -869,6 +873,34 @@ function initialize() {
   try {
     createTables();
     console.log('[database] All 11 tables ready ✔');
+
+    // Run migration checks (add profile_id if missing)
+    try {
+      db.prepare('SELECT profile_id FROM users LIMIT 1').get();
+    } catch (e) {
+      console.log('[database] Migration: Adding profile_id column to users table...');
+      try {
+        db.exec('ALTER TABLE users ADD COLUMN profile_id INTEGER');
+        
+        // Seed profile_id for existing users
+        const users = db.prepare('SELECT id FROM users').all();
+        let initialId = 1000;
+        const updateStmt = db.prepare('UPDATE users SET profile_id = ? WHERE id = ?');
+        const runUpdate = db.transaction(() => {
+          for (const u of users) {
+            initialId++;
+            updateStmt.run(initialId, u.id);
+          }
+        });
+        runUpdate();
+
+        // Add a unique index to profile_id to enforce uniqueness
+        db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_users_profile_id ON users(profile_id)');
+        console.log('[database] Migration: Successfully seeded profile_id for existing users!');
+      } catch (migrationErr) {
+        console.error('[database] Migration failed:', migrationErr.message);
+      }
+    }
 
     // Only seed if the database is empty
     const row = db.prepare('SELECT COUNT(*) AS count FROM users').get();

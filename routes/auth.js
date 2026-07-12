@@ -66,11 +66,22 @@ router.post('/register', (req, res) => {
         // Hash the password
         const password_hash = bcrypt.hashSync(password, 10);
 
+        // Generate unique 4-digit profile ID
+        let profile_id;
+        let idExists = true;
+        while (idExists) {
+            profile_id = Math.floor(Math.random() * 9000) + 1000; // 1000 to 9999
+            const check = db.db.prepare('SELECT id FROM users WHERE profile_id = ?').get(profile_id);
+            if (!check) {
+                idExists = false;
+            }
+        }
+
         // Insert new user into database
         const result = db.db.prepare(`
-            INSERT INTO users (username, email, password_hash, display_name)
-            VALUES (?, ?, ?, ?)
-        `).run(username, email, password_hash, display_name);
+            INSERT INTO users (username, email, password_hash, display_name, profile_id)
+            VALUES (?, ?, ?, ?, ?)
+        `).run(username, email, password_hash, display_name, profile_id);
 
         // Set session and redirect to home
         req.session.userId = result.lastInsertRowid;
@@ -190,13 +201,26 @@ router.get('/search', (req, res) => {
         if (q.trim()) {
             const searchTerm = `%${q}%`;
 
-            // Search users by username or display_name
-            users = db.db.prepare(`
-                SELECT id, username, display_name, avatar_url, headline
-                FROM users
-                WHERE username LIKE ? OR display_name LIKE ?
-                LIMIT 50
-            `).all(searchTerm, searchTerm);
+            // Check if user is searching by 4-digit profile ID (e.g. "1001" or "#1001")
+            const cleanId = q.replace('#', '').trim();
+            const isIdSearch = /^\d{4}$/.test(cleanId);
+
+            if (isIdSearch) {
+                // Direct profile ID lookup
+                const exactUser = db.db.prepare(`
+                    SELECT id, username, display_name, avatar_url, headline, profile_id
+                    FROM users WHERE profile_id = ?
+                `).get(parseInt(cleanId));
+                if (exactUser) users.push(exactUser);
+            } else {
+                // Search users by username or display_name
+                users = db.db.prepare(`
+                    SELECT id, username, display_name, avatar_url, headline, profile_id
+                    FROM users
+                    WHERE username LIKE ? OR display_name LIKE ?
+                    LIMIT 50
+                `).all(searchTerm, searchTerm);
+            }
 
             // Search communities by name
             communities = db.db.prepare(`
