@@ -18,7 +18,7 @@
   <div class="page-container">
     <div class="xp-window">
       <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
-        <span class="xp-titlebar__title">🏘️ Orkut Communities</span>
+        <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Orkut Communities</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -33,12 +33,12 @@
             <%= cat.category %>
           </a>
         <% }) %>
-        <a href="/communities/create" style="margin-left: auto; color: var(--orkut-pink); font-weight: bold;">➕ Create Community</a>
+        <a href="/communities/create" style="margin-left: auto; color: var(--orkut-pink); font-weight: bold;"><i class="i">&#xe726;</i> Create Community</a>
       </div>
 
       <div class="xp-window__body" style="background: #fff;">
         <div class="section-header section-header--pink">
-          🏘️ Browse Communities <%= selectedCategory ? `in "${selectedCategory}"` : '' %>
+          <i class="i">&#xea60;</i> Browse Communities <%= selectedCategory ? `in "${selectedCategory}"` : '' %>
         </div>
 
         <% if (communities && communities.length > 0) { %>

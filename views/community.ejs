@@ -17,7 +17,7 @@
   <div class="page-container">
     <div class="xp-window">
       <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
-        <span class="xp-titlebar__title">🏘️ Community — <%= community.name %></span>
+        <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Community — <%= community.name %></span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -47,7 +47,7 @@
                   </form>
                 <% } else { %>
                   <form method="POST" action="/communities/<%= community.id %>/join" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--primary">➕ Join Community</button>
+                    <button type="submit" class="xp-btn xp-btn--primary"><i class="i">&#xe726;</i> Join Community</button>
                   </form>
                 <% } %>
               <% } %>
@@ -63,7 +63,7 @@
             <!-- Create a New Topic Form -->
             <% if (currentUser && isMember) { %>
               <div class="xp-fieldset">
-                <legend>✏️ Post a New Topic</legend>
+                <legend><i class="i">&#xe71f;</i> Post a New Topic</legend>
                 <form method="POST" action="/communities/<%= community.id %>/post">
                   <div class="form-group mb-sm">
                     <input type="text" name="title" class="xp-input w-100" placeholder="Topic Title..." required>
@@ -76,13 +76,13 @@
               </div>
             <% } else if (currentUser && !isMember) { %>
               <div class="outset-panel text-center text-small text-muted" style="padding: 10px; border-color: #ED1A7B;">
-                🔒 You must join this community to start or reply to topics.
+                <i class="i">&#xe530;</i> You must join this community to start or reply to topics.
               </div>
             <% } %>
 
             <!-- Forum Topics list -->
             <div class="xp-fieldset">
-              <legend>💬 Discussion Forum</legend>
+              <legend><i class="i">&#xe54d;</i> Discussion Forum</legend>
               <% if (posts && posts.length > 0) { %>
                 <% posts.forEach(post => { %>
                   <div class="post-item" style="border-bottom: 2px solid #f0ccd7; padding-bottom: 12px; margin-bottom: 12px;">
@@ -101,7 +101,7 @@
                         </div>
                         <div class="mt-sm">
                           <a href="/communities/<%= community.id %>/post/<%= post.id %>" style="font-size: 12px; font-weight: bold; color: #4A7EBB;">
-                            💬 View discussion / replies →
+                            <i class="i">&#xe54d;</i> View discussion / replies →
                           </a>
                         </div>
                       </div>
@@ -118,7 +118,7 @@
           <!-- Right: Members Sidebar -->
           <div class="layout-two-col__sidebar" style="width: 240px;">
             <div class="outset-panel" style="background: #FFF0F5; border-color: #ED1A7B;">
-              <div class="section-header section-header--pink">🏘️ Members (<%= memberCount %>)</div>
+              <div class="section-header section-header--pink"><i class="i">&#xea60;</i> Members (<%= memberCount %>)</div>
               
               <div class="top8-grid" style="grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 4px;">
                 <% members.forEach(member => { %>

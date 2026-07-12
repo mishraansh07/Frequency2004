@@ -27,7 +27,7 @@
 
     <div class="retro-marquee mb-md">
       <span class="retro-marquee__inner">
-        ★ NEW: Communities are live! ★ Join the Bollywood Music Lovers community! ★ Don't forget to update your Top 8! ★ Shoutbox is buzzing! ★ Check out the FM Radio! ★
+        * NEW: Communities are live! * Join the Bollywood Music Lovers community! * Don't forget to update your Top 8! * Shoutbox is buzzing! * Check out the FM Radio! ★
       </span>
     </div>
 
@@ -43,23 +43,23 @@
           </div>
           <hr style="border:1px groove #999;margin:8px 0;">
           <div class="text-small">
-            <div>📍 <%= currentUser.location || 'Unknown' %></div>
-            <div>👤 <%= currentUser.gender || '?' %>, <%= currentUser.age || '?' %></div>
-            <div>👁️ Profile views: <strong><%= currentUser.profile_views %></strong></div>
+            <div><i class="i">&#xe547;</i> <%= currentUser.location || 'Unknown' %></div>
+            <div><i class="i">&#xea5d;</i> <%= currentUser.gender || '?' %>, <%= currentUser.age || '?' %></div>
+            <div><i class="i">&#xe394;</i> Profile views: <strong><%= currentUser.profile_views %></strong></div>
           </div>
-          <a href="/profile/<%= currentUser.username %>/edit" class="xp-btn w-100 mt-sm" style="display:block;text-align:center;text-decoration:none;">✏️ Edit Profile</a>
+          <a href="/profile/<%= currentUser.username %>/edit" class="xp-btn w-100 mt-sm" style="display:block;text-align:center;text-decoration:none;"><i class="i">&#xe71f;</i> Edit Profile</a>
         </div>
 
         <!-- Quick Links -->
         <div class="outset-panel">
           <div class="section-header">📌 Quick Links</div>
           <div style="font-size:12px;line-height:2;">
-            <a href="/friends">👥 My Friends (<%= friends.length %>)</a><br>
-            <a href="/scrapbook/<%= currentUser.username %>">📒 My Scrapbook</a><br>
-            <a href="/communities">🏘️ Communities</a><br>
-            <a href="/radio">📻 FM Radio</a><br>
+            <a href="/friends"><i class="i">&#xea60;</i> My Friends (<%= friends.length %>)</a><br>
+            <a href="/scrapbook/<%= currentUser.username %>"><i class="i">&#xe572;</i> My Scrapbook</a><br>
+            <a href="/communities"><i class="i">&#xea60;</i> Communities</a><br>
+            <a href="/radio"><i class="i">&#xea07;</i> FM Radio</a><br>
             <% if (pendingCount > 0) { %>
-              <a href="/friends" style="color:red;font-weight:bold;">🔔 Pending Requests (<%= pendingCount %>)</a><br>
+              <a href="/friends" style="color:red;font-weight:bold;"><i class="i">&#xe3a7;</i> Pending Requests (<%= pendingCount %>)</a><br>
             <% } %>
           </div>
         </div>
@@ -71,7 +71,7 @@
         <!-- Cool People Suggestions -->
         <% if (coolPeople && coolPeople.length > 0) { %>
         <div class="outset-panel">
-          <div class="section-header--orange section-header">🌟 Cool New People</div>
+          <div class="section-header--orange section-header"><i class="i">&#xeaa0;</i> Cool New People</div>
           <div class="cool-people">
             <% coolPeople.forEach(person => { %>
               <div class="cool-person">
@@ -86,7 +86,7 @@
         <!-- Recent Scraps -->
         <div class="xp-window">
           <div class="xp-titlebar">
-            <span class="xp-titlebar__title">📒 Recent Scraps</span>
+            <span class="xp-titlebar__title"><i class="i">&#xe572;</i> Recent Scraps</span>
           </div>
           <div class="xp-window__body" style="max-height:400px;overflow-y:auto;">
             <% if (scraps && scraps.length > 0) { %>
@@ -112,7 +112,7 @@
         <!-- My Communities -->
         <div class="xp-window mt-md">
           <div class="xp-titlebar">
-            <span class="xp-titlebar__title">🏘️ My Communities</span>
+            <span class="xp-titlebar__title"><i class="i">&#xea60;</i> My Communities</span>
           </div>
           <div class="xp-window__body">
             <% if (communities && communities.length > 0) { %>
@@ -137,7 +137,7 @@
         <!-- My Friends -->
         <div class="xp-window mt-md">
           <div class="xp-titlebar">
-            <span class="xp-titlebar__title">👥 My Friends (<%= friends.length %>)</span>
+            <span class="xp-titlebar__title"><i class="i">&#xea60;</i> My Friends (<%= friends.length %>)</span>
           </div>
           <div class="xp-window__body">
             <% if (friends && friends.length > 0) { %>

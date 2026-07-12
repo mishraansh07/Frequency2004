@@ -93,7 +93,7 @@
       <!-- ═══ LEFT SIDEBAR: CONVERSATION LIST ═══ -->
       <div class="friends-list-panel xp-window">
         <div class="xp-titlebar" style="background: linear-gradient(180deg, #7F9DB9 0%, #5E7A99 100%); border-color: #5E7A99;">
-          <span class="xp-titlebar__title">👥 My Contacts</span>
+          <span class="xp-titlebar__title"><i class="i">&#xea60;</i> My Contacts</span>
         </div>
         <div class="xp-window__body" style="padding: 0; background: #fff; height: 480px; overflow-y: auto; border: 2px inset #808080;">
           <% if (chats && chats.length > 0) { %>
@@ -124,7 +124,7 @@
       <!-- ═══ RIGHT PANEL: MSN CHAT DIALOG ═══ -->
       <div class="chat-window-panel xp-window">
         <div class="xp-titlebar" id="chat-titlebar">
-          <span class="xp-titlebar__title" id="chat-window-header">💬 Instant Messenger — Choose a Contact</span>
+          <span class="xp-titlebar__title" id="chat-window-header"><i class="i">&#xe54d;</i> Instant Messenger — Choose a Contact</span>
           <div class="xp-titlebar__buttons">
             <button class="xp-titlebar__btn">_</button>
             <button class="xp-titlebar__btn">□</button>
@@ -144,8 +144,8 @@
             <button class="xp-btn" style="padding: 1px 6px;">Send File</button>
             <button class="xp-btn" style="padding: 1px 6px;">Webcam</button>
             <div style="flex: 1;"></div>
-            <button class="xp-btn" style="padding: 1px 8px; background: #000; color: #00ff00; font-family: monospace; font-weight: bold; border: 1px solid #00ff00; cursor: pointer; margin-right: 4px;" onclick="sendHack()">👾 Hack Chat</button>
-            <button class="xp-btn" style="padding: 1px 8px; background: #cc0000; color: #fff; font-weight: bold;" onclick="sendNuke()">🚀 Send Nuke</button>
+            <button class="xp-btn" style="padding: 1px 8px; background: #000; color: #00ff00; font-family: monospace; font-weight: bold; border: 1px solid #00ff00; cursor: pointer; margin-right: 4px;" onclick="sendHack()">Hack Chat</button>
+            <button class="xp-btn" style="padding: 1px 8px; background: #cc0000; color: #fff; font-weight: bold;" onclick="sendNuke()"><i class="i">&#xea1c;</i> Send Nuke</button>
           </div>
 
           <!-- Chat log -->
@@ -207,7 +207,7 @@
       fetch(`/messages/chat/${friendId}`)
         .then(res => res.json())
         .then(data => {
-          document.getElementById('chat-window-header').textContent = `💬 Chat with ${data.friend.display_name} — [${data.friend.username}]`;
+          document.getElementById('chat-window-header').textContent = `<i class="i">&#xe54d;</i> Chat with ${data.friend.display_name} — [${data.friend.username}]`;
           const log = document.getElementById('chat-log');
           log.innerHTML = '';
 
@@ -255,7 +255,7 @@
           if (data.messages && data.messages.length > 0) {
             // Get active conversation friend metadata from header name
             const displayTitle = document.getElementById('chat-window-header').textContent;
-            const friendName = displayTitle.replace('💬 Chat with ', '').split(' — ')[0];
+            const friendName = displayTitle.replace('<i class="i">&#xe54d;</i> Chat with ', '').split(' — ')[0];
             const tempFriend = { display_name: friendName };
 
             data.messages.forEach(msg => {
@@ -263,9 +263,9 @@
               
               // Run visual reaction locally if received from friend
               if (msg.sender_id !== currentUserId) {
-                if (msg.content.includes('🚀 *NUKED THE CHAT!* 💥')) {
+                if (msg.content.includes('<i class="i">&#xea1c;</i> *NUKED THE CHAT!* ')) {
                   triggerNukeReaction();
-                } else if (msg.content.includes('👾 *HACKED THE CHAT!* 💻')) {
+                } else if (msg.content.includes('*HACKED THE CHAT!* <i class="i">&#xe5b7;</i>')) {
                   triggerHackReaction();
                 } else {
                   playMSNPing();
@@ -419,7 +419,7 @@
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
           const emoji = document.createElement('div');
-          emoji.textContent = ['💥', '🔥', '💣', '💨'][Math.floor(Math.random() * 4)];
+          emoji.textContent = ['', '', '', '💨'][Math.floor(Math.random() * 4)];
           const rect = chatLog.getBoundingClientRect();
           const x = rect.left + Math.random() * (rect.width - 40);
           const y = rect.top + Math.random() * (rect.height - 40);
@@ -479,14 +479,14 @@
       fetch('/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipientId: activeFriendId, content: '🚀 *NUKED THE CHAT!* 💥' })
+        body: JSON.stringify({ recipientId: activeFriendId, content: '<i class="i">&#xea1c;</i> *NUKED THE CHAT!* ' })
       })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           appendMessage(data.message, { display_name: currentUserName });
           scrollToBottom();
-          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: 🚀 *NUKED THE CHAT!* 💥';
+          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: <i class="i">&#xea1c;</i> *NUKED THE CHAT!* ';
         }
       })
       .catch(err => console.error('Error sending nuke:', err));
@@ -499,14 +499,14 @@
       fetch('/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipientId: activeFriendId, content: '👾 *HACKED THE CHAT!* 💻' })
+        body: JSON.stringify({ recipientId: activeFriendId, content: '*HACKED THE CHAT!* <i class="i">&#xe5b7;</i>' })
       })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           appendMessage(data.message, { display_name: currentUserName });
           scrollToBottom();
-          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: 👾 *HACKED THE CHAT!* 💻';
+          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: *HACKED THE CHAT!* <i class="i">&#xe5b7;</i>';
         }
       })
       .catch(err => console.error('Error sending hack:', err));
@@ -517,7 +517,7 @@
       activeFriendId = null;
       document.getElementById('chat-active-state').style.display = 'none';
       document.getElementById('chat-empty-state').style.display = 'flex';
-      document.getElementById('chat-window-header').textContent = '💬 Instant Messenger — Choose a Contact';
+      document.getElementById('chat-window-header').textContent = '<i class="i">&#xe54d;</i> Instant Messenger — Choose a Contact';
     }
 
     function scrollToBottom() {

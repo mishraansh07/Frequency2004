@@ -6,12 +6,14 @@
   <title>Register — Frequency 2004 Social</title>
   <meta name="description" content="Create your retro social network account and join the early 2000s nostalgia!">
   <link rel="stylesheet" href="/css/retro.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.min.css">
+  <style>.i { font-family: 'lucide'; font-style: normal; font-size: 14px; vertical-align: -2px; margin-right: 3px; }</style>
 </head>
 <body>
   <div class="auth-container">
     <div class="xp-window auth-window">
       <div class="xp-titlebar">
-        <span class="xp-titlebar__title">📝 Register — Join The Retro Revolution!</span>
+        <span class="xp-titlebar__title"><i class="i">&#xe71f;</i> Register — Join The Retro Revolution!</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -21,37 +23,37 @@
       <div class="xp-window__body">
         <div class="text-center mb-md">
           <h1 class="text-pixel" style="font-size:22px;color:#ED1A7B;">
-            ✦ Create Your Profile ✦
+            Create Your Profile ✦
           </h1>
           <p class="text-muted text-small">Join <%= Math.floor(Math.random() * 9000) + 1000 %> other retro enthusiasts!</p>
         </div>
 
         <% if (error) { %>
-          <div class="auth-error">⚠️ <%= error %></div>
+          <div class="auth-error"><i class="i">&#xe3a3;</i> <%= error %></div>
         <% } %>
 
         <form class="auth-form" method="POST" action="/register">
           <div class="form-group">
-            <label for="username">👤 Username (your unique handle):</label>
+            <label for="username"><i class="i">&#xea5d;</i> Username (your unique handle):</label>
             <input type="text" id="username" name="username" class="xp-input" required 
                    placeholder="e.g. CoOl_DuDe99" minlength="3" maxlength="30" autocomplete="username">
           </div>
           <div class="form-group">
-            <label for="email">📧 Email Address:</label>
+            <label for="email"><i class="i">&#xe535;</i> Email Address:</label>
             <input type="email" id="email" name="email" class="xp-input" required 
                    placeholder="coolperson@yahoo.com" autocomplete="email">
           </div>
           <div class="form-group">
-            <label for="display_name">🌟 Display Name:</label>
+            <label for="display_name"><i class="i">&#xeaa0;</i> Display Name:</label>
             <input type="text" id="display_name" name="display_name" class="xp-input" required 
                    placeholder="~*Your Cool Name*~" maxlength="50">
           </div>
           <div class="form-group">
-            <label for="password">🔑 Password:</label>
+            <label for="password"><i class="i">&#xe516;</i> Password:</label>
             <input type="password" id="password" name="password" class="xp-input" required 
                    placeholder="Choose a strong password..." minlength="6" autocomplete="new-password">
           </div>
-          <button type="submit" class="xp-btn xp-btn--green w-100">✨ Create My Account!</button>
+          <button type="submit" class="xp-btn xp-btn--green w-100"><i class="i">&#xeaa0;</i> Create My Account!</button>
         </form>
 
         <div class="auth-footer">

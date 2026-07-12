@@ -125,7 +125,7 @@
     
     <!-- Navigation Back Link -->
     <div style="margin-top:10px;">
-      <a href="/profile/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">⬅ Back to <%= profileUser.display_name %>'s Profile</a>
+      <a href="/profile/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe3ac;</i> Back to <%= profileUser.display_name %>'s Profile</a>
     </div>
 
     <div class="slambook-cover">
@@ -139,37 +139,37 @@
         </div>
 
         <div class="slambook-title">
-          📓 <%= profileUser.display_name %>'s Friendship Slam Book 📓
+          <i class="i">&#xe572;</i> <%= profileUser.display_name %>'s Friendship Slam Book <i class="i">&#xe572;</i>
         </div>
 
         <p style="font-size: 13px; text-align: center; margin-bottom: 25px; color:#555;">
-          Remember the golden school days? Sign my slam book and let's lock our memories forever! 🔐💖
+          Remember the golden school days? Sign my slam book and let's lock our memories forever! 🔐
         </p>
 
         <!-- ═══ SIGN THE SLAM BOOK FORM (Only for logged-in friends) ═══ -->
         <% if (!isOwner) { %>
           <div style="background: #fdfefe; border: 2px dashed #3498db; padding: 15px; border-radius: 6px; margin-bottom: 30px;">
-            <h3 style="margin-top: 0; color: #2980b9; font-size:16px;">✍️ Sign / Update Your Entry</h3>
+            <h3 style="margin-top: 0; color: #2980b9; font-size:16px;"><i class="i">&#xe71f;</i> Sign / Update Your Entry</h3>
             
             <form action="/profile/<%= profileUser.username %>/slambook/sign" method="POST">
               
-              <label class="slam-form-label">1. Who is your secret crush? 🤭</label>
+              <label class="slam-form-label">1. Who is your secret crush? </label>
               <input type="text" name="crush" class="slam-input" value="<%= myEntry ? myEntry.crush : '' %>" placeholder="Classmate / Secret crush / No one..." required>
 
-              <label class="slam-form-label">2. What was your first impression of me? 👀</label>
+              <label class="slam-form-label">2. What was your first impression of me? </label>
               <input type="text" name="first_impression" class="slam-input" value="<%= myEntry ? myEntry.first_impression : '' %>" placeholder="Very helpful / quiet / funny..." required>
 
-              <label class="slam-form-label">3. What is your favorite memory of us? 💖</label>
+              <label class="slam-form-label">3. What is your favorite memory of us? </label>
               <input type="text" name="best_memory" class="slam-input" value="<%= myEntry ? myEntry.best_memory : '' %>" placeholder="Cybercafe chats / annual day / bunking classes..." required>
 
-              <label class="slam-form-label">4. Describe me in ONE word! ⭐️</label>
+              <label class="slam-form-label">4. Describe me in ONE word! </label>
               <input type="text" name="describe_me" class="slam-input" value="<%= myEntry ? myEntry.describe_me : '' %>" placeholder="Awesome / Rockstar / Nerd..." required>
 
-              <label class="slam-form-label">5. Any advice or tips for me? 💡</label>
+              <label class="slam-form-label">5. Any advice or tips for me? </label>
               <input type="text" name="advice" class="slam-input" value="<%= myEntry ? myEntry.advice : '' %>" placeholder="Stay awesome / study hard / clear your Winamp skin queue..." required>
 
               <div style="text-align: right; margin-top: 15px;">
-                <button type="submit" class="xp-btn xp-btn--primary" style="font-family: inherit; font-size: 14px;">✍️ Sign Slam Book!</button>
+                <button type="submit" class="xp-btn xp-btn--primary" style="font-family: inherit; font-size: 14px;"><i class="i">&#xe71f;</i> Sign Slam Book!</button>
               </div>
             </form>
           </div>
@@ -177,7 +177,7 @@
 
         <!-- ═══ READ ENTRIES SECTION ═══ -->
         <div>
-          <h3 style="border-bottom: 2px solid #8e44ad; padding-bottom: 6px; color:#8e44ad; font-size:18px;">📖 Handwritten Signatures (<%= entries.length %>)</h3>
+          <h3 style="border-bottom: 2px solid #8e44ad; padding-bottom: 6px; color:#8e44ad; font-size:18px;"><i class="i">&#xe572;</i> Handwritten Signatures (<%= entries.length %>)</h3>
           
           <% if (entries && entries.length > 0) { %>
             <% entries.forEach(e => { %>

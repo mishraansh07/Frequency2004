@@ -12,7 +12,7 @@
   <div class="page-container">
     <div class="xp-window">
       <div class="xp-titlebar">
-        <span class="xp-titlebar__title">🔍 Search Results</span>
+        <span class="xp-titlebar__title"><i class="i">&#xea45;</i> Search Results</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -34,7 +34,7 @@
           <!-- Left: People results -->
           <div class="layout-two-col__main" style="flex:1;">
             <div class="xp-fieldset">
-              <legend>👤 People Results (<%= users.length %>)</legend>
+              <legend><i class="i">&#xea5d;</i> People Results (<%= users.length %>)</legend>
               
               <% if (users && users.length > 0) { %>
                 <ul class="search-results">
@@ -60,7 +60,7 @@
           <!-- Right: Communities results -->
           <div class="layout-two-col__sidebar" style="width:320px;">
             <div class="xp-fieldset">
-              <legend>🏘️ Communities (<%= communities.length %>)</legend>
+              <legend><i class="i">&#xea60;</i> Communities (<%= communities.length %>)</legend>
               
               <% if (communities && communities.length > 0) { %>
                 <ul class="search-results">

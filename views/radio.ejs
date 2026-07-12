@@ -26,7 +26,7 @@
                 <!-- Status Bar -->
                 <div class="ipod-statusbar">
                   <span id="ipod-status-title">iPod</span>
-                  <span class="ipod-battery">🔋</span>
+                  <span class="ipod-battery"></span>
                 </div>
 
                 <!-- Menu View -->
@@ -73,7 +73,7 @@
         <!-- XP Titlebar -->
         <div class="xp-titlebar">
           <span class="xp-titlebar__title">
-            💬 Retro Shoutbox — Online Chat
+            <i class="i">&#xe54d;</i> Retro Shoutbox — Online Chat
           </span>
           <div class="xp-titlebar__buttons">
             <button class="xp-titlebar__btn">_</button>
@@ -92,7 +92,7 @@
             <div style="width:1px; height:18px; background:#999; margin: 0 4px;"></div>
             <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;">😀</button>
             <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;">🖼️</button>
-            <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;" title="Send Nudge" onclick="alert('👋 Sending a nudge!')">👋</button>
+            <button class="toolbar-btn xp-btn" style="padding: 1px 4px; font-size:11px;" title="Send Nudge" onclick="alert('Sending a nudge!')"></button>
           </div>
 
           <!-- Messages container -->
@@ -109,7 +109,7 @@
               <button class="shoutbox-send-btn xp-btn xp-btn--primary" onclick="sendShoutboxMessage()">Send</button>
             <% } else { %>
               <input type="text" class="shoutbox-input xp-input" disabled
-                     placeholder="🔒 Please log in to shout!" style="flex:1; background:#eee;">
+                     placeholder="<i class="i">&#xe530;</i> Please log in to shout!" style="flex:1; background:#eee;">
               <a href="/login" class="xp-btn xp-btn--primary" style="text-decoration:none; text-align:center; padding-top:3px;">Log In</a>
             <% } %>
           </div>

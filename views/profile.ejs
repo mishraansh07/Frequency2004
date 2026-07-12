@@ -20,7 +20,7 @@
 
       <!-- ══ TITLEBAR ══ -->
       <div class="xp-titlebar">
-        <span class="xp-titlebar__title">👤 <%= profileUser.display_name %>'s Profile — [<%= profileUser.username %>]</span>
+        <span class="xp-titlebar__title"><i class="i">&#xea5d;</i> <%= profileUser.display_name %>'s Profile — [<%= profileUser.username %>]</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -39,21 +39,21 @@
             <div class="profile-headline"><%= profileUser.headline %></div>
 
             <div class="profile-stats">
-              <span>📍 <strong><%= profileUser.location || 'Somewhere on the internet' %></strong></span>
-              <span>👤 <strong><%= profileUser.gender || '?' %></strong></span>
-              <span>🎂 <strong><%= profileUser.age || '?' %></strong> years old</span>
+              <span><i class="i">&#xe547;</i> <strong><%= profileUser.location || 'Somewhere on the internet' %></strong></span>
+              <span><i class="i">&#xea5d;</i> <strong><%= profileUser.gender || '?' %></strong></span>
+              <span><i class="i">&#xe3ae;</i> <strong><%= profileUser.age || '?' %></strong> years old</span>
             </div>
 
             <div class="profile-mood"><%= profileUser.mood %></div>
 
             <% if (degrees !== null && degrees !== undefined && !isOwner) { %>
               <div class="degrees-badge mt-sm">
-                🔗 <%= degrees === 0 ? 'This is you!' : degrees + ' degree' + (degrees > 1 ? 's' : '') + ' of separation' %>
+                <i class="i">&#xe527;</i> <%= degrees === 0 ? 'This is you!' : degrees + ' degree' + (degrees > 1 ? 's' : '') + ' of separation' %>
               </div>
             <% } %>
 
             <% if (mutualCrush) { %>
-              <div class="mutual-crush mt-sm">💕 It's a MUTUAL CRUSH! 💕 You both like each other!</div>
+              <div class="mutual-crush mt-sm">It's a MUTUAL CRUSH! You both like each other!</div>
             <% } %>
 
             <!-- Profile Actions -->
@@ -75,17 +75,17 @@
                   </form>
                 <% } else { %>
                   <form method="POST" action="/friends/request/<%= profileUser.id %>" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--primary">➕ Add as Friend</button>
+                    <button type="submit" class="xp-btn xp-btn--primary"><i class="i">&#xe726;</i> Add as Friend</button>
                   </form>
                 <% } %>
-                <a href="/messages?friendId=<%= profileUser.id %>" class="xp-btn xp-btn--primary" style="text-decoration:none;">💬 Send Message</a>
-                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">📒 Scrapbook</a>
-                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;">📓 Sign Slam Book</a>
+                <a href="/messages?friendId=<%= profileUser.id %>" class="xp-btn xp-btn--primary" style="text-decoration:none;"><i class="i">&#xe54d;</i> Send Message</a>
+                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> Scrapbook</a>
+                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> Sign Slam Book</a>
               <% } %>
               <% if (isOwner) { %>
-                <a href="/profile/<%= profileUser.username %>/edit" class="xp-btn xp-btn--primary" style="text-decoration:none;">✏️ Edit My Profile</a>
-                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">📒 My Scrapbook</a>
-                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;">📓 My Slam Book</a>
+                <a href="/profile/<%= profileUser.username %>/edit" class="xp-btn xp-btn--primary" style="text-decoration:none;"><i class="i">&#xe71f;</i> Edit My Profile</a>
+                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> My Scrapbook</a>
+                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> My Slam Book</a>
               <% } %>
             </div>
           </div>
@@ -101,14 +101,14 @@
             <div class="outset-panel">
               <div class="section-header">📋 Member Info</div>
               <div class="text-small" style="line-height: 2;">
-                <div>📅 Member since <%= new Date(profileUser.created_at).toLocaleDateString() %></div>
+                <div><i class="i">&#xe3a5;</i> Member since <%= new Date(profileUser.created_at).toLocaleDateString() %></div>
               </div>
             </div>
 
             <!-- Profile Song -->
             <% if (profileUser.profile_song) { %>
             <div class="outset-panel">
-              <div class="section-header">🎵 Profile Song</div>
+              <div class="section-header"><i class="i">&#xe618;</i> Profile Song</div>
               <div style="padding: 6px; text-align: center;">
                 <audio src="<%= profileUser.profile_song %>" controls style="width: 100%; height: 32px;"></audio>
               </div>
@@ -117,10 +117,10 @@
 
             <!-- Ratings (Orkut-style) -->
             <div class="outset-panel">
-              <div class="section-header section-header--pink">⭐ Ratings</div>
+              <div class="section-header section-header--pink"><i class="i">&#xeaa0;</i> Ratings</div>
 
               <div class="mb-sm" style="font-size:12px; font-weight:bold; color:var(--xp-blue); display:flex; align-items:center; gap:6px; margin: 4px 0 8px 0;">
-                <span>🌟 Total Fans:</span>
+                <span><i class="i">&#xeaa0;</i> Total Fans:</span>
                 <strong><%= fanCount %></strong>
               </div>
               <hr style="border:1px groove #999; margin:8px 0;">
@@ -161,7 +161,7 @@
                   </div>
                   <% }) %>
                   <div class="mb-sm">
-                    <label><input type="checkbox" name="is_fan" value="1" <%= myRating && myRating.is_fan ? 'checked' : '' %>> 🌟 I'm a fan!</label>
+                    <label><input type="checkbox" name="is_fan" value="1" <%= myRating && myRating.is_fan ? 'checked' : '' %>> <i class="i">&#xeaa0;</i> I'm a fan!</label>
                   </div>
                   <div class="mb-sm">
                     <label><input type="checkbox" name="is_crush" value="1" <%= myRating && myRating.is_crush ? 'checked' : '' %>> 💘 Crush!</label>
@@ -174,7 +174,7 @@
             <!-- Top Friends -->
             <% if (top8 && top8.length > 0) { %>
             <div class="outset-panel">
-              <div class="section-header">🏆 Top <%= top8.length %> Friends</div>
+              <div class="section-header">Top <%= top8.length %> Friends</div>
               <div class="top8-grid" style="grid-template-columns: repeat(2, 1fr);">
                 <% top8.forEach(f => { %>
                   <div class="top8-card">
@@ -193,7 +193,7 @@
             <!-- About Me -->
             <div class="xp-window">
               <div class="xp-titlebar">
-                <span class="xp-titlebar__title">📝 About <%= profileUser.display_name %></span>
+                <span class="xp-titlebar__title"><i class="i">&#xe71f;</i> About <%= profileUser.display_name %></span>
               </div>
               <div class="xp-window__body">
                 <% if (profileUser.bio) { %>
@@ -236,7 +236,7 @@
             <!-- Testimonials -->
             <div class="xp-window mt-md">
               <div class="xp-titlebar">
-                <span class="xp-titlebar__title">💬 Testimonials (<%= testimonials.length %>)</span>
+                <span class="xp-titlebar__title"><i class="i">&#xe54d;</i> Testimonials (<%= testimonials.length %>)</span>
               </div>
               <div class="xp-window__body">
                 <% if (testimonials && testimonials.length > 0) { %>
@@ -256,7 +256,7 @@
                 <% if (currentUser && !isOwner) { %>
                   <hr style="border:1px groove #999; margin:12px 0;">
                   <form method="POST" action="/profile/<%= profileUser.username %>/testimonial">
-                    <label style="font-size:12px; font-weight:bold;">✍️ Write a testimonial:</label>
+                    <label style="font-size:12px; font-weight:bold;"><i class="i">&#xe71f;</i> Write a testimonial:</label>
                     <textarea name="content" class="xp-textarea w-100 mt-sm" rows="3"
                       placeholder="Write something nice about <%= profileUser.display_name %>..." required></textarea>
                     <button type="submit" class="xp-btn xp-btn--primary mt-sm">Submit Testimonial</button>
@@ -268,7 +268,7 @@
             <!-- Recent Scraps -->
             <div class="xp-window mt-md">
               <div class="xp-titlebar">
-                <span class="xp-titlebar__title">📒 Recent Scraps</span>
+                <span class="xp-titlebar__title"><i class="i">&#xe572;</i> Recent Scraps</span>
               </div>
               <div class="xp-window__body">
                 <% if (scraps && scraps.length > 0) { %>

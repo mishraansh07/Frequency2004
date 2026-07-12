@@ -12,7 +12,7 @@
   <div class="page-container">
     <div class="xp-window">
       <div class="xp-titlebar">
-        <span class="xp-titlebar__title">✏️ Edit Profile — <%= user.username %></span>
+        <span class="xp-titlebar__title"><i class="i">&#xe71f;</i> Edit Profile — <%= user.username %></span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -23,7 +23,7 @@
         <form method="POST" action="/profile/<%= user.username %>/edit">
           <!-- Basic Info -->
           <div class="xp-fieldset">
-            <legend>🌟 Basic Info</legend>
+            <legend><i class="i">&#xeaa0;</i> Basic Info</legend>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Display Name:</label>
               <input type="text" name="display_name" class="xp-input w-100" value="<%= user.display_name %>" maxlength="50">
@@ -59,7 +59,7 @@
             </div>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Mood:</label>
-              <input type="text" name="mood" class="xp-input w-100" value="<%= user.mood %>" placeholder="😊 Happy">
+              <input type="text" name="mood" class="xp-input w-100" value="<%= user.mood %>" placeholder="Happy">
             </div>
             <div class="d-flex gap-md">
               <div class="form-group mb-sm" style="flex:1">
@@ -84,7 +84,7 @@
 
           <!-- About Me -->
           <div class="xp-fieldset">
-            <legend>📝 About Me</legend>
+            <legend><i class="i">&#xe71f;</i> About Me</legend>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Bio:</label>
               <textarea name="bio" class="xp-textarea w-100" rows="4" placeholder="Tell the world about yourself..."><%= user.bio %></textarea>
@@ -97,7 +97,7 @@
 
           <!-- Interests (MySpace-style) -->
           <div class="xp-fieldset">
-            <legend>🎯 Interests</legend>
+            <legend><i class="i">&#xeb16;</i> Interests</legend>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">General:</label>
               <input type="text" name="interests_general" class="xp-input w-100" value="<%= user.interests_general %>">
@@ -126,7 +126,7 @@
 
           <!-- Customization (MySpace custom CSS!) -->
           <div class="xp-fieldset">
-            <legend>🎨 Profile Customization</legend>
+            <legend>Profile Customization</legend>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Profile Song URL (YouTube/SoundCloud):</label>
               <input type="text" name="profile_song" class="xp-input w-100" value="<%= user.profile_song %>" placeholder="https://...">
@@ -134,12 +134,12 @@
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Custom CSS (MySpace-style!):</label>
               <textarea name="custom_css" class="xp-textarea w-100" rows="4" style="font-family:'Courier New',monospace;font-size:12px;" placeholder="body { background: #000 !important; } .profile-content { color: #0f0 !important; }"><%= user.custom_css %></textarea>
-              <p class="text-small text-muted mt-sm">⚠️ Use at your own risk! Just like the real MySpace. 😎</p>
+              <p class="text-small text-muted mt-sm"><i class="i">&#xe3a3;</i> Use at your own risk! Just like the real MySpace. </p>
             </div>
           </div>
 
           <div class="d-flex gap-md justify-between">
-            <button type="submit" class="xp-btn xp-btn--primary">💾 Save Changes</button>
+            <button type="submit" class="xp-btn xp-btn--primary"><i class="i">&#xe790;</i> Save Changes</button>
             <a href="/profile/<%= user.username %>" class="xp-btn" style="text-decoration:none;">Cancel</a>
           </div>
         </form>

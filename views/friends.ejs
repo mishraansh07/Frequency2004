@@ -12,7 +12,7 @@
   <div class="page-container">
     <div class="xp-window">
       <div class="xp-titlebar">
-        <span class="xp-titlebar__title">👥 Friend Manager</span>
+        <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Friend Manager</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -23,7 +23,7 @@
         
         <!-- 1. PENDING REQUESTS -->
         <div class="xp-fieldset">
-          <legend>🔔 Pending Friend Requests (<%= pendingRequests.length %>)</legend>
+          <legend><i class="i">&#xe3a7;</i> Pending Friend Requests (<%= pendingRequests.length %>)</legend>
           <% if (pendingRequests && pendingRequests.length > 0) { %>
             <div class="friend-grid">
               <% pendingRequests.forEach(req => { %>
@@ -50,7 +50,7 @@
 
         <!-- 2. MANAGE TOP 8 -->
         <div class="xp-fieldset">
-          <legend>⭐ My Top 8 Friends</legend>
+          <legend><i class="i">&#xeaa0;</i> My Top 8 Friends</legend>
           <p class="text-small text-muted mb-sm">Select who appears in your profile's Top 8 grid. Leave fields blank for empty slots.</p>
           
           <form method="POST" action="/friends/top8">
@@ -76,13 +76,13 @@
                 </div>
               <% } %>
             </div>
-            <button type="submit" class="xp-btn xp-btn--primary mt-md">💾 Save Top 8</button>
+            <button type="submit" class="xp-btn xp-btn--primary mt-md"><i class="i">&#xe790;</i> Save Top 8</button>
           </form>
         </div>
 
         <!-- 3. ALL FRIENDS -->
         <div class="xp-fieldset">
-          <legend>👥 All Friends (<%= friends.length %>)</legend>
+          <legend><i class="i">&#xea60;</i> All Friends (<%= friends.length %>)</legend>
           <% if (friends && friends.length > 0) { %>
             <div class="friend-grid">
               <% friends.forEach(f => { %>

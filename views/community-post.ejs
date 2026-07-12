@@ -17,7 +17,7 @@
   <div class="page-container" style="max-width: 800px;">
     <div class="xp-window">
       <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
-        <span class="xp-titlebar__title">💬 Topic Discussion</span>
+        <span class="xp-titlebar__title"><i class="i">&#xe54d;</i> Topic Discussion</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -27,7 +27,7 @@
       <div class="xp-window__body" style="background: #fff;">
         
         <div class="mb-md">
-          <a href="/communities/<%= community.id %>" style="color: #4A7EBB; font-weight: bold; text-decoration: none;">🏘️ Back to <%= community.name %> Forum</a>
+          <a href="/communities/<%= community.id %>" style="color: #4A7EBB; font-weight: bold; text-decoration: none;"><i class="i">&#xea60;</i> Back to <%= community.name %> Forum</a>
         </div>
 
         <!-- The main Post -->
@@ -49,7 +49,7 @@
 
         <!-- Replies Section -->
         <div class="xp-fieldset mt-lg">
-          <legend>💬 Replies (<%= replies.length %>)</legend>
+          <legend><i class="i">&#xe54d;</i> Replies (<%= replies.length %>)</legend>
           
           <% if (replies && replies.length > 0) { %>
             <% replies.forEach((reply, index) => { %>
@@ -76,7 +76,7 @@
         <!-- Reply Form -->
         <% if (currentUser && isMember) { %>
           <div class="xp-fieldset mt-lg">
-            <legend>✍️ Add a Reply</legend>
+            <legend><i class="i">&#xe71f;</i> Add a Reply</legend>
             <form method="POST" action="/communities/<%= community.id %>/post/<%= post.id %>/reply">
               <div class="form-group mb-sm">
                 <textarea name="content" class="xp-textarea w-100" rows="3" placeholder="Write your reply..." required></textarea>
@@ -86,11 +86,11 @@
           </div>
         <% } else if (currentUser && !isMember) { %>
           <div class="outset-panel text-center text-small text-muted" style="padding: 10px; border-color: #ED1A7B;">
-            🔒 You must join this community to write a reply.
+            <i class="i">&#xe530;</i> You must join this community to write a reply.
           </div>
         <% } else { %>
           <div class="outset-panel text-center text-small text-muted" style="padding: 10px;">
-            🔒 Please <a href="/login">log in</a> to participate in discussions.
+            <i class="i">&#xe530;</i> Please <a href="/login">log in</a> to participate in discussions.
           </div>
         <% } %>
 

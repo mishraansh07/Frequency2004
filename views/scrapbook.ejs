@@ -17,7 +17,7 @@
   <div class="page-container" style="max-width: 800px;">
     <div class="xp-window">
       <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
-        <span class="xp-titlebar__title">📒 <%= profileUser.display_name %>'s Scrapbook</span>
+        <span class="xp-titlebar__title"><i class="i">&#xe572;</i> <%= profileUser.display_name %>'s Scrapbook</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn">_</button>
           <button class="xp-titlebar__btn">□</button>
@@ -33,7 +33,7 @@
         <!-- Add Scrap Form -->
         <% if (currentUser) { %>
           <div class="xp-fieldset">
-            <legend>✍️ Leave a Scrap (Message)</legend>
+            <legend><i class="i">&#xe71f;</i> Leave a Scrap (Message)</legend>
             <form method="POST" action="/scrapbook/<%= profileUser.username %>">
               <div class="form-group mb-sm">
                 <textarea name="content" class="xp-textarea w-100" rows="3" placeholder="Write a scrap..." required></textarea>
@@ -43,13 +43,13 @@
           </div>
         <% } else { %>
           <div class="outset-panel text-center text-small text-muted" style="padding: 10px;">
-            🔒 Please <a href="/login">log in</a> to leave a scrap.
+            <i class="i">&#xe530;</i> Please <a href="/login">log in</a> to leave a scrap.
           </div>
         <% } %>
 
         <!-- Scraps Feed -->
         <div class="xp-fieldset mt-lg">
-          <legend>📒 Scraps</legend>
+          <legend><i class="i">&#xe572;</i> Scraps</legend>
           <% if (scraps && scraps.length > 0) { %>
             <% scraps.forEach(scrap => { %>
               <div class="scrap-item" style="border: 1px solid #f0ccd7; background: #fff; padding: 12px; margin-bottom: 12px; border-radius: 4px; display: flex; gap: 12px;">
