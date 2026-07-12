@@ -503,23 +503,6 @@ function seedData() {
 // ══════════════════════════════════════════════════════════
 function initialize() {
   try {
-    // Auto-reset if old demo data is found
-    let needsReset = false;
-    try {
-      const old = db.prepare("SELECT id FROM users WHERE username='CoOl_DuDe99'").get();
-      if (old) needsReset = true;
-    } catch(e) { /* table may not exist yet */ }
-
-    if (needsReset) {
-      console.log('[database] Detected old demo data — resetting...');
-      db.pragma('foreign_keys = OFF');
-      ['users','friendships','top_friends','scraps','testimonials','ratings',
-       'communities','community_members','community_posts','community_replies',
-       'shoutbox_messages','direct_messages','slambook_responses'
-      ].forEach(t => db.exec(`DROP TABLE IF EXISTS ${t}`));
-      db.pragma('foreign_keys = ON');
-    }
-
     createTables();
     console.log('[database] All 13 tables ready');
 
