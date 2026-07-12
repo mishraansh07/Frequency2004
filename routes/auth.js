@@ -66,6 +66,15 @@ router.post('/register', (req, res) => {
             });
         }
 
+        // Validate username format
+        const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
+        if (!usernameRegex.test(username)) {
+            return res.render('register', {
+                title: 'Register',
+                error: 'Username must be 3-30 characters long and contain only letters, numbers, or underscores.'
+            });
+        }
+
         // Hash the password
         const password_hash = bcrypt.hashSync(password, 10);
 
