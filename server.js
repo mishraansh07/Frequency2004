@@ -83,7 +83,7 @@ app.use(session({
   cookie: {
     maxAge:   1000 * 60 * 60 * 24 * 7, // 7 days
     httpOnly: true,
-    secure:   process.env.NODE_ENV === 'production', // auto-enable on Render HTTPS
+    secure:   false,  // Render proxy handles HTTPS; Express sees HTTP
     sameSite: 'lax',
   },
 }));

@@ -33,7 +33,10 @@ router.post('/login', (req, res) => {
 
         // Set session and redirect to home
         req.session.userId = user.id;
-        res.redirect('/home');
+        req.session.save((err) => {
+            if (err) console.error('Session save error:', err);
+            res.redirect('/home');
+        });
     } catch (err) {
         console.error('Login error:', err);
         res.render('login', { title: 'Login', error: 'Something went wrong. Please try again.' });
@@ -85,7 +88,10 @@ router.post('/register', (req, res) => {
 
         // Set session and redirect to home
         req.session.userId = result.lastInsertRowid;
-        res.redirect('/home');
+        req.session.save((err) => {
+            if (err) console.error('Session save error:', err);
+            res.redirect('/home');
+        });
     } catch (err) {
         console.error('Registration error:', err);
 

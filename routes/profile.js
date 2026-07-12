@@ -226,6 +226,15 @@ router.post('/:username/edit', requireAuth, (req, res) => {
             custom_css, profile_song, avatar_url
         } = req.body;
 
+        // Use submitted value if present, otherwise keep the existing stored value.
+        // This prevents blank optional fields from wiping saved data.
+        const safeVal = (submitted, existing) => {
+            // submitted could be an empty string (user intentionally cleared it)
+            // or undefined (field was missing from the form entirely).
+            // We keep submitted if it was actually in the form (even if empty).
+            return submitted !== undefined ? submitted : (existing || '');
+        };
+
         // Update the user record with all profile fields
         db.db.prepare(`
             UPDATE users SET
@@ -248,11 +257,23 @@ router.post('/:username/edit', requireAuth, (req, res) => {
                 avatar_url = ?
             WHERE id = ?
         `).run(
-            display_name || '', headline || '', bio || '', who_id_like_to_meet || '',
-            mood || '', location || '', gender || '', age || null,
-            interests_general || '', interests_music || '', interests_movies || '',
-            interests_tv || '', interests_books || '', interests_heroes || '',
-            custom_css || '', profile_song || '', avatar_url || '/images/avatars/default.png',
+            safeVal(display_name, user.display_name),
+            safeVal(headline, user.headline),
+            safeVal(bio, user.bio),
+            safeVal(who_id_like_to_meet, user.who_id_like_to_meet),
+            safeVal(mood, user.mood),
+            safeVal(location, user.location),
+            safeVal(gender, user.gender),
+            age ? parseInt(age) : user.age,
+            safeVal(interests_general, user.interests_general),
+            safeVal(interests_music, user.interests_music),
+            safeVal(interests_movies, user.interests_movies),
+            safeVal(interests_tv, user.interests_tv),
+            safeVal(interests_books, user.interests_books),
+            safeVal(interests_heroes, user.interests_heroes),
+            safeVal(custom_css, user.custom_css),
+            safeVal(profile_song, user.profile_song),
+            avatar_url || user.avatar_url || '/images/avatars/default.png',
             user.id
         );
 
