@@ -95,11 +95,11 @@ router.post('/delete/:id', requireAuth, (req, res) => {
         const scrapId = parseInt(req.params.id);
         const currentUserId = req.session.userId;
 
-        // Delete only if the current user is the author
+        // Delete if current user is either the scrap author or the scrapbook owner (recipient)
         db.db.prepare(`
             DELETE FROM scraps
-            WHERE id = ? AND author_id = ?
-        `).run(scrapId, currentUserId);
+            WHERE id = ? AND (author_id = ? OR recipient_id = ?)
+        `).run(scrapId, currentUserId, currentUserId);
 
         // Redirect back to the referring page
         const referer = req.get('referer') || '/home';
