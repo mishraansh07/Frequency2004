@@ -89,6 +89,17 @@ router.post('/send', requireAuth, (req, res) => {
             return res.status(400).json({ error: 'Invalid message data' });
         }
 
+        // Verify friendship exists and is accepted
+        const friendship = db.db.prepare(`
+            SELECT id FROM friendships 
+            WHERE status = 'accepted'
+            AND ((requester_id = ? AND addressee_id = ?) OR (requester_id = ? AND addressee_id = ?))
+        `).get(currentUserId, recipientId, recipientId, currentUserId);
+
+        if (!friendship) {
+            return res.status(403).json({ error: 'You can only send messages to accepted friends.' });
+        }
+
         const info = db.db.prepare(`
             INSERT INTO direct_messages (sender_id, recipient_id, content)
             VALUES (?, ?, ?)
