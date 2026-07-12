@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=VT323&size=30&duration=2000&pause=1000&color=FFD700&center=true&vCenter=true&width=500&lines=Welcome+to+Frequency+2004;Relive+the+Golden+Days+of+the+Internet;Yeh+Un+Dino+Ki+Baat+Hai" alt="Typing SVG" />
+</p>
+
+<p align="center">
   <strong>A premium, high-fidelity retro social network bringing back the golden age of Web 1.0.</strong>
 </p>
 
