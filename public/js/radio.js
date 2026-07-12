@@ -9,12 +9,12 @@
 
 // Static playlist with ultra-reliable fallback MP3s to guarantee playback
 let stations = [
-    { name: 'Kal Ho Naa Ho', genre: 'Sonu Nigam', url: 'https://ccma.public.cat/mp3/Sonu_Nigam_-_Kal_Ho_Naa_Ho.mp3' },
-    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://ccma.public.cat/mp3/Kaho_Naa_Pyaar_Hai.mp3' },
-    { name: 'Koi Mil Gaya', genre: 'Udit Narayan & Alka Yagnik', url: 'https://ccma.public.cat/mp3/Koi_Mil_Gaya.mp3' },
-    { name: 'It\'s The Time To Disco', genre: 'KK & Shaan', url: 'https://ccma.public.cat/mp3/Its_The_Time_To_Disco.mp3' },
-    { name: 'Mahi Ve', genre: 'Sadhana Sargam & Shankar Mahadevan', url: 'https://ccma.public.cat/mp3/Mahi_Ve.mp3' },
-    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://ccma.public.cat/mp3/Ek_Pal_Ka_Jeena.mp3' }
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://archive.org/download/kaho-naa-pyaar-hai_202005/Kaho%20Naa%20Pyaar%20Hai.mp3' },
+    { name: 'Koi Mil Gaya', genre: 'Udit Narayan & Alka Yagnik', url: 'https://archive.org/download/Koi-Mil-Gaya-2003-Movie-Hindiganadownload.com/Koi%20Mil%20Gaya.mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://archive.org/download/MainTumhaaraHiRahoon320/02%20Ek%20Pal%20Ka%20Jeena.mp3' },
+    { name: 'Kal Ho Naa Ho (Theme)', genre: 'Sonu Nigam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+    { name: 'It\'s The Time To Disco (Beat)', genre: 'Shaan & KK', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+    { name: 'Mahi Ve (Theme)', genre: 'Sadhana Sargam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
 ];
 
 const ipodState = {
