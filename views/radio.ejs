@@ -169,6 +169,11 @@
   </div>
 
   <%- include('partials/taskbar') %>
+  <script>
+    const currentUserName = "<%= locals.currentUser ? currentUser.username : '' %>";
+    const currentUserDisplayName = "<%= locals.currentUser ? currentUser.display_name : '' %>";
+    const currentUserAvatar = "<%= locals.currentUser ? currentUser.avatar_url : '/images/avatars/default.png' %>";
+  </script>
   <script src="/js/app.js"></script>
   <script src="/js/radio.js"></script>
 </body>
