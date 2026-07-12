@@ -141,14 +141,52 @@ app.use('/shoutbox',    shoutboxRoutes);
 app.use('/messages',    messagesRoutes);
 
 // ─── Radio Page ─────────────────────────────────────────
-// The retro FM radio — standalone page preserved from v1.
 app.get('/radio', (req, res) => {
   try {
-    res.render('radio', { title: 'FM Radio & Shoutbox' });
+    const db = app.locals.db;
+    const currentUserId = req.session.userId;
+    let friends = [];
+    if (currentUserId) {
+      friends = db.db.prepare(`
+        SELECT u.id, u.username, u.display_name, u.avatar_url
+        FROM friendships f
+        JOIN users u ON u.id = CASE
+            WHEN f.requester_id = ? THEN f.addressee_id
+            ELSE f.requester_id
+        END
+        WHERE f.status = 'accepted'
+        AND (f.requester_id = ? OR f.addressee_id = ?)
+        ORDER BY u.display_name ASC
+      `).all(currentUserId, currentUserId, currentUserId);
+    }
+    res.render('radio', { title: 'FM Radio & Shoutbox', friends });
   } catch (err) {
-    // Fallback: serve the original index.html if the view
-    // doesn't exist yet
+    console.error('Radio loading error:', err);
     res.sendFile(path.join(__dirname, 'index.html'));
+  }
+});
+
+app.post('/radio/invite', (req, res) => {
+  try {
+    const db = app.locals.db;
+    const currentUserId = req.session.userId;
+    const { friendId, room } = req.body;
+    if (!currentUserId || !friendId || !room) {
+      return res.status(400).json({ error: 'Invalid parameters' });
+    }
+
+    const inviteLink = `/radio?room=${encodeURIComponent(room)}`;
+    const content = `🎧 Hey! Come join my Music Listening Party and chat with me! Click here: ${inviteLink}`;
+
+    db.db.prepare(`
+        INSERT INTO direct_messages (sender_id, recipient_id, content)
+        VALUES (?, ?, ?)
+    `).run(currentUserId, parseInt(friendId), content);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Listening party invite error:', err);
+    res.status(500).json({ error: 'Failed to send invitation' });
   }
 });
 
