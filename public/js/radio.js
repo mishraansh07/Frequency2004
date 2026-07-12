@@ -18,6 +18,10 @@ let stations = [
     { name: 'Tanhayee (Sad)', genre: 'Sonu Nigam (Dil Chahta Hai)', url: 'https://archive.org/download/dil-chahta-hai-2001-movie-songs-hindiganadownload.com/Dil Chahta Hai/7. Tanhayee - hindiganadownload.com.mp3' }
 ];
 
+let activeRoom = null;
+let isPartyHost = false;
+let wsConnection = null;
+
 const ipodState = {
     view: 'menu', // 'menu' or 'nowplaying'
     menuIndex: 0,
@@ -36,11 +40,56 @@ document.addEventListener('DOMContentLoaded', () => {
         audioElement.volume = 0.75;
     }
 
+    // Parse URL Room parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room');
+    if (roomParam) {
+        activeRoom = roomParam;
+        isPartyHost = (activeRoom === currentUserName);
+        
+        // Show party active panel UI
+        const noState = document.getElementById('no-party-state');
+        const activeState = document.getElementById('party-active-state');
+        if (noState) noState.style.display = 'none';
+        if (activeState) activeState.style.display = 'block';
+        
+        const roomIdEl = document.getElementById('party-room-id');
+        if (roomIdEl) roomIdEl.textContent = activeRoom;
+        
+        const roleBadge = document.getElementById('party-role-badge');
+        if (roleBadge) {
+            roleBadge.textContent = isPartyHost ? 'Host' : 'Guest';
+            roleBadge.style.background = isPartyHost ? '#0a246a' : '#27ae60';
+        }
+        
+        if (isPartyHost) {
+            const hostSec = document.getElementById('host-invite-section');
+            if (hostSec) hostSec.style.display = 'block';
+        } else {
+            const guestSec = document.getElementById('guest-status-section');
+            if (guestSec) guestSec.style.display = 'block';
+        }
+        
+        // Update Shoutbox title info
+        const toolbarTitle = document.querySelector('.shoutbox-toolbar span');
+        if (toolbarTitle) {
+            toolbarTitle.textContent = `Listening Party Chatroom: ${activeRoom}`;
+            toolbarTitle.style.color = 'var(--orkut-pink)';
+            toolbarTitle.style.fontWeight = 'bold';
+        }
+        
+        // Clear message log to separate from global shoutbox
+        const msgContainer = document.getElementById('shoutbox-messages');
+        if (msgContainer) msgContainer.innerHTML = '';
+    }
+
     // Initialize iPod Menu directly with static songs
     renderIpodMenu();
 
     // Initialize Shoutbox with WebSockets and fallback to polling
-    pollShoutbox();
+    if (!activeRoom) {
+        pollShoutbox();
+    }
     initShoutboxWebSocket();
 
     // Input handlers for shoutbox
@@ -92,6 +141,10 @@ function renderIpodMenu() {
 }
 
 function ipodPrev() {
+    if (activeRoom && !isPartyHost) {
+        showPartyAlert("Host controls only!");
+        return;
+    }
     if (ipodState.view !== 'menu') return;
     if (ipodState.menuIndex > 0) {
         ipodState.menuIndex--;
@@ -100,6 +153,10 @@ function ipodPrev() {
 }
 
 function ipodNext() {
+    if (activeRoom && !isPartyHost) {
+        showPartyAlert("Host controls only!");
+        return;
+    }
     if (ipodState.view !== 'menu') return;
     if (ipodState.menuIndex < stations.length - 1) {
         ipodState.menuIndex++;
@@ -107,8 +164,8 @@ function ipodNext() {
     }
 }
 
+// Menu button goes back to menu view
 function ipodMenu() {
-    // Menu button goes back to menu view
     if (ipodState.view === 'nowplaying') {
         ipodState.view = 'menu';
         renderIpodMenu();
@@ -116,13 +173,22 @@ function ipodMenu() {
 }
 
 function ipodSelect() {
+    if (activeRoom && !isPartyHost) {
+        showPartyAlert("Host controls only!");
+        return;
+    }
     if (ipodState.view === 'menu') {
         const selectedStation = stations[ipodState.menuIndex];
         playIpodStation(selectedStation);
+        broadcastSync({ action: 'change', songIndex: ipodState.menuIndex });
     }
 }
 
 function ipodPlayPause() {
+    if (activeRoom && !isPartyHost) {
+        showPartyAlert("Host controls only!");
+        return;
+    }
     if (ipodState.isPlaying) {
         pauseIpod();
     } else {
@@ -158,6 +224,13 @@ function playIpodStation(station) {
     // UI updates for buffering and errors
     audioElement.onplaying = () => {
         document.getElementById('ipod-np-title').textContent = station.name;
+        if (isPartyHost) {
+            broadcastSync({
+                action: 'play',
+                songIndex: ipodState.menuIndex,
+                currentTime: audioElement.currentTime
+            });
+        }
     };
     audioElement.onwaiting = () => {
         document.getElementById('ipod-np-title').textContent = 'Buffering...';
@@ -181,13 +254,29 @@ function playIpodStation(station) {
 
     if (audioElement && isNewStation) {
         audioElement.src = station.url;
-        audioElement.play().catch(err => {
+        audioElement.play().then(() => {
+            if (isPartyHost) {
+                broadcastSync({
+                    action: 'play',
+                    songIndex: ipodState.menuIndex,
+                    currentTime: 0
+                });
+            }
+        }).catch(err => {
             console.error('Playback error:', err);
             document.getElementById('ipod-np-title').textContent = 'Playback Failed';
             stopIpodProgress();
         });
     } else if (audioElement) {
-        audioElement.play().catch(err => {
+        audioElement.play().then(() => {
+            if (isPartyHost) {
+                broadcastSync({
+                    action: 'play',
+                    songIndex: ipodState.menuIndex,
+                    currentTime: audioElement.currentTime
+                });
+            }
+        }).catch(err => {
             console.error('Playback error:', err);
             document.getElementById('ipod-np-title').textContent = 'Playback Failed';
             stopIpodProgress();
@@ -201,6 +290,12 @@ function pauseIpod() {
     
     if (audioElement) {
         audioElement.pause();
+    }
+    if (isPartyHost) {
+        broadcastSync({
+            action: 'pause',
+            songIndex: ipodState.menuIndex
+        });
     }
 }
 
@@ -242,6 +337,7 @@ function stopIpodProgress() {
 }
 
 /* ─── Shoutbox Live Integration ──────────────────────── */
+/* ─── Shoutbox & Room Listening Party Live Integration ──────── */
 function initShoutboxWebSocket() {
     try {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -250,17 +346,42 @@ function initShoutboxWebSocket() {
 
         ws.onopen = () => {
             console.log('[ws] Connected to real-time chat socket channel');
+            wsConnection = ws;
+            if (activeRoom) {
+                ws.send(JSON.stringify({
+                    type: 'join',
+                    room: activeRoom,
+                    username: currentUserName,
+                    displayName: currentUserDisplayName
+                }));
+            }
         };
 
         ws.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
-                if (message.type === 'shoutbox') {
-                    // Append incoming broadcast message directly to the shoutbox
-                    appendShoutboxMessage(message.data);
+                
+                // 1. System notices
+                if (message.type === 'user_joined') {
+                    appendSystemMessage(`${message.displayName} joined the listening party room 🎧`);
+                } else if (message.type === 'user_left') {
+                    appendSystemMessage(`${message.displayName} left the party.`);
+                }
+                
+                // 2. Synchronized audio controls (Only Guest handles this)
+                else if (message.type === 'sync' && activeRoom && !isPartyHost) {
+                    handleSyncMessage(message);
+                }
+                
+                // 3. Chat Room messages
+                else if (message.type === 'room_chat' && activeRoom) {
+                    appendRoomChatMessage(message);
+                } else if (message.type === 'shoutbox' && !activeRoom) {
+                    // Global shoutbox message
+                    appendShoutboxMessage(message.message || message.data);
                 }
             } catch (e) {
-                console.error('[ws] Failed to parse broadcast message:', e);
+                console.error('[ws] Failed to parse socket message:', e);
             }
         };
 
@@ -269,13 +390,141 @@ function initShoutboxWebSocket() {
         };
 
         ws.onclose = () => {
-            console.warn('[ws] Channel closed. Re-polling fallback...');
-            // Fallback: poll every 6 seconds if WS is disconnected
-            setInterval(pollShoutbox, 6000);
+            console.warn('[ws] Socket disconnected.');
+            wsConnection = null;
+            if (!activeRoom) {
+                // Fallback: poll every 6 seconds if WS is disconnected in global mode
+                setInterval(pollShoutbox, 6000);
+            }
         };
     } catch (err) {
         console.warn('[ws] WS setup failed. Falling back to HTTP polling.', err);
-        setInterval(pollShoutbox, 6000);
+        if (!activeRoom) {
+            setInterval(pollShoutbox, 6000);
+        }
+    }
+}
+
+function handleSyncMessage(msg) {
+    console.log('[sync] Received sync from host:', msg);
+    if (msg.action === 'change') {
+        ipodState.menuIndex = msg.songIndex;
+        playIpodStationSilent(msg.songIndex);
+    } else if (msg.action === 'play') {
+        if (!ipodState.isPlaying || ipodState.menuIndex !== msg.songIndex) {
+            playIpodStationSilent(msg.songIndex);
+        }
+        if (audioElement && Math.abs(audioElement.currentTime - msg.currentTime) > 2) {
+            audioElement.currentTime = msg.currentTime;
+        }
+    } else if (msg.action === 'pause') {
+        pauseIpodSilent();
+    }
+}
+
+function broadcastSync(payload) {
+    if (isPartyHost && wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+        wsConnection.send(JSON.stringify({
+            type: 'sync',
+            room: activeRoom,
+            ...payload
+        }));
+    }
+}
+
+// Silent audio control helper functions for guest players
+function playIpodStationSilent(songIndex) {
+    const station = stations[songIndex];
+    if (!station) return;
+    ipodState.menuIndex = songIndex;
+    ipodState.currentStation = station;
+    ipodState.isPlaying = true;
+    ipodState.view = 'nowplaying';
+    
+    // Update Screen UI
+    document.getElementById('ipod-menu').style.display = 'none';
+    document.getElementById('ipod-now-playing').style.display = 'flex';
+    document.getElementById('ipod-status-title').textContent = 'Listening Together';
+    
+    document.getElementById('ipod-np-title').textContent = station.name;
+    document.getElementById('ipod-np-artist').textContent = station.genre;
+    
+    startIpodProgress();
+
+    if (audioElement) {
+        if (audioElement.src !== station.url) {
+            audioElement.src = station.url;
+        }
+        audioElement.play().catch(err => console.log('Auto-play blocked by user gesture restrictions', err));
+    }
+}
+
+function pauseIpodSilent() {
+    ipodState.isPlaying = false;
+    stopIpodProgress();
+    if (audioElement) {
+        audioElement.pause();
+    }
+    document.getElementById('ipod-status-title').textContent = 'Paused (Sync)';
+}
+
+function startParty() {
+    if (!currentUserName) {
+        alert("Please log in to start a listening party!");
+        window.location.href = "/login";
+        return;
+    }
+    window.location.href = `/radio?room=${encodeURIComponent(currentUserName)}`;
+}
+
+function leaveParty() {
+    window.location.href = '/radio';
+}
+
+function sendInvite() {
+    const select = document.getElementById('invite-friend-select');
+    if (!select) return;
+    const friendId = select.value;
+    if (!friendId) {
+        alert("Please select a friend to invite!");
+        return;
+    }
+
+    fetch('/radio/invite', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            friendId: friendId,
+            room: activeRoom
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const status = document.getElementById('invite-status');
+            if (status) {
+                status.style.display = 'block';
+                setTimeout(() => status.style.display = 'none', 3000);
+            }
+        } else {
+            alert("Failed to send invite: " + (data.error || "unknown error"));
+        }
+    })
+    .catch(err => console.error("Error sending invite:", err));
+}
+
+function showPartyAlert(text) {
+    const npTitle = document.getElementById('ipod-np-title');
+    if (npTitle) {
+        const originalText = npTitle.textContent;
+        npTitle.textContent = text;
+        setTimeout(() => {
+            if (npTitle.textContent === text) {
+                npTitle.textContent = originalText;
+            }
+        }, 2000);
     }
 }
 
@@ -286,7 +535,7 @@ function appendShoutboxMessage(msg) {
     const div = document.createElement('div');
     div.className = 'shoutbox__msg';
 
-    const dateObj = new Date(msg.created_at);
+    const dateObj = new Date(msg.created_at || new Date());
     const timeStr = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
 
     div.innerHTML = `
@@ -298,12 +547,40 @@ function appendShoutboxMessage(msg) {
     container.scrollTop = container.scrollHeight;
 }
 
+function appendRoomChatMessage(msg) {
+    const container = document.getElementById('shoutbox-messages');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'shoutbox__msg';
+    div.innerHTML = `
+        <span class="shoutbox__msg-time">[${msg.timestamp}]</span>
+        <span class="shoutbox__msg-author" style="color:#bf3a6c; font-weight:bold;">&lt;${msg.displayName}&gt;</span>
+        <span class="shoutbox__msg-content">${escapeHTML(msg.content)}</span>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function appendSystemMessage(text) {
+    const container = document.getElementById('shoutbox-messages');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'shoutbox__msg';
+    div.style.color = '#7f8c8d';
+    div.style.fontStyle = 'italic';
+    div.style.padding = '3px 8px';
+    div.innerHTML = `📢 ${escapeHTML(text)}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
 function pollShoutbox() {
     fetch('/shoutbox/api/messages')
         .then(res => res.json())
         .then(data => {
             if (Array.isArray(data)) {
-                // Reverse to show oldest first in chat scrolling layout
                 renderShoutbox(data.slice().reverse());
             }
         })
@@ -337,23 +614,33 @@ function sendShoutboxMessage() {
     const text = input.value.trim();
     if (!text) return;
     
-    fetch('/shoutbox', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ content: text })
-    })
-    .then(() => {
+    if (activeRoom && wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+        wsConnection.send(JSON.stringify({
+            type: 'chat',
+            room: activeRoom,
+            username: currentUserName,
+            displayName: currentUserDisplayName,
+            avatarUrl: currentUserAvatar,
+            content: text
+        }));
         input.value = '';
-        // No need to call pollShoutbox() here because the server 
-        // broadcasts it back via WebSockets immediately!
-    })
-    .catch(err => {
-        console.error('[Send Message failed]:', err);
-        window.location.href = '/login';
-    });
+    } else {
+        fetch('/shoutbox', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ content: text })
+        })
+        .then(() => {
+            input.value = '';
+        })
+        .catch(err => {
+            console.error('[Send Message failed]:', err);
+            window.location.href = '/login';
+        });
+    }
 }
 
 function escapeHTML(str) {
