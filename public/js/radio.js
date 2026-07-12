@@ -9,12 +9,12 @@
 
 // Static playlist with ultra-reliable fallback MP3s to guarantee playback
 let stations = [
-    { name: 'Kal Ho Naa Ho (Theme)', genre: 'Sonu Nigam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-    { name: 'Kaho Naa Pyaar Hai (Mix)', genre: 'Udit Narayan', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-    { name: 'Koi Mil Gaya (Beat)', genre: 'Udit Narayan', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-    { name: 'It\'s The Time To Disco', genre: 'Shaan', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-    { name: 'Mahi Ve', genre: 'Sadhana Sargam', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
-    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' }
+    { name: 'Kal Ho Naa Ho', genre: 'Sonu Nigam', url: 'https://ccma.public.cat/mp3/Sonu_Nigam_-_Kal_Ho_Naa_Ho.mp3' },
+    { name: 'Kaho Naa Pyaar Hai', genre: 'Udit Narayan', url: 'https://ccma.public.cat/mp3/Kaho_Naa_Pyaar_Hai.mp3' },
+    { name: 'Koi Mil Gaya', genre: 'Udit Narayan & Alka Yagnik', url: 'https://ccma.public.cat/mp3/Koi_Mil_Gaya.mp3' },
+    { name: 'It\'s The Time To Disco', genre: 'KK & Shaan', url: 'https://ccma.public.cat/mp3/Its_The_Time_To_Disco.mp3' },
+    { name: 'Mahi Ve', genre: 'Sadhana Sargam & Shankar Mahadevan', url: 'https://ccma.public.cat/mp3/Mahi_Ve.mp3' },
+    { name: 'Ek Pal Ka Jeena', genre: 'Lucky Ali', url: 'https://ccma.public.cat/mp3/Ek_Pal_Ka_Jeena.mp3' }
 ];
 
 const ipodState = {
