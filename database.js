@@ -186,11 +186,11 @@ function seedData() {
     INSERT INTO users
       (username, email, password_hash, display_name, headline, bio,
        mood, location, gender, age, custom_css, interests_music,
-       interests_movies, interests_general, interests_heroes, profile_views)
+       interests_movies, interests_general, interests_heroes, profile_views, avatar_url)
     VALUES
       (@username, @email, @hash, @display_name, @headline, @bio,
        @mood, @location, @gender, @age, @custom_css, @interests_music,
-       @interests_movies, @interests_general, @interests_heroes, @profile_views)
+       @interests_movies, @interests_general, @interests_heroes, @profile_views, COALESCE(@avatar_url, '/images/avatars/default.png'))
   `);
 
   const users = [
@@ -211,6 +211,7 @@ function seedData() {
       interests_general: 'Cricket, Yahoo Messenger, MP3 collecting, Cybercafes',
       interests_heroes: 'Sachin Tendulkar, Shah Rukh Khan',
       profile_views: 342,
+      avatar_url: '/images/avatars/pixel1.png',
     },
     {
       username: 'PixelPrincess',
@@ -229,6 +230,7 @@ function seedData() {
       interests_general: 'Geocities, Web design, Cats, Glitter graphics, Dollz',
       interests_heroes: 'Sailor Moon, my big sister',
       profile_views: 891,
+      avatar_url: '/images/avatars/pixel2.png',
     },
     {
       username: 'MP3_Hunter',
@@ -247,6 +249,7 @@ function seedData() {
       interests_general: 'MP3 collecting, CD burning, Napster, Kazaa, WinMX',
       interests_heroes: 'Shawn Fanning (Napster founder)',
       profile_views: 567,
+      avatar_url: '/images/avatars/pixel1.png',
     },
     {
       username: 'DialUpKing',
@@ -265,6 +268,7 @@ function seedData() {
       interests_general: 'Complaining about dial-up, Waiting for broadband, IRC, mIRC scripts',
       interests_heroes: 'Anyone who invented broadband',
       profile_views: 213,
+      avatar_url: '/images/avatars/pixel4.png',
     },
     {
       username: 'SunnyBoy2003',
@@ -283,6 +287,7 @@ function seedData() {
       interests_general: 'Cricket, Carrom, Cybercafe, WWF/WWE, Beyblade',
       interests_heroes: 'Shaktimaan, Sachin Tendulkar, John Cena',
       profile_views: 156,
+      avatar_url: '/images/avatars/pixel1.png',
     },
     {
       username: 'xX_AnGeL_Xx',
@@ -301,6 +306,7 @@ function seedData() {
       interests_general: 'Slam books, Friendship bands, Autograph books, Poetry',
       interests_heroes: 'My best friends ♥♥♥',
       profile_views: 723,
+      avatar_url: '/images/avatars/pixel2.png',
     },
     {
       username: 'WinampFan',
@@ -319,6 +325,7 @@ function seedData() {
       interests_general: 'Winamp skins, Audio visualizations, Foobar2000 (sometimes), MPCs',
       interests_heroes: 'Justin Frankel (Winamp creator)',
       profile_views: 445,
+      avatar_url: '/images/avatars/pixel4.png',
     },
     {
       username: 'Nokia3310',
@@ -337,6 +344,7 @@ function seedData() {
       interests_general: 'Snake game, Ringtone composing, SMS lingo, T9 typing championships',
       interests_heroes: 'The Nokia engineers who made the 3310',
       profile_views: 310,
+      avatar_url: '/images/avatars/pixel4.png',
     },
     {
       username: 'BollywoodQueen',
@@ -355,6 +363,7 @@ function seedData() {
       interests_general: 'Movie reviews, Filmi gossip, Dance, Antakshari',
       interests_heroes: 'Shah Rukh Khan, Hrithik Roshan, Madhuri Dixit',
       profile_views: 654,
+      avatar_url: '/images/avatars/pixel2.png',
     },
     {
       username: 'TechGeek2004',
@@ -373,6 +382,7 @@ function seedData() {
       interests_general: 'C++, HTML, Assembly, Building PCs, Overclocking, Linux',
       interests_heroes: 'Linus Torvalds, Bill Gates (sorry), Yashavant Kanetkar',
       profile_views: 489,
+      avatar_url: '/images/avatars/pixel4.png',
     },
   ];
 
