@@ -8,6 +8,13 @@
 /* ─── Imports & Fonts ──────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Tahoma&display=swap');
 
+@font-face {
+  font-family: 'VCR OSD Mono';
+  src: url('https://cdn.jsdelivr.net/gh/Rishabh-coder/fonts/VCR_OSD_MONO.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* ─── CSS Variables (Design Tokens) ────────────────────── */
 :root {
   /* XP Window chrome */
@@ -61,10 +68,10 @@
   --border-groove: #999999;
   
   /* Fonts */
-  --font-system: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
-  --font-pixel: 'VT323', monospace;
-  --font-pixel-small: 'Press Start 2P', monospace;
-  --font-mono: 'Courier New', 'Lucida Console', monospace;
+  --font-system: 'VCR OSD Mono', 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+  --font-pixel: 'VCR OSD Mono', 'VT323', monospace;
+  --font-pixel-small: 'VCR OSD Mono', 'Press Start 2P', monospace;
+  --font-mono: 'VCR OSD Mono', 'Courier New', 'Lucida Console', monospace;
   
   /* Spacing */
   --space-xs: 4px;
