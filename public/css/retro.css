@@ -61,7 +61,7 @@
   --border-groove: #999999;
   
   /* Fonts */
-  --font-system: 'Tahoma', 'Segoe UI', 'Verdana', sans-serif;
+  --font-system: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
   --font-pixel: 'VT323', monospace;
   --font-pixel-small: 'Press Start 2P', monospace;
   --font-mono: 'Courier New', 'Lucida Console', monospace;

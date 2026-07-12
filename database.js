@@ -199,7 +199,7 @@ function seedData() {
     interests_movies:'Dil Chahta Hai, Pirates of Silicon Valley, The Social Network',
     interests_general:'Web Dev, Retro Design, Music, Open Source, Cybercafes',
     interests_heroes:'Linus Torvalds, Steve Jobs, Dennis Ritchie',
-    profile_views:1337, avatar_url:'/images/avatars/pixel1.png', profile_id:1001
+    profile_views:1337, avatar_url:'/images/avatars/pixel_boy_blue_1783831781477.png', profile_id:1001
   });
 
   // id=2: naitik12 (Developer)
@@ -215,7 +215,7 @@ function seedData() {
     interests_movies:'Dil Chahta Hai, Kal Ho Naa Ho',
     interests_general:'Web Development, Retro Design, Cybercafes',
     interests_heroes:'Steve Jobs, Linus Torvalds',
-    profile_views:99, avatar_url:'/images/avatars/pixel3.png', profile_id:1002
+    profile_views:99, avatar_url:'/images/avatars/pixel_computer_1783822705542.png', profile_id:1002
   });
 
   // id=3: Exe_sparsh (Developer)
@@ -231,7 +231,7 @@ function seedData() {
     interests_movies:'The Matrix, Pirates of Silicon Valley',
     interests_general:'Programming, Retro Design, Computer hardware',
     interests_heroes:'Linus Torvalds, Dennis Ritchie',
-    profile_views:99, avatar_url:'/images/avatars/pixel4.png', profile_id:1003
+    profile_views:99, avatar_url:'/images/avatars/crt_monitor_1783831864729.png', profile_id:1003
   });
 
   // id=4: CoOl_DuDe99
@@ -245,7 +245,7 @@ function seedData() {
     interests_movies:'Kal Ho Naa Ho, DDLJ, Lagaan, Dil Chahta Hai',
     interests_general:'Cricket, Yahoo Messenger, MP3 collecting, Cybercafes',
     interests_heroes:'Sachin Tendulkar, Shah Rukh Khan',
-    profile_views:342, avatar_url:'/images/avatars/pixel1.png', profile_id:1004
+    profile_views:342, avatar_url:'/images/avatars/pixel_boy_1783822667200.png', profile_id:1004
   });
 
   // id=5: PixelPrincess
@@ -259,7 +259,7 @@ function seedData() {
     interests_movies:'Mean Girls, A Walk to Remember, Harry Potter',
     interests_general:'HTML/CSS design, Geocities, cats, glitter graphics',
     interests_heroes:'My mom, Hello Kitty',
-    profile_views:521, avatar_url:'/images/avatars/pixel2.png', profile_id:1005
+    profile_views:521, avatar_url:'/images/avatars/pixel_girl_pink_1783831809448.png', profile_id:1005
   });
 
   // id=6: MP3_Hunter
@@ -273,7 +273,7 @@ function seedData() {
     interests_movies:'The Matrix, Fight Club, Gladiator',
     interests_general:'MP3 downloading, CD burning, gaming, file sharing',
     interests_heroes:'Eminem, Chester Bennington',
-    profile_views:298, avatar_url:'/images/avatars/pixel3.png', profile_id:1006
+    profile_views:298, avatar_url:'/images/avatars/avatar_boombox_1783823552230.png', profile_id:1006
   });
 
   // id=7: DialUpKing
@@ -287,7 +287,7 @@ function seedData() {
     interests_movies:'Hackers, Terminator 2, Alien',
     interests_general:'Computers, modem tweaking, IRC, BSNL helpline complaining',
     interests_heroes:'Kevin Mitnick, Neo',
-    profile_views:187, avatar_url:'/images/avatars/default.png', profile_id:1007
+    profile_views:187, avatar_url:'/images/avatars/floppy_disk_1783831878023.png', profile_id:1007
   });
 
   // id=8: SunnyBoy2003
@@ -301,7 +301,7 @@ function seedData() {
     interests_movies:'Sholay, Koi Mil Gaya, Kaho Naa Pyaar Hai',
     interests_general:'Cricket, Yahoo chatrooms, cycling, tiffin stealing',
     interests_heroes:'Sachin Tendulkar, Shaktimaan',
-    profile_views:145, avatar_url:'/images/avatars/default.png', profile_id:1008
+    profile_views:145, avatar_url:'/images/avatars/avatar_puppy_1783823536377.png', profile_id:1008
   });
 
   // id=9: xX_AnGeL_Xx
@@ -315,7 +315,7 @@ function seedData() {
     interests_movies:'Dil To Pagal Hai, Kuch Kuch Hota Hai, K3G',
     interests_general:'Passing chits, scrapbook writing, friendship bands',
     interests_heroes:'Shah Rukh Khan, my besties',
-    profile_views:412, avatar_url:'/images/avatars/pixel2.png', profile_id:1009
+    profile_views:412, avatar_url:'/images/avatars/pixel_girl_1783822679066.png', profile_id:1009
   });
 
   // id=10: WinampFan
@@ -329,7 +329,7 @@ function seedData() {
     interests_movies:'High Fidelity, Almost Famous, School of Rock',
     interests_general:'Winamp skinning, audio formats, concert bootleg trading',
     interests_heroes:'Justin Frankel (Winamp creator), Jimmy Page',
-    profile_views:254, avatar_url:'/images/avatars/default.png', profile_id:1010
+    profile_views:254, avatar_url:'/images/avatars/winamp_mascot_1783831890370.png', profile_id:1010
   });
 
   // id=11: Nokia3310
@@ -343,7 +343,7 @@ function seedData() {
     interests_movies:'Sivaji, Vikram, Anniyan',
     interests_general:'Snake II, composer mode ringtones, T9 fast typing',
     interests_heroes:'Rajinikanth, Nokia engineers',
-    profile_views:310, avatar_url:'/images/avatars/default.png', profile_id:1011
+    profile_views:310, avatar_url:'/images/avatars/nokia_3310_1783831838880.png', profile_id:1011
   });
 
   // id=12: BollywoodQueen
@@ -357,7 +357,7 @@ function seedData() {
     interests_movies:'Dilwale Dulhania Le Jayenge, Kabhi Khushi Kabhie Gham, Devdas',
     interests_general:'Cinema, movie poster collecting, gossip magazines, antakshari',
     interests_heroes:'Shah Rukh Khan, Kajol, Aishwarya Rai',
-    profile_views:654, avatar_url:'/images/avatars/pixel2.png', profile_id:1012
+    profile_views:654, avatar_url:'/images/avatars/avatar_alien_1783823525098.png', profile_id:1012
   });
 
   // id=13: TechGeek2004
@@ -371,7 +371,7 @@ function seedData() {
     interests_movies:'WarGames, Tron, Pirates of Silicon Valley',
     interests_general:'PC building, Linux, C++, over-clocking, CRT monitors',
     interests_heroes:'Linus Torvalds, Bill Gates (sorry), Yashavant Kanetkar',
-    profile_views:489, avatar_url:'/images/avatars/pixel4.png', profile_id:1013
+    profile_views:489, avatar_url:'/images/avatars/retro_gameboy_1783831852295.png', profile_id:1013
   });
 
   console.log('[database]   13 users created (3 developer + 10 demo)');
