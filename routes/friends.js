@@ -91,6 +91,28 @@ router.post('/request/:userId', requireAuth, (req, res) => {
 });
 
 // ──────────────────────────────────────────────
+// POST /cancel/:userId — Cancel/Withdraw a friend request
+// ──────────────────────────────────────────────
+router.post('/cancel/:userId', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const currentUserId = req.session.userId;
+        const targetUserId = parseInt(req.params.userId);
+
+        // Delete the pending request in the direction currentUserId -> targetUserId
+        db.db.prepare(`
+            DELETE FROM friendships
+            WHERE requester_id = ? AND addressee_id = ? AND status = 'pending'
+        `).run(currentUserId, targetUserId);
+
+        res.redirect('back');
+    } catch (err) {
+        console.error('Cancel friend request error:', err);
+        res.redirect('back');
+    }
+});
+
+// ──────────────────────────────────────────────
 // POST /accept/:userId — Accept a friend request
 // ──────────────────────────────────────────────
 router.post('/accept/:userId', requireAuth, (req, res) => {

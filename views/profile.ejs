@@ -78,6 +78,9 @@
                   </form>
                 <% } else if (friendRequestSent) { %>
                   <span class="xp-btn" style="cursor:default;"><i class="i">&#xe38b;</i> Request Sent</span>
+                  <form method="POST" action="/friends/cancel/<%= profileUser.id %>" style="display:inline;">
+                    <button type="submit" class="xp-btn xp-btn--danger"><i class="i">&#xe5cd;</i> Withdraw</button>
+                  </form>
                 <% } else if (friendRequestReceived) { %>
                   <form method="POST" action="/friends/accept/<%= profileUser.id %>" style="display:inline;">
                     <button type="submit" class="xp-btn xp-btn--green"><i class="i">&#xe5cc;</i> Accept Request</button>
