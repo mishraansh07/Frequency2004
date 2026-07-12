@@ -95,5 +95,14 @@ Badges are hardcoded case-insensitively for the system's verified authors:
 ---
 
 <p align="center">
-  <sub>Frequency 2004 — Relive the Web of Yesterday, Today.</sub>
+  <a href="https://github.com/mishraansh07/Frequency2004/issues">
+    <img src="https://img.shields.io/badge/Support-Submit__Issue-red?style=flat-square" alt="Submit Issue" />
+  </a>
+  <a href="https://github.com/mishraansh07/Frequency2004/pulls">
+    <img src="https://img.shields.io/badge/Contributions-Pull__Requests-green?style=flat-square" alt="Pull Requests" />
+  </a>
+</p>
+
+<p align="center">
+  <sub>Frequency 2004 — Relive the Web of Yesterday, Today. Developed by Ansh, Naitik, and Sparsh.</sub>
 </p>
