@@ -139,11 +139,12 @@
 
         <div class="xp-window__body" id="chat-active-state" style="height: 480px; display: none; flex-direction: column; background: #ECE9D8; justify-content: space-between;">
           <!-- Toolbar -->
-          <div style="background: #ece9d8; padding: 2px 6px; border-bottom: 1px solid #7f9db9; display: flex; gap: 6px; font-size: 11px;">
+          <div style="background: #ece9d8; padding: 2px 6px; border-bottom: 1px solid #7f9db9; display: flex; gap: 6px; font-size: 11px; align-items: center;">
             <button class="xp-btn" style="padding: 1px 6px;">Invite</button>
             <button class="xp-btn" style="padding: 1px 6px;">Send File</button>
             <button class="xp-btn" style="padding: 1px 6px;">Webcam</button>
-            <button class="xp-btn" style="padding: 1px 4px;" onclick="sendNudge()">👋 Send Nudge</button>
+            <div style="flex: 1;"></div>
+            <button class="xp-btn" style="padding: 1px 8px; background: #cc0000; color: #fff; font-weight: bold;" onclick="sendNuke()">🚀 Send Nuke</button>
           </div>
 
           <!-- Chat log -->
@@ -301,34 +302,120 @@
       }
     }
 
-    function sendNudge() {
+    function playExplosionSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const bufferSize = ctx.sampleRate * 1.2;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(800, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(10, ctx.currentTime + 1.0);
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(1, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 1.0);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        noise.start();
+      } catch (err) {
+        console.error('AudioContext error:', err);
+      }
+    }
+
+    function sendNuke() {
       const chatWindow = document.getElementById('chat-active-state');
-      let offset = 10;
+      const chatLog = document.getElementById('chat-log');
+      if (!activeFriendId) return;
+
+      playExplosionSound();
+
+      // Violent shake effect
+      let offset = 20;
       let count = 0;
-      
-      // Play a quick nudge shake effect
       const shakeInterval = setInterval(() => {
-        chatWindow.style.transform = `translate(${count % 2 === 0 ? offset : -offset}px, ${count % 2 !== 0 ? offset : -offset}px)`;
+        const dx = (Math.random() - 0.5) * offset;
+        const dy = (Math.random() - 0.5) * offset;
+        chatWindow.style.transform = `translate(${dx}px, ${dy}px)`;
         count++;
-        if (count > 8) {
+        if (count > 25) {
           clearInterval(shakeInterval);
           chatWindow.style.transform = '';
         }
-      }, 50);
+      }, 40);
 
-      // Send standard message text as a nudge alert
+      // Flashing background color effect
+      let flashCount = 0;
+      const colors = ['#ff3333', '#ff9933', '#ffff33', '#ffffff'];
+      const flashInterval = setInterval(() => {
+        chatLog.style.background = colors[flashCount % colors.length];
+        flashCount++;
+        if (flashCount > 12) {
+          clearInterval(flashInterval);
+          chatLog.style.background = '#ffffff';
+        }
+      }, 80);
+
+      // Spawn floating explosion emojis
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const emoji = document.createElement('div');
+          emoji.textContent = ['💥', '🔥', '💣', '💨'][Math.floor(Math.random() * 4)];
+          const rect = chatLog.getBoundingClientRect();
+          const x = rect.left + Math.random() * (rect.width - 40);
+          const y = rect.top + Math.random() * (rect.height - 40);
+          emoji.style.cssText = `
+            position: fixed; left: ${x}px; top: ${y}px;
+            pointer-events: none; z-index: 9999;
+            font-size: ${24 + Math.random() * 24}px;
+            animation: explode-fade 0.8s ease-out forwards;
+          `;
+          document.body.appendChild(emoji);
+          setTimeout(() => emoji.remove(), 800);
+        }, i * 30);
+      }
+
+      // Add explosion animation styles dynamically if missing
+      if (!document.getElementById('nuke-style')) {
+        const style = document.createElement('style');
+        style.id = 'nuke-style';
+        style.textContent = `
+          @keyframes explode-fade {
+            0% { opacity: 1; transform: scale(0.5) rotate(0deg); }
+            50% { transform: scale(1.5) rotate(180deg); }
+            100% { opacity: 0; transform: scale(2) rotate(360deg); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      // Send standard message text as a nuke alert
       fetch('/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipientId: activeFriendId, content: '👋 *Sent a Nudge*' })
+        body: JSON.stringify({ recipientId: activeFriendId, content: '🚀 *NUKED THE CHAT!* 💥' })
       })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           appendMessage(data.message, { display_name: currentUserName });
           scrollToBottom();
+          
+          // Update sidebar snippet
+          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: 🚀 *NUKED THE CHAT!* 💥';
         }
-      });
+      })
+      .catch(err => console.error('Error sending nuke:', err));
     }
 
     function closeChat() {
