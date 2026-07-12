@@ -425,7 +425,7 @@ a:active { color: var(--accent-red); }
 }
 
 .retro-navbar__brand {
-  font-family: var(--font-pixel);
+  font-family: 'VT323', monospace;
   font-size: 26px;
   color: #FFD700;
   text-decoration: none !important;
