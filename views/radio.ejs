@@ -17,54 +17,102 @@
       <!-- ========================================================
            LEFT PANEL: RETRO FM RADIO (Skeuomorphic)
            ======================================================== -->
-          <!-- iPod Body -->
-          <div class="ipod-body" id="radio-window">
-            
-            <!-- iPod Screen -->
-            <div class="ipod-screen-container">
-              <div class="ipod-screen">
-                <!-- Status Bar -->
-                <div class="ipod-statusbar">
-                  <span id="ipod-status-title">iPod</span>
-                  <span class="ipod-battery"></span>
-                </div>
-
-                <!-- Menu View -->
-                <div class="ipod-menu" id="ipod-menu">
-                  <!-- JS will populate menu items here -->
-                </div>
-
-                <!-- Now Playing View -->
-                <div class="ipod-now-playing" id="ipod-now-playing" style="display:none;">
-                  <div class="ipod-np-title" id="ipod-np-title">Now Playing</div>
-                  <div class="ipod-np-artist" id="ipod-np-artist">Loading...</div>
-                  
-                  <div class="ipod-np-progress">
-                    <div class="ipod-np-bar">
-                      <div class="ipod-np-fill" id="ipod-np-fill"></div>
-                    </div>
-                  </div>
-                  <div class="ipod-np-time" style="display:flex; justify-content:space-between; font-size:10px; color:#555; margin-top:3px; font-family:'Courier New', monospace; padding: 0 2px;">
-                    <span id="ipod-np-elapsed">0:00</span>
-                    <span id="ipod-np-duration">0:00</span>
-                  </div>
-                </div>
+      <div style="display:flex; flex-direction:column; gap:20px; align-items:center; width:300px; max-width:100%;">
+        <!-- iPod Body -->
+        <div class="ipod-body" id="radio-window" style="margin:0;">
+          
+          <!-- iPod Screen -->
+          <div class="ipod-screen-container">
+            <div class="ipod-screen">
+              <!-- Status Bar -->
+              <div class="ipod-statusbar">
+                <span id="ipod-status-title">iPod</span>
+                <span class="ipod-battery"></span>
               </div>
-            </div>
 
-            <!-- Click Wheel -->
-            <div class="ipod-wheel-container">
-              <div class="ipod-wheel">
-                <button class="ipod-wheel-btn ipod-btn-menu" id="btn-ipod-menu" onclick="ipodMenu()">MENU</button>
-                <button class="ipod-wheel-btn ipod-btn-prev" id="btn-ipod-prev" onclick="ipodPrev()">|&lt;&lt;</button>
-                <button class="ipod-wheel-btn ipod-btn-next" id="btn-ipod-next" onclick="ipodNext()">&gt;&gt;|</button>
-                <button class="ipod-wheel-btn ipod-btn-play" id="btn-ipod-play" onclick="ipodPlayPause()">&gt;||</button>
+              <!-- Menu View -->
+              <div class="ipod-menu" id="ipod-menu">
+                <!-- JS will populate menu items here -->
+              </div>
+
+              <!-- Now Playing View -->
+              <div class="ipod-now-playing" id="ipod-now-playing" style="display:none;">
+                <div class="ipod-np-title" id="ipod-np-title">Now Playing</div>
+                <div class="ipod-np-artist" id="ipod-np-artist">Loading...</div>
                 
-                <div class="ipod-center-btn" id="btn-ipod-center" onclick="ipodSelect()"></div>
+                <div class="ipod-np-progress">
+                  <div class="ipod-np-bar">
+                    <div class="ipod-np-fill" id="ipod-np-fill"></div>
+                  </div>
+                </div>
+                <div class="ipod-np-time" style="display:flex; justify-content:space-between; font-size:10px; color:#555; margin-top:3px; font-family:'Courier New', monospace; padding: 0 2px;">
+                  <span id="ipod-np-elapsed">0:00</span>
+                  <span id="ipod-np-duration">0:00</span>
+                </div>
               </div>
             </div>
-            
           </div>
+
+          <!-- Click Wheel -->
+          <div class="ipod-wheel-container">
+            <div class="ipod-wheel">
+              <button class="ipod-wheel-btn ipod-btn-menu" id="btn-ipod-menu" onclick="ipodMenu()">MENU</button>
+              <button class="ipod-wheel-btn ipod-btn-prev" id="btn-ipod-prev" onclick="ipodPrev()">|&lt;&lt;</button>
+              <button class="ipod-wheel-btn ipod-btn-next" id="btn-ipod-next" onclick="ipodNext()">&gt;&gt;|</button>
+              <button class="ipod-wheel-btn ipod-btn-play" id="btn-ipod-play" onclick="ipodPlayPause()">&gt;||</button>
+              
+              <div class="ipod-center-btn" id="btn-ipod-center" onclick="ipodSelect()"></div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- Listening Party Manager Panel -->
+        <div class="xp-window" style="width:100%; box-sizing:border-box;">
+          <div class="xp-titlebar">
+            <span class="xp-titlebar__title"><i class="i">&#xea07;</i> Music Party Room</span>
+          </div>
+          <div class="xp-window__body text-small" style="padding:10px; background:#ece9d8;">
+            <% if (locals.currentUser) { %>
+              <div id="party-controls">
+                <div id="no-party-state">
+                  <p style="margin:0 0 8px 0; color:#555; line-height:1.3;">Start a synchronized music listening room and invite your friends to listen with you in real-time!</p>
+                  <button class="xp-btn xp-btn--primary w-100" onclick="startParty()"><i class="i">&#xea07;</i> Start listening party</button>
+                </div>
+                
+                <div id="party-active-state" style="display:none;">
+                  <p style="margin:0 0 6px 0;"><strong>Status:</strong> <span id="party-role-badge" style="background:#0a246a; color:#fff; padding:1px 6px; border-radius:3px; font-size:10px;">Host</span></p>
+                  <p style="margin:0 0 8px 0; color:#333;">Room ID: <strong id="party-room-id">None</strong></p>
+                  
+                  <div id="host-invite-section" style="display:none; border-top:1px groove #fff; padding-top:8px; margin-top:8px;">
+                    <label style="font-weight:bold; display:block; margin-bottom:4px;">Invite a Friend:</label>
+                    <div style="display:flex; gap:6px;">
+                      <select id="invite-friend-select" class="xp-select" style="flex:1; padding:2px;">
+                        <option value="">-- Choose Friend --</option>
+                        <% if (locals.friends && friends.length > 0) { %>
+                          <% friends.forEach(f => { %>
+                            <option value="<%= f.id %>"><%= f.display_name %></option>
+                          <% }) %>
+                        <% } %>
+                      </select>
+                      <button class="xp-btn xp-btn--green" onclick="sendInvite()">Invite</button>
+                    </div>
+                    <div id="invite-status" style="color:green; font-size:11px; margin-top:4px; font-weight:bold; display:none;">Invite sent! ✉</div>
+                  </div>
+
+                  <div id="guest-status-section" style="display:none; color:#555; font-style:italic; line-height:1.3;">
+                    Synchronized with the host. Music playback is managed by the room owner.
+                  </div>
+
+                  <button class="xp-btn xp-btn--danger w-100 mt-md" onclick="leaveParty()">Leave Room</button>
+                </div>
+              </div>
+            <% } else { %>
+              <p style="margin:0; text-align:center; color:#555;"><a href="/login">Log in</a> to start or join a listening party!</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
 
       <!-- ========================================================
            RIGHT PANEL: RETRO SHOUTBOX
