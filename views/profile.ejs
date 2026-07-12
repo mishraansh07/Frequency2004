@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> — Yeh Un Dino Ki Baat Hai Social</title>
-  <meta name="description" content="View <%= profileUser.display_name %>'s retro profile on Yeh Un Dino Ki Baat Hai Social.">
+  <title><%= title %> — Frequency 2004</title>
+  <meta name="description" content="View <%= profileUser.display_name %>'s retro profile on Frequency 2004.">
   <link rel="stylesheet" href="/css/retro.css">
+  <% if (profileUser.custom_css) { %>
+    <style>
+      <%- profileUser.custom_css %>
+    </style>
+  <% } %>
 </head>
 <body>
   <%- include('partials/navbar') %>
@@ -97,9 +102,25 @@
               </div>
             </div>
 
+            <!-- Profile Song -->
+            <% if (profileUser.profile_song) { %>
+            <div class="outset-panel">
+              <div class="section-header">🎵 Profile Song</div>
+              <div style="padding: 6px; text-align: center;">
+                <audio src="<%= profileUser.profile_song %>" controls style="width: 100%; height: 32px;"></audio>
+              </div>
+            </div>
+            <% } %>
+
             <!-- Ratings (Orkut-style) -->
             <div class="outset-panel">
               <div class="section-header section-header--pink">⭐ Ratings</div>
+
+              <div class="mb-sm" style="font-size:12px; font-weight:bold; color:var(--xp-blue); display:flex; align-items:center; gap:6px; margin: 4px 0 8px 0;">
+                <span>🌟 Total Fans:</span>
+                <strong><%= fanCount %></strong>
+              </div>
+              <hr style="border:1px groove #999; margin:8px 0;">
 
               <div style="font-size:12px;">
                 <% [

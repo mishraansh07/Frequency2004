@@ -96,6 +96,13 @@ router.get('/:username', (req, res) => {
             WHERE rated_id = ?
         `).get(profileUser.id);
 
+        // Count total fans
+        const fanCountObj = db.db.prepare(`
+            SELECT COUNT(*) as count FROM ratings
+            WHERE rated_id = ? AND is_fan = 1
+        `).get(profileUser.id);
+        const fanCount = fanCountObj ? fanCountObj.count : 0;
+
         // Check friendship status between current user and profile user
         let isFriend = false;
         let friendRequestSent = false;
@@ -153,6 +160,7 @@ router.get('/:username', (req, res) => {
             scraps,
             testimonials,
             avgRatings: avgRatings || { avg_trustworthy: null, avg_cool: null, avg_sexy: null },
+            fanCount,
             isFriend,
             friendRequestSent,
             friendRequestReceived,

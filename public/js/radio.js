@@ -203,17 +203,34 @@ function pauseIpod() {
     }
 }
 
+function formatTime(secs) {
+    if (isNaN(secs) || !isFinite(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
 function startIpodProgress() {
     const fill = document.getElementById('ipod-np-fill');
+    const elapsedEl = document.getElementById('ipod-np-elapsed');
+    const durationEl = document.getElementById('ipod-np-duration');
     if (ipodState.progressInterval) clearInterval(ipodState.progressInterval);
     
-    // Simulate progress bar moving for endless radio stream
-    let percent = 0;
     ipodState.progressInterval = setInterval(() => {
-        percent += 0.5;
-        if (percent > 100) percent = 0;
-        if (fill) fill.style.width = percent + '%';
-    }, 500);
+        if (!audioElement) return;
+        const cur = audioElement.currentTime;
+        const dur = audioElement.duration;
+        if (dur) {
+            const percent = (cur / dur) * 100;
+            if (fill) fill.style.width = percent + '%';
+            if (elapsedEl) elapsedEl.textContent = formatTime(cur);
+            if (durationEl) durationEl.textContent = formatTime(dur);
+        } else {
+            if (fill) fill.style.width = '0%';
+            if (elapsedEl) elapsedEl.textContent = '0:00';
+            if (durationEl) durationEl.textContent = '0:00';
+        }
+    }, 250);
 }
 
 function stopIpodProgress() {
