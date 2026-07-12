@@ -78,6 +78,7 @@
                     <button type="submit" class="xp-btn xp-btn--primary">➕ Add as Friend</button>
                   </form>
                 <% } %>
+                <a href="/messages?friendId=<%= profileUser.id %>" class="xp-btn xp-btn--primary" style="text-decoration:none;">💬 Send Message</a>
                 <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">📒 Scrapbook</a>
               <% } %>
               <% if (isOwner) { %>

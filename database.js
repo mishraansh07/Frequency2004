@@ -162,6 +162,16 @@ function createTables() {
       content TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    -- ────────────── DIRECT MESSAGES ──────────────────────
+    CREATE TABLE IF NOT EXISTS direct_messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sender_id INTEGER NOT NULL REFERENCES users(id),
+      recipient_id INTEGER NOT NULL REFERENCES users(id),
+      content TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      is_read INTEGER DEFAULT 0
+    );
   `;
 
   db.exec(createSQL);
@@ -775,6 +785,27 @@ function seedData() {
   });
   insertShoutboxTransaction();
   console.log(`[database]   ✔ ${shoutboxMessages.length} shoutbox messages created`);
+
+  // ─── 7. Direct Messages ──────────────────────────────────
+  const insertDirectMsg = db.prepare(`
+    INSERT INTO direct_messages (sender_id, recipient_id, content)
+    VALUES (?, ?, ?)
+  `);
+
+  const directMessages = [
+    [1, 2, 'Hey PixelPrincess! Add me to your MSN Messenger, my email is cooldude99@yahoo.com.'],
+    [2, 1, 'Hiii CoOl_DuDe99! Sure, I just added you. Did you see my custom CSS on my profile?'],
+    [1, 2, 'Yeah it looks awesome! How did you do the glitter background?'],
+    [2, 1, 'Its a secret Geocities code! 🤫💖 I can send it to you later.']
+  ];
+
+  const insertDirectMsgTransaction = db.transaction(() => {
+    for (const [sender, recipient, content] of directMessages) {
+      insertDirectMsg.run(sender, recipient, content);
+    }
+  });
+  insertDirectMsgTransaction();
+  console.log(`[database]   ✔ ${directMessages.length} direct messages seeded`);
 
   console.log('[database] ✅ All seed data inserted successfully!');
 }

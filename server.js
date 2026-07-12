@@ -97,6 +97,7 @@ const friendsRoutes     = require('./routes/friends');
 const communitiesRoutes = require('./routes/communities');
 const scrapbookRoutes   = require('./routes/scrapbook');
 const shoutboxRoutes    = require('./routes/shoutbox');
+const messagesRoutes    = require('./routes/messages');
 
 // ─── Route Mounting ─────────────────────────────────────
 
@@ -113,6 +114,7 @@ app.use('/communities', communitiesRoutes);
 app.use('/community',   communitiesRoutes);
 app.use('/scrapbook',   scrapbookRoutes);
 app.use('/shoutbox',    shoutboxRoutes);
+app.use('/messages',    messagesRoutes);
 
 // ─── Radio Page ─────────────────────────────────────────
 // The retro FM radio — standalone page preserved from v1.
