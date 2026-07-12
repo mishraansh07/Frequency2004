@@ -388,4 +388,42 @@ router.post('/:id/avatar', requireAuth, (req, res) => {
     }
 });
 
+// ──────────────────────────────────────────────
+// POST /:id/edit — Edit community details
+// Only owner can update community details
+// ──────────────────────────────────────────────
+router.post('/:id/edit', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const communityId = parseInt(req.params.id);
+        const currentUserId = req.session.userId;
+
+        // Check if user is owner of the community
+        const community = db.db.prepare('SELECT * FROM communities WHERE id = ?').get(communityId);
+        if (!community) {
+            return res.status(404).render('error', { title: '404', message: 'Community not found.' });
+        }
+
+        if (community.owner_id !== currentUserId) {
+            return res.status(403).render('error', { title: 'Forbidden', message: 'Only the community owner can edit details.' });
+        }
+
+        const { name, category, description } = req.body;
+        if (!name || !name.trim()) {
+            return res.redirect('back');
+        }
+
+        db.db.prepare(`
+            UPDATE communities
+            SET name = ?, category = ?, description = ?
+            WHERE id = ?
+        `).run(name.trim(), category || 'General', description || '', communityId);
+
+        res.redirect(`/communities/${communityId}`);
+    } catch (err) {
+        console.error('Edit community error:', err);
+        res.redirect('back');
+    }
+});
+
 module.exports = router;

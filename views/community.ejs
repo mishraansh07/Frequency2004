@@ -41,7 +41,8 @@
             <div class="profile-actions" style="margin-top: 12px;">
               <% if (currentUser) { %>
                 <% if (currentUser.id === community.owner_id) { %>
-                  <button class="xp-btn xp-btn--primary" onclick="document.getElementById('community-avatar-panel').style.display='block'"><i class="i">&#xe3b0;</i> Change Avatar</button>
+                  <button class="xp-btn xp-btn--primary" onclick="document.getElementById('community-edit-panel').style.display='block'; document.getElementById('community-avatar-panel').style.display='none'"><i class="i">&#xe3c9;</i> Edit Details</button>
+                  <button class="xp-btn xp-btn--primary" onclick="document.getElementById('community-avatar-panel').style.display='block'; document.getElementById('community-edit-panel').style.display='none'"><i class="i">&#xe3b0;</i> Change Avatar</button>
                 <% } %>
                 <% if (isMember) { %>
                   <span class="xp-btn xp-btn--green" style="cursor: default;"><i class="i">&#xe5cc;</i> Joined</span>
@@ -58,6 +59,33 @@
               <% } %>
               <a href="/communities" class="xp-btn"><i class="i">&#xe3ac;</i> Back to Communities</a>
             </div>
+
+            <!-- Community Details Edit Panel (Hidden by default) -->
+            <% if (currentUser && currentUser.id === community.owner_id) { %>
+              <div id="community-edit-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #ED1A7B; background:#FFF0F5;">
+                <legend><i class="i">&#xe3c9;</i> Edit Community Details</legend>
+                <form method="POST" action="/communities/<%= community.id %>/edit">
+                  <div class="form-group mb-sm">
+                    <label style="font-size:11px; font-weight:bold; display:block; margin-bottom:2px;">Community Name:</label>
+                    <input type="text" name="name" class="xp-input w-100" value="<%= community.name %>" required maxlength="100">
+                  </div>
+                  <div class="form-group mb-sm">
+                    <label style="font-size:11px; font-weight:bold; display:block; margin-bottom:2px;">Category:</label>
+                    <select name="category" class="xp-select w-100">
+                      <% ['General', 'Music', 'Movies', 'Technology', 'School Life', 'Nostalgia', 'Fun & Games'].forEach(cat => { %>
+                        <option value="<%= cat %>" <%= community.category === cat ? 'selected' : '' %>><%= cat %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class="form-group mb-sm">
+                    <label style="font-size:11px; font-weight:bold; display:block; margin-bottom:2px;">Description:</label>
+                    <textarea name="description" class="xp-textarea w-100" rows="3" required><%= community.description %></textarea>
+                  </div>
+                  <button type="submit" class="xp-btn xp-btn--primary">Save Changes</button>
+                  <button type="button" class="xp-btn" onclick="document.getElementById('community-edit-panel').style.display='none'">Cancel</button>
+                </form>
+              </div>
+            <% } %>
 
             <!-- Community Avatar Picker Panel (Hidden by default) -->
             <% if (currentUser && currentUser.id === community.owner_id) { %>
