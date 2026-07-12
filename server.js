@@ -21,6 +21,7 @@ try {
 }
 
 const path    = require('path');
+const fs      = require('fs');
 const express = require('express');
 const morgan  = require('morgan');
 const session = require('express-session');
@@ -54,6 +55,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ─── Session Configuration ──────────────────────────────
 const sessionDbDir = process.env.DATABASE_URL ? path.dirname(process.env.DATABASE_URL) : __dirname;
+
+// Ensure session directory exists (e.g. /data on Render)
+if (!fs.existsSync(sessionDbDir)) {
+  fs.mkdirSync(sessionDbDir, { recursive: true });
+}
 
 app.use(session({
   store: new SQLiteStore({

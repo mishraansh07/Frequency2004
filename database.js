@@ -17,11 +17,19 @@
  */
 
 const path    = require('path');
+const fs      = require('fs');
 const Database = require('better-sqlite3');
 const bcrypt  = require('bcryptjs');
 
 // ─── Open (or create) the SQLite database ────────────────
 const DB_PATH = process.env.DATABASE_URL || path.join(__dirname, 'retrosocial.db');
+
+// Ensure parent directory exists (e.g. /data on Render)
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(DB_PATH);
 
 // Turn on WAL mode for better concurrent read performance
