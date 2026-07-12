@@ -129,7 +129,7 @@
             <div class="outset-panel">
               <div class="section-header">📋 Member Info</div>
               <div class="text-small" style="line-height: 2;">
-                <div><i class="i">&#xe3a5;</i> Member since <%= new Date(profileUser.created_at).toLocaleDateString() %></div>
+                <div><i class="i">&#xe3a5;</i> Member since <%= formatDate(profileUser.created_at, 'date') %></div>
               </div>
             </div>
 
@@ -273,7 +273,7 @@
                       <p>"<%= t.content %>"</p>
                       <div class="testimonial-item__author">
                         — <a href="/profile/<%= t.author_username %>"><%= t.author_display_name %></a>
-                        <span class="text-muted text-small"> · <%= new Date(t.created_at).toLocaleDateString() %></span>
+                        <span class="text-muted text-small"> · <%= formatDate(t.created_at, 'date') %></span>
                       </div>
                     </div>
                   <% }) %>
@@ -327,7 +327,7 @@
                         <span class="scrap-item__author">
                           <a href="/profile/<%= scrap.author_username %>"><%= scrap.author_display_name %></a>
                         </span>
-                        <span class="scrap-item__date"><%= new Date(scrap.created_at).toLocaleDateString() %></span>
+                        <span class="scrap-item__date"><%= formatDate(scrap.created_at, 'date') %></span>
                         <div class="scrap-item__content"><%= scrap.content %></div>
                       </div>
                     </div>

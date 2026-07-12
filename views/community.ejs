@@ -32,7 +32,7 @@
             <div class="profile-stats">
               <span>Category: <strong><%= community.category %></strong></span>
               <span>Members: <strong><%= memberCount %></strong></span>
-              <span>Created: <strong><%= new Date(community.created_at).toLocaleDateString() %></strong></span>
+              <span>Created: <strong><%= formatDate(community.created_at, 'date') %></strong></span>
             </div>
             <p style="font-size: 13px; color: #333; margin: 8px 0;"><%= community.description %></p>
 
@@ -161,7 +161,7 @@
                         </a>
                         <div class="post-item__meta" style="font-size: 11px; color: #666; margin-top: 2px;">
                           Posted by <a href="/profile/<%= post.author_username %>"><%= post.author_display_name %></a> 
-                          on <%= new Date(post.created_at).toLocaleString() %>
+                          on <%= formatDate(post.created_at) %>
                         </div>
                         <div class="post-item__content" style="margin-top: 8px; font-size: 13px; line-height: 1.4; color: #333; word-break: break-word;">
                           <%= post.content %>

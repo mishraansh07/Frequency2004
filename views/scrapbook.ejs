@@ -58,7 +58,7 @@
                       From <a href="/profile/<%= scrap.author_username %>" style="font-weight: bold; color: #ED1A7B;"><%= scrap.author_display_name %></a>
                     </span>
                     <span>
-                      <%= new Date(scrap.created_at).toLocaleString() %>
+                      <%= formatDate(scrap.created_at) %>
                       <% if (currentUser && (scrap.author_id === currentUser.id || profileUser.id === currentUser.id)) { %>
                         <!-- If owner of profile or author of scrap, they can delete it -->
                         <!-- Wait! The route checks if author_id = currentUser.id, let's see -->

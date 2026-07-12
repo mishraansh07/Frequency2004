@@ -188,7 +188,7 @@
                     <span style="font-weight:bold; font-size:14px; color:#2980b9;">
                       <a href="/profile/<%= e.author_username %>" style="text-decoration:none; color:inherit;"><%= e.author_name %></a>
                     </span>
-                    <span style="font-size:10px; color:#7f8c8d; margin-left:8px;">Signed on <%= new Date(e.created_at).toLocaleDateString() %></span>
+                    <span style="font-size:10px; color:#7f8c8d; margin-left:8px;">Signed on <%= formatDate(e.created_at, 'date') %></span>
                   </div>
                 </div>
 
