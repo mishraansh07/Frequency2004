@@ -223,9 +223,65 @@ const WebSocket = require('ws');
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
-  console.log('[ws] Client connected to live shoutbox channel');
-  ws.on('close', () => console.log('[ws] Client disconnected'));
+  console.log('[ws] Client connected');
+
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
+      if (data.type === 'join') {
+        ws.room = data.room;
+        ws.username = data.username;
+        ws.displayName = data.displayName;
+        console.log(`[ws] User ${ws.username} joined room ${ws.room}`);
+
+        // Broadcast join notice
+        broadcastToRoom(ws.room, {
+          type: 'user_joined',
+          username: ws.username,
+          displayName: ws.displayName
+        }, ws);
+      } else if (data.type === 'chat') {
+        broadcastToRoom(ws.room, {
+          type: 'room_chat',
+          username: ws.username,
+          displayName: ws.displayName,
+          avatarUrl: data.avatarUrl || '/images/avatars/default.png',
+          content: data.content,
+          timestamp: new Date().toLocaleTimeString()
+        });
+      } else if (data.type === 'sync') {
+        // Broadcast play state/song change to the room
+        broadcastToRoom(ws.room, {
+          type: 'sync',
+          action: data.action,
+          songIndex: data.songIndex,
+          currentTime: data.currentTime
+        }, ws);
+      }
+    } catch (err) {
+      console.error('[ws] Message handling error:', err);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('[ws] Client disconnected');
+    if (ws.room && ws.username) {
+      broadcastToRoom(ws.room, {
+        type: 'user_left',
+        username: ws.username,
+        displayName: ws.displayName
+      });
+    }
+  });
 });
+
+function broadcastToRoom(room, payload, excludeWs = null) {
+  wss.clients.forEach(client => {
+    if (client.room === room && client.readyState === WebSocket.OPEN && client !== excludeWs) {
+      client.send(JSON.stringify(payload));
+    }
+  });
+}
 
 // Attach WebSocket Server reference to app locals so routes can broadcast
 app.locals.wss = wss;
