@@ -412,8 +412,16 @@ function initShoutboxWebSocket() {
     }
 }
 
+function ensureSyncSongExists(msg) {
+    if (msg.song && !stations[msg.songIndex]) {
+        stations[msg.songIndex] = msg.song;
+        renderIpodMenu();
+    }
+}
+
 function handleSyncMessage(msg) {
     console.log('[sync] Received sync from host:', msg);
+    ensureSyncSongExists(msg);
     if (msg.action === 'change') {
         ipodState.menuIndex = msg.songIndex;
         playIpodStationSilent(msg.songIndex);
@@ -431,9 +439,11 @@ function handleSyncMessage(msg) {
 
 function broadcastSync(payload) {
     if (isPartyHost && wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+        const currentSong = stations[ipodState.menuIndex];
         wsConnection.send(JSON.stringify({
             type: 'sync',
             room: activeRoom,
+            song: currentSong,
             ...payload
         }));
     }
@@ -661,4 +671,53 @@ function escapeHTML(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+}
+
+function loadCustomAudioUrl() {
+    const input = document.getElementById('custom-audio-url');
+    if (!input) return;
+    const urlVal = input.value.trim();
+    if (!urlVal) {
+        alert("Please paste a valid audio URL!");
+        return;
+    }
+    
+    try {
+        const urlObj = new URL(urlVal);
+        const filename = urlObj.pathname.split('/').pop() || 'Custom Song';
+        let cleanName = decodeURIComponent(filename).replace(/\.[^/.]+$/, "");
+        if (!cleanName) cleanName = 'Internet Song';
+
+        const newStation = {
+            name: cleanName,
+            genre: 'Web Stream',
+            url: urlVal
+        };
+
+        // Add to stations array
+        stations.push(newStation);
+        ipodState.menuIndex = stations.length - 1;
+        
+        // Re-render iPod menu to show the new song
+        renderIpodMenu();
+        
+        // Load and play
+        playIpodStation(newStation);
+        
+        // Broadcast song change if Host
+        if (isPartyHost) {
+            broadcastSync({ action: 'change', songIndex: ipodState.menuIndex });
+        }
+
+        // Show status
+        const status = document.getElementById('audio-load-status');
+        if (status) {
+            status.style.display = 'block';
+            setTimeout(() => status.style.display = 'none', 3000);
+        }
+        
+        input.value = '';
+    } catch (err) {
+        alert("Invalid URL format! Make sure it starts with http:// or https://");
+    }
 }
