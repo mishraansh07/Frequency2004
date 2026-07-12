@@ -130,17 +130,112 @@
             <!-- MusicZone Song Player -->
             <% if (community.category === 'MusicZone') { %>
               <% 
-                const cleanName = community.name.replace('Zone', '').trim().toLowerCase();
-                const station = stations.find(s => s.name.toLowerCase().includes(cleanName) || cleanName.includes(s.name.toLowerCase()));
+                const displayUrl = community.song_url || (stations.find(s => {
+                  const cleanName = community.name.replace('Zone', '').trim().toLowerCase();
+                  return s.name.toLowerCase().includes(cleanName) || cleanName.includes(s.name.toLowerCase());
+                }) || {}).url;
               %>
-              <% if (station) { %>
-                <div class="xp-fieldset mb-md" style="background:#f4f3ee; border-color:#8a8a8a; padding:12px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <legend style="font-weight:bold; color:#0055ff; font-size:11px;"><i class="i">&#xe618;</i> Playing Song in this Zone</legend>
-                  <div style="font-weight:bold; font-size:14px; color:#333;"><%= station.name %></div>
-                  <div style="font-size:11px; color:#666;"><%= station.genre %></div>
-                  <audio src="<%= station.url %>" controls style="width:100%; max-width:400px; height:32px; margin-top:4px;"></audio>
+              
+              <div class="winamp-player mb-md" style="width:100%; background:#2c2c2c; border:3px outset #555; padding:12px; border-radius:4px; font-family:'Courier New', monospace; color:#00ff00; box-shadow:0 4px 10px rgba(0,0,0,0.3); box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #444; padding-bottom:6px; margin-bottom:8px; font-size:11px; color:#aaa; font-family:var(--font-system);">
+                  <span>📻 WINAMP 2.80 - RETRO PLAYER</span>
+                  <span style="color:#00ff00; font-weight:bold;">128KBPS / 44.1KHZ</span>
                 </div>
-              <% } %>
+                
+                <div style="display:flex; gap:12px; align-items:center; background:#111; padding:10px; border:2px inset #444; border-radius:3px;">
+                  <!-- Bouncing Visualizer Bars (Retro Winamp Style!) -->
+                  <div class="winamp-vis" style="display:flex; align-items:flex-end; gap:2px; height:40px; width:60px; background:#000; border:1px solid #333; padding:2px;">
+                    <div style="flex:1; background:#00ff00; height:80%; animation: bounce-vis 1.2s ease infinite alternate;"></div>
+                    <div style="flex:1; background:#00ff00; height:40%; animation: bounce-vis 0.8s ease infinite alternate 0.2s;"></div>
+                    <div style="flex:1; background:#00ff00; height:95%; animation: bounce-vis 1.5s ease infinite alternate 0.1s;"></div>
+                    <div style="flex:1; background:#00ff00; height:60%; animation: bounce-vis 1.0s ease infinite alternate 0.3s;"></div>
+                    <div style="flex:1; background:#00ff00; height:30%; animation: bounce-vis 0.7s ease infinite alternate 0.4s;"></div>
+                    <div style="flex:1; background:#00ff00; height:75%; animation: bounce-vis 1.3s ease infinite alternate 0.2s;"></div>
+                  </div>
+                  
+                  <div style="flex:1; min-width:0;">
+                    <div class="winamp-title-marquee" style="font-weight:bold; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= community.name %></div>
+                    <div style="font-size:10px; color:#888; font-family:var(--font-system); margin-top:2px;">Playing active stream from web...</div>
+                  </div>
+                </div>
+
+                <% if (displayUrl) { %>
+                  <audio src="<%= displayUrl %>" id="winamp-audio-element" style="display:none;"></audio>
+                  
+                  <!-- Winamp Skeuomorphic Control Bar -->
+                  <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:10px; font-family:var(--font-system);">
+                    <button class="xp-btn" id="winamp-play-btn" onclick="toggleWinampPlay()" style="min-width:60px; font-weight:bold; background: linear-gradient(180deg, #5c5c5c 0%, #3a3a3a 100%); color:#fff; border-color:#222;"><i class="i">&#xe037;</i> PLAY</button>
+                    <button class="xp-btn" id="winamp-pause-btn" onclick="toggleWinampPause()" style="min-width:60px; display:none; font-weight:bold; background: linear-gradient(180deg, #5c5c5c 0%, #3a3a3a 100%); color:#fff; border-color:#222;"><i class="i">&#xe034;</i> PAUSE</button>
+                    <button class="xp-btn" onclick="stopWinamp()" style="min-width:60px; font-weight:bold; background: linear-gradient(180deg, #5c5c5c 0%, #3a3a3a 100%); color:#fff; border-color:#222;"><i class="i">&#xe047;</i> STOP</button>
+                    
+                    <!-- Volume slider track -->
+                    <div style="display:flex; align-items:center; gap:4px; margin-left:auto; font-size:11px; color:#aaa;">
+                      <span>VOL:</span>
+                      <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="changeWinampVolume(this.value)" style="width:60px; height:4px; background:#444; outline:none; border:none; cursor:pointer;">
+                    </div>
+                  </div>
+
+                  <!-- Visualizer animation keyframes -->
+                  <style>
+                    @keyframes bounce-vis {
+                      0% { height: 10%; }
+                      100% { height: 100%; }
+                    }
+                  </style>
+                  
+                  <script>
+                    const winampAudio = document.getElementById('winamp-audio-element');
+                    const winampPlayBtn = document.getElementById('winamp-play-btn');
+                    const winampPauseBtn = document.getElementById('winamp-pause-btn');
+
+                    function toggleWinampPlay() {
+                      if (winampAudio) {
+                        winampAudio.play();
+                        winampPlayBtn.style.display = 'none';
+                        winampPauseBtn.style.display = 'inline-block';
+                      }
+                    }
+
+                    function toggleWinampPause() {
+                      if (winampAudio) {
+                        winampAudio.pause();
+                        winampPlayBtn.style.display = 'inline-block';
+                        winampPauseBtn.style.display = 'none';
+                      }
+                    }
+
+                    function stopWinamp() {
+                      if (winampAudio) {
+                        winampAudio.pause();
+                        winampAudio.currentTime = 0;
+                        winampPlayBtn.style.display = 'inline-block';
+                        winampPauseBtn.style.display = 'none';
+                      }
+                    }
+
+                    function changeWinampVolume(val) {
+                      if (winampAudio) {
+                        winampAudio.volume = val;
+                      }
+                    }
+                  </script>
+                <% } else { %>
+                  <div style="text-align:center; padding:12px; color:#ff3333; font-size:12px; font-weight:bold; font-family:var(--font-system);">
+                     ⚠️ No song uploaded to this Zone yet.
+                  </div>
+                <% } %>
+
+                <!-- Owner Upload Song Form widget -->
+                <% if (currentUser && currentUser.id === community.owner_id) { %>
+                  <div style="border-top:1px solid #444; padding-top:10px; margin-top:10px; font-family:var(--font-system);">
+                    <form method="POST" action="/communities/<%= community.id %>/upload-song" enctype="multipart/form-data" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                      <label style="font-size:11px; color:#aaa; font-weight:bold;">📤 Change Song:</label>
+                      <input type="file" name="song_file" accept="audio/*" required style="font-size:10px; color:#ccc; max-width:180px;">
+                      <button type="submit" class="xp-btn xp-btn--primary" style="font-size:11px; padding:2px 8px;">Upload</button>
+                    </form>
+                  </div>
+                <% } %>
+              </div>
             <% } %>
             
             <!-- Create a New Topic Form -->
