@@ -12,3 +12,43 @@
     <span class="xp-taskbar__clock" id="taskbar-clock">12:00 AM</span>
   </div>
 </div>
+
+<!-- Floating Friend Request Popups Overlay -->
+<% if (locals.currentUser && locals.globalPendingRequests && locals.globalPendingRequests.length > 0) { %>
+  <div class="friend-request-popups-container" style="position: fixed; bottom: 50px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; max-width: 320px; font-family: Tahoma, Arial, sans-serif;">
+    <% locals.globalPendingRequests.forEach(reqInfo => { %>
+      <div class="xp-window friend-popup-card" id="popup-friend-<%= reqInfo.friendship_id %>" style="box-shadow: 2px 2px 10px rgba(0,0,0,0.3); animation: slideInUp 0.3s ease-out;">
+        <!-- Titlebar -->
+        <div class="xp-titlebar" style="padding: 2px 6px; background: linear-gradient(to right, #0058e6, #3a93ff); font-size: 11px; height: 18px; line-height: 18px;">
+          <span class="xp-titlebar__title"><i class="i i-sm">&#xea5d;</i> Friend Request!</span>
+          <div class="xp-titlebar__buttons">
+            <button class="xp-titlebar__btn" style="width:12px; height:12px; font-size:9px; line-height:10px; min-width:unset; padding:0;" onclick="document.getElementById('popup-friend-<%= reqInfo.friendship_id %>').style.display='none'">✕</button>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="xp-window__body" style="padding: 8px; display: flex; gap: 8px; align-items: center; background: #ece9d8; border: 1px solid #7f9db9; border-top: none;">
+          <img src="<%= reqInfo.avatar_url %>" alt="" style="width: 38px; height: 38px; border: 1px solid #7f9db9; background: #fff; object-fit: cover;">
+          <div style="flex: 1; font-size: 11px;">
+            <div style="font-weight: bold; color: #000; margin-bottom: 2px;"><%= reqInfo.display_name %></div>
+            <div style="color: #555; font-size: 10px;">wants to be friends!</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <form method="POST" action="/friends/accept/<%= reqInfo.requester_id %>" style="margin:0;">
+              <button type="submit" class="xp-btn xp-btn--green" style="font-size: 10px; padding: 2px 6px; width: 100%; display: flex; align-items: center; justify-content: center;"><i class="i i-sm">&#xe5cc;</i> Accept</button>
+            </form>
+            <form method="POST" action="/friends/reject/<%= reqInfo.requester_id %>" style="margin:0;">
+              <button type="submit" class="xp-btn xp-btn--danger" style="font-size: 10px; padding: 2px 6px; width: 100%; display: flex; align-items: center; justify-content: center;"><i class="i i-sm">&#xe5cd;</i> Decline</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+  <style>
+    @keyframes slideInUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+<% } %>
+

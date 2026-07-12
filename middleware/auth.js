@@ -67,6 +67,16 @@ function loadUser(req, res, next) {
     if (user) {
       req.user = user;
       res.locals.currentUser = user;
+
+      // Expose pending requests details globally for notifications/popups
+      const pendingReqs = db.db.prepare(`
+        SELECT f.id AS friendship_id, u.id AS requester_id, u.username, u.display_name, u.avatar_url
+        FROM friendships f
+        JOIN users u ON u.id = f.requester_id
+        WHERE f.addressee_id = ? AND f.status = 'pending'
+        ORDER BY f.created_at DESC
+      `).all(user.id);
+      res.locals.globalPendingRequests = pendingReqs || [];
     } else {
       // userId in session doesn't match any row — stale session.
       // Clear it so the visitor isn't stuck in a ghost state.
