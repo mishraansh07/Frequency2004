@@ -22,12 +22,17 @@ const Database = require('better-sqlite3');
 const bcrypt  = require('bcryptjs');
 
 // ─── Open (or create) the SQLite database ────────────────
-const DB_PATH = process.env.DATABASE_URL || path.join(__dirname, 'retrosocial.db');
+let DB_PATH = process.env.DATABASE_URL || path.join(__dirname, 'retrosocial.db');
 
 // Ensure parent directory exists (e.g. /data on Render)
-const dbDir = path.dirname(DB_PATH);
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+try {
+  const dbDir = path.dirname(DB_PATH);
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn(`[database] Warn: Could not create directory for database: ${err.message}. Falling back to local database.`);
+  DB_PATH = path.join(__dirname, 'retrosocial.db');
 }
 
 const db = new Database(DB_PATH);

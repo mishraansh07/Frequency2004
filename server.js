@@ -54,11 +54,19 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ─── Session Configuration ──────────────────────────────
-const sessionDbDir = process.env.DATABASE_URL ? path.dirname(process.env.DATABASE_URL) : __dirname;
+let sessionDbDir = __dirname;
 
-// Ensure session directory exists (e.g. /data on Render)
-if (!fs.existsSync(sessionDbDir)) {
-  fs.mkdirSync(sessionDbDir, { recursive: true });
+if (process.env.DATABASE_URL) {
+  try {
+    const targetDir = path.dirname(process.env.DATABASE_URL);
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    sessionDbDir = targetDir;
+  } catch (err) {
+    console.warn(`[server] Warn: Could not create session folder: ${err.message}. Falling back to local folder.`);
+    sessionDbDir = __dirname;
+  }
 }
 
 app.use(session({
