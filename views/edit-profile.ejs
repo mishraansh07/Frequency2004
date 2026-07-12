@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Profile — Yeh Un Dino Ki Baat Hai Social</title>
+  <title>Edit Profile — Frequency 2004</title>
   <link rel="stylesheet" href="/css/retro.css">
 </head>
 <body>
@@ -27,6 +27,27 @@
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Display Name:</label>
               <input type="text" name="display_name" class="xp-input w-100" value="<%= user.display_name %>" maxlength="50">
+            </div>
+            <div class="form-group mb-sm">
+              <label style="font-size:12px;font-weight:bold;display:block;margin-bottom:6px;">Choose Retro Pixel Avatar:</label>
+              <div class="d-flex gap-md" style="flex-wrap:wrap; background:#f5f5f5; padding:10px; border:2px inset #999; border-radius:4px;">
+                <% 
+                  const presets = [
+                    { path: '/images/avatars/default.png', label: 'Default' },
+                    { path: '/images/avatars/pixel1.png', label: 'Pixel Boy' },
+                    { path: '/images/avatars/pixel2.png', label: 'Pixel Girl' },
+                    { path: '/images/avatars/pixel3.png', label: 'Cool Cat' },
+                    { path: '/images/avatars/pixel4.png', label: 'Retro PC' }
+                  ];
+                  presets.forEach(p => { 
+                %>
+                  <label style="display:flex; flex-direction:column; align-items:center; cursor:pointer; gap:4px; font-size:11px;">
+                    <img src="<%= p.path %>" alt="" style="width:50px; height:50px; border:2px outset #ccc; padding:2px; background:#fff; <%= user.avatar_url === p.path ? 'border-color:var(--xp-blue); box-shadow:0 0 4px var(--xp-blue);' : '' %>">
+                    <span style="font-weight:<%= user.avatar_url === p.path ? 'bold' : 'normal' %>;"><%= p.label %></span>
+                    <input type="radio" name="avatar_url" value="<%= p.path %>" <%= user.avatar_url === p.path ? 'checked' : '' %> style="margin-top:2px;">
+                  </label>
+                <% }) %>
+              </div>
             </div>
             <div class="form-group mb-sm">
               <label style="font-size:12px;font-weight:bold;">Headline / Tagline:</label>

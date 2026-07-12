@@ -223,7 +223,7 @@ router.post('/:username/edit', requireAuth, (req, res) => {
             mood, location, gender, age,
             interests_general, interests_music, interests_movies,
             interests_tv, interests_books, interests_heroes,
-            custom_css, profile_song
+            custom_css, profile_song, avatar_url
         } = req.body;
 
         // Update the user record with all profile fields
@@ -244,14 +244,15 @@ router.post('/:username/edit', requireAuth, (req, res) => {
                 interests_books = ?,
                 interests_heroes = ?,
                 custom_css = ?,
-                profile_song = ?
+                profile_song = ?,
+                avatar_url = ?
             WHERE id = ?
         `).run(
             display_name || '', headline || '', bio || '', who_id_like_to_meet || '',
             mood || '', location || '', gender || '', age || null,
             interests_general || '', interests_music || '', interests_movies || '',
             interests_tv || '', interests_books || '', interests_heroes || '',
-            custom_css || '', profile_song || '',
+            custom_css || '', profile_song || '', avatar_url || '/images/avatars/default.png',
             user.id
         );
 
