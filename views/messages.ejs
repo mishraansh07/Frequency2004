@@ -144,6 +144,7 @@
             <button class="xp-btn" style="padding: 1px 6px;">Send File</button>
             <button class="xp-btn" style="padding: 1px 6px;">Webcam</button>
             <div style="flex: 1;"></div>
+            <button class="xp-btn" style="padding: 1px 8px; background: #000; color: #00ff00; font-family: monospace; font-weight: bold; border: 1px solid #00ff00; cursor: pointer; margin-right: 4px;" onclick="sendHack()">👾 Hack Chat</button>
             <button class="xp-btn" style="padding: 1px 8px; background: #cc0000; color: #fff; font-weight: bold;" onclick="sendNuke()">🚀 Send Nuke</button>
           </div>
 
@@ -259,6 +260,15 @@
 
             data.messages.forEach(msg => {
               appendMessage(msg, tempFriend);
+              
+              // Run visual reaction locally if received from friend
+              if (msg.sender_id !== currentUserId) {
+                if (msg.content.includes('🚀 *NUKED THE CHAT!* 💥')) {
+                  triggerNukeReaction();
+                } else if (msg.content.includes('👾 *HACKED THE CHAT!* 💻')) {
+                  triggerHackReaction();
+                }
+              }
             });
             scrollToBottom();
 
@@ -333,11 +343,47 @@
       }
     }
 
-    function sendNuke() {
+    function playDialUpSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc1.type = 'sawtooth';
+        osc1.frequency.setValueAtTime(800, ctx.currentTime);
+        osc1.frequency.linearRampToValueAtTime(1800, ctx.currentTime + 0.3);
+        osc1.frequency.setValueAtTime(1200, ctx.currentTime + 0.3);
+        osc1.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 1.2);
+        
+        osc2.type = 'square';
+        osc2.frequency.setValueAtTime(1200, ctx.currentTime);
+        osc2.frequency.linearRampToValueAtTime(600, ctx.currentTime + 0.5);
+        osc2.frequency.setValueAtTime(2000, ctx.currentTime + 0.5);
+        osc2.frequency.linearRampToValueAtTime(150, ctx.currentTime + 1.2);
+        
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+        
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc1.start();
+        osc2.start();
+        setTimeout(() => {
+          osc1.stop();
+          osc2.stop();
+        }, 1200);
+      } catch (err) {
+        console.error('AudioContext error:', err);
+      }
+    }
+
+    function triggerNukeReaction() {
       const chatWindow = document.getElementById('chat-active-state');
       const chatLog = document.getElementById('chat-log');
-      if (!activeFriendId) return;
-
+      
       playExplosionSound();
 
       // Violent shake effect
@@ -398,8 +444,35 @@
         `;
         document.head.appendChild(style);
       }
+    }
 
-      // Send standard message text as a nuke alert
+    function triggerHackReaction() {
+      playDialUpSound();
+      const chatLog = document.getElementById('chat-log');
+      const originalHTML = chatLog.innerHTML;
+      chatLog.style.background = '#000000';
+      chatLog.style.color = '#00ff00';
+      chatLog.style.fontFamily = "'Courier New', monospace";
+      
+      let count = 0;
+      const scrambleInterval = setInterval(() => {
+        chatLog.innerText = Array.from({length: 400}, () => Math.random() > 0.5 ? '0' : '1').join(' ');
+        count++;
+        if (count > 15) {
+          clearInterval(scrambleInterval);
+          chatLog.innerHTML = originalHTML;
+          chatLog.style.background = '#ffffff';
+          chatLog.style.color = '';
+          chatLog.style.fontFamily = '';
+          scrollToBottom();
+        }
+      }, 100);
+    }
+
+    function sendNuke() {
+      if (!activeFriendId) return;
+      triggerNukeReaction();
+
       fetch('/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -410,12 +483,30 @@
         if (data.success) {
           appendMessage(data.message, { display_name: currentUserName });
           scrollToBottom();
-          
-          // Update sidebar snippet
           document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: 🚀 *NUKED THE CHAT!* 💥';
         }
       })
       .catch(err => console.error('Error sending nuke:', err));
+    }
+
+    function sendHack() {
+      if (!activeFriendId) return;
+      triggerHackReaction();
+
+      fetch('/messages/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipientId: activeFriendId, content: '👾 *HACKED THE CHAT!* 💻' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          appendMessage(data.message, { display_name: currentUserName });
+          scrollToBottom();
+          document.getElementById(`snippet-${activeFriendId}`).textContent = 'You: 👾 *HACKED THE CHAT!* 💻';
+        }
+      })
+      .catch(err => console.error('Error sending hack:', err));
     }
 
     function closeChat() {
