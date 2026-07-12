@@ -211,7 +211,17 @@ router.post('/top8', requireAuth, (req, res) => {
         for (let i = 1; i <= 8; i++) {
             const friendId = req.body[`friend_${i}`];
             if (friendId && friendId.trim()) {
-                insertStmt.run(currentUserId, parseInt(friendId), i);
+                const targetId = parseInt(friendId);
+                // Verify they are accepted friends
+                const isFriend = db.db.prepare(`
+                    SELECT 1 FROM friendships
+                    WHERE status = 'accepted'
+                    AND ((requester_id = ? AND addressee_id = ?) OR (requester_id = ? AND addressee_id = ?))
+                `).get(currentUserId, targetId, targetId, currentUserId);
+
+                if (isFriend) {
+                    insertStmt.run(currentUserId, targetId, i);
+                }
             }
         }
 
