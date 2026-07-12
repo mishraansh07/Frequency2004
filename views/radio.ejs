@@ -85,18 +85,20 @@
                   <p style="margin:0 0 8px 0; color:#333;">Room ID: <strong id="party-room-id">None</strong></p>
                   
                   <div id="host-invite-section" style="display:none; border-top:1px groove #fff; padding-top:8px; margin-top:8px;">
-                    <label style="font-weight:bold; display:block; margin-bottom:4px;">Invite a Friend:</label>
-                    <div style="display:flex; gap:6px;">
-                      <select id="invite-friend-select" class="xp-select" style="flex:1; padding:2px;">
-                        <option value="">-- Choose Friend --</option>
-                        <% if (locals.friends && friends.length > 0) { %>
-                          <% friends.forEach(f => { %>
-                            <option value="<%= f.id %>"><%= f.display_name %></option>
-                          <% }) %>
-                        <% } %>
-                      </select>
-                      <button class="xp-btn xp-btn--green" onclick="sendInvite()">Invite</button>
+                    <label style="font-weight:bold; display:block; margin-bottom:6px;">Invite Friends to Party:</label>
+                    <div id="invite-friends-list" style="max-height: 100px; overflow-y: auto; background: #fff; border: 1px inset #808080; padding: 4px; margin-bottom: 8px;">
+                      <% if (locals.friends && friends.length > 0) { %>
+                        <% friends.forEach(f => { %>
+                          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                            <input type="checkbox" name="invite-friend-check" value="<%= f.id %>" id="chk-friend-<%= f.id %>" style="margin:0;">
+                            <label for="chk-friend-<%= f.id %>" style="cursor: pointer; font-size:11px; color:#000;"><%= f.display_name %></label>
+                          </div>
+                        <% }) %>
+                      <% } else { %>
+                        <div style="color: #777; font-size:10px; font-style:italic; padding: 4px;">No contacts to invite</div>
+                      <% } %>
                     </div>
+                    <button class="xp-btn xp-btn--green w-100" onclick="sendMultipleInvites()">Invite Selected Friends</button>
                     <div id="invite-status" style="color:green; font-size:11px; margin-top:4px; font-weight:bold; display:none;">Invite sent! ✉</div>
                   </div>
 
