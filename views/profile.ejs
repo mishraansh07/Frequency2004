@@ -16,7 +16,7 @@
   <%- include('partials/navbar') %>
 
   <div class="page-container">
-    <div class="xp-window">
+    <div class="xp-window<% if(profileUser.username==='anshmishra'){%> dev-profile-window<%}%>">
 
       <!-- ══ TITLEBAR ══ -->
       <div class="xp-titlebar">
@@ -32,10 +32,18 @@
 
         <!-- ══ PROFILE HEADER ══ -->
         <div class="profile-header">
-          <img src="<%= profileUser.avatar_url %>" alt="<%= profileUser.display_name %>" class="profile-avatar">
+          <img src="<%= profileUser.avatar_url %>" alt="<%= profileUser.display_name %>" class="profile-avatar<% if(profileUser.username==='anshmishra'){%> profile-avatar--dev<%}%>">
 
           <div class="profile-info">
-            <h1><%= profileUser.display_name %> <% if (profileUser.profile_id) { %><span style="background:#2980b9;color:#fff;font-size:11px;padding:2px 6px;border-radius:3px;margin-left:6px;font-weight:normal;vertical-align:middle;">#<%= profileUser.profile_id %></span><% } %></h1>
+            <h1>
+              <%= profileUser.display_name %>
+              <% if (profileUser.username === 'anshmishra') { %>
+                <span style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:11px;padding:2px 8px;border-radius:3px;margin-left:6px;font-weight:bold;vertical-align:middle;border:1px solid #B8860B;" title="Verified Developer of Frequency 2004"><i class="i">&#xeaa0;</i> Developer</span>
+              <% } %>
+              <% if (profileUser.profile_id) { %>
+                <span style="background:#2980b9;color:#fff;font-size:11px;padding:2px 6px;border-radius:3px;margin-left:4px;font-weight:normal;vertical-align:middle;">#<%= profileUser.profile_id %></span>
+              <% } %>
+            </h1>
             <div class="profile-headline"><%= profileUser.headline %></div>
 
             <div class="profile-stats">

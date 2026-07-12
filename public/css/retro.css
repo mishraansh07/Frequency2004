@@ -604,6 +604,23 @@ a:active { color: var(--accent-red); }
   flex-shrink: 0;
 }
 
+.profile-avatar--dev {
+  border: 3px solid #FFD700;
+  box-shadow: 0 0 8px rgba(255,215,0,0.6), 0 0 16px rgba(255,165,0,0.3);
+  animation: devGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes devGlow {
+  from { box-shadow: 0 0 6px rgba(255,215,0,0.5), 0 0 12px rgba(255,165,0,0.2); }
+  to   { box-shadow: 0 0 14px rgba(255,215,0,0.9), 0 0 28px rgba(255,165,0,0.5); }
+}
+
+.dev-profile-window > .xp-titlebar {
+  background: linear-gradient(to right, #B8860B, #DAA520, #FFD700) !important;
+  color: #000 !important;
+}
+.dev-profile-window > .xp-titlebar .xp-titlebar__title { color:#000 !important; }
+
 .profile-info {
   flex: 1;
 }
