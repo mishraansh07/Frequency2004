@@ -194,7 +194,7 @@ function seedData() {
     bio:'Hey! I am Ansh Mishra, the developer behind Frequency 2004. I built this whole platform from scratch with Node.js, SQLite, EJS, and a whole lot of nostalgia. Feel free to add me as a friend or drop a scrap!',
     mood:'Shipping code...',
     location:'Delhi, India', gender:'Male', age:20,
-    custom_css:'body{background:#0d0d1a!important}.profile-content{color:#e0e0ff!important}.profile-header{background:linear-gradient(135deg,#1a1a3e,#2d2d5e)!important;border:2px solid #FFD700!important}',
+    custom_css:'',
     interests_music:'Euphoria, Strings, Lucky Ali, Classic Bollywood, Daft Punk',
     interests_movies:'Dil Chahta Hai, Pirates of Silicon Valley, The Social Network',
     interests_general:'Web Dev, Retro Design, Music, Open Source, Cybercafes',

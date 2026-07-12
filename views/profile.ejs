@@ -88,13 +88,11 @@
                   </form>
                 <% } %>
                 <a href="/messages?friendId=<%= profileUser.id %>" class="xp-btn xp-btn--primary" style="text-decoration:none;"><i class="i">&#xe54d;</i> Send Message</a>
-                <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> Scrapbook</a>
-                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> Sign Slam Book</a>
+                 <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> Scrapbook</a>
               <% } %>
               <% if (isOwner) { %>
                 <a href="/profile/<%= profileUser.username %>/edit" class="xp-btn xp-btn--primary" style="text-decoration:none;"><i class="i">&#xe71f;</i> Edit My Profile</a>
                 <a href="/scrapbook/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> My Scrapbook</a>
-                <a href="/profile/<%= profileUser.username %>/slambook" class="xp-btn" style="text-decoration:none;"><i class="i">&#xe572;</i> My Slam Book</a>
               <% } %>
             </div>
           </div>
