@@ -60,18 +60,18 @@
             <div class="profile-actions mt-sm">
               <% if (currentUser && !isOwner) { %>
                 <% if (isFriend) { %>
-                  <span class="xp-btn xp-btn--green" style="cursor:default;">✅ Friends!</span>
+                  <span class="xp-btn xp-btn--green" style="cursor:default;"><i class="i">&#xe5cc;</i> Friends</span>
                   <form method="POST" action="/friends/remove/<%= profileUser.id %>" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Remove this friend?">❌ Unfriend</button>
+                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Remove this friend?"><i class="i">&#xe725;</i> Unfriend</button>
                   </form>
                 <% } else if (friendRequestSent) { %>
-                  <span class="xp-btn" style="cursor:default;">⏳ Request Sent</span>
+                  <span class="xp-btn" style="cursor:default;"><i class="i">&#xe38b;</i> Request Sent</span>
                 <% } else if (friendRequestReceived) { %>
                   <form method="POST" action="/friends/accept/<%= profileUser.id %>" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--green">✅ Accept Request</button>
+                    <button type="submit" class="xp-btn xp-btn--green"><i class="i">&#xe5cc;</i> Accept Request</button>
                   </form>
                   <form method="POST" action="/friends/reject/<%= profileUser.id %>" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--danger">❌ Decline</button>
+                    <button type="submit" class="xp-btn xp-btn--danger"><i class="i">&#xe5cd;</i> Decline</button>
                   </form>
                 <% } else { %>
                   <form method="POST" action="/friends/request/<%= profileUser.id %>" style="display:inline;">

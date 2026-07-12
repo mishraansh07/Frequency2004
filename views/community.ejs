@@ -41,9 +41,9 @@
             <div class="profile-actions" style="margin-top: 12px;">
               <% if (currentUser) { %>
                 <% if (isMember) { %>
-                  <span class="xp-btn xp-btn--green" style="cursor: default;">Joined ✓</span>
+                  <span class="xp-btn xp-btn--green" style="cursor: default;"><i class="i">&#xe5cc;</i> Joined</span>
                   <form method="POST" action="/communities/<%= community.id %>/leave" style="display:inline;">
-                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Are you sure you want to leave this community?">Leave Group</button>
+                    <button type="submit" class="xp-btn xp-btn--danger" data-confirm="Are you sure you want to leave this community?"><i class="i">&#xe725;</i> Leave Group</button>
                   </form>
                 <% } else { %>
                   <form method="POST" action="/communities/<%= community.id %>/join" style="display:inline;">
@@ -51,7 +51,7 @@
                   </form>
                 <% } %>
               <% } %>
-              <a href="/communities" class="xp-btn">← Back to Communities</a>
+              <a href="/communities" class="xp-btn"><i class="i">&#xe3ac;</i> Back to Communities</a>
             </div>
           </div>
         </div>
