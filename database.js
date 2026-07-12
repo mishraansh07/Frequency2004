@@ -172,6 +172,20 @@ function createTables() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       is_read INTEGER DEFAULT 0
     );
+
+    -- ────────────── SLAMBOOK RESPONSES ───────────────────
+    CREATE TABLE IF NOT EXISTS slambook_responses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id),
+      author_id INTEGER NOT NULL REFERENCES users(id),
+      crush TEXT DEFAULT '',
+      first_impression TEXT DEFAULT '',
+      best_memory TEXT DEFAULT '',
+      describe_me TEXT DEFAULT '',
+      advice TEXT DEFAULT '',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(user_id, author_id)
+    );
   `;
 
   db.exec(createSQL);
@@ -806,6 +820,25 @@ function seedData() {
   });
   insertDirectMsgTransaction();
   console.log(`[database]   ✔ ${directMessages.length} direct messages seeded`);
+
+  // ─── 8. Slam Book Responses ──────────────────────────────
+  const insertSlam = db.prepare(`
+    INSERT INTO slambook_responses (user_id, author_id, crush, first_impression, best_memory, describe_me, advice)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const slamEntries = [
+    [1, 2, 'Someone in my class 🤭', 'Super helpful, gave me Yahoo messenger tips!', 'When you shared the Kal Ho Naa Ho MP3 link!', 'Music lover 🎧', 'Keep downloading cool songs!'],
+    [2, 1, 'Secret!', 'Very cool programmer girl with a cute pink profile!', 'Helping you format your custom CSS!', 'Creative 🎨', 'Do not let your dialup connection drop!']
+  ];
+
+  const insertSlamTransaction = db.transaction(() => {
+    for (const [uid, authId, crush, firstImp, bestMem, descMe, adv] of slamEntries) {
+      insertSlam.run(uid, authId, crush, firstImp, bestMem, descMe, adv);
+    }
+  });
+  insertSlamTransaction();
+  console.log(`[database]   ✔ ${slamEntries.length} slam book responses seeded`);
 
   console.log('[database] ✅ All seed data inserted successfully!');
 }

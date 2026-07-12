@@ -267,6 +267,8 @@
                   triggerNukeReaction();
                 } else if (msg.content.includes('👾 *HACKED THE CHAT!* 💻')) {
                   triggerHackReaction();
+                } else {
+                  playMSNPing();
                 }
               }
             });
@@ -296,6 +298,7 @@
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          playMSNSend();
           appendMessage(data.message, { display_name: currentUserName });
           scrollToBottom();
 

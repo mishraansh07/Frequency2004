@@ -334,4 +334,87 @@ router.post('/:username/rate', requireAuth, (req, res) => {
     }
 });
 
+// ─── GET /:username/slambook — View/Sign Slam Book ───────
+router.get('/:username/slambook', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const { username } = req.params;
+        const currentUserId = req.session.userId;
+
+        const profileUser = db.db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+        if (!profileUser) {
+            return res.status(404).render('error', { title: '404', message: 'User not found.' });
+        }
+
+        const isOwner = currentUserId === profileUser.id;
+
+        // Fetch all slam book entries signed by friends
+        const entries = db.db.prepare(`
+            SELECT s.*, u.username as author_username, u.display_name as author_name, u.avatar_url as author_avatar
+            FROM slambook_responses s
+            JOIN users u ON u.id = s.author_id
+            WHERE s.user_id = ?
+            ORDER BY s.created_at DESC
+        `).all(profileUser.id);
+
+        // Fetch viewer's existing entry (if any)
+        let myEntry = null;
+        if (!isOwner) {
+            myEntry = db.db.prepare(`
+                SELECT * FROM slambook_responses
+                WHERE user_id = ? AND author_id = ?
+            `).get(profileUser.id, currentUserId);
+        }
+
+        res.render('slambook', {
+            title: `${profileUser.display_name}'s Slam Book`,
+            profileUser,
+            isOwner,
+            entries,
+            myEntry
+        });
+    } catch (err) {
+        console.error('Slam Book GET error:', err);
+        res.status(500).render('error', { title: 'Error', message: 'Failed to load Slam Book.' });
+    }
+});
+
+// ─── POST /:username/slambook/sign — Sign Slam Book ─────
+router.post('/:username/slambook/sign', requireAuth, (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const { username } = req.params;
+        const currentUserId = req.session.userId;
+
+        const profileUser = db.db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+        if (!profileUser) {
+            return res.status(404).render('error', { title: '404', message: 'User not found.' });
+        }
+
+        if (currentUserId === profileUser.id) {
+            return res.status(400).render('error', { title: 'Error', message: 'You cannot sign your own Slam Book!' });
+        }
+
+        const { crush, first_impression, best_memory, describe_me, advice } = req.body;
+
+        db.db.prepare(`
+            INSERT OR REPLACE INTO slambook_responses (user_id, author_id, crush, first_impression, best_memory, describe_me, advice)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(
+            profileUser.id,
+            currentUserId,
+            crush ? crush.trim() : '',
+            first_impression ? first_impression.trim() : '',
+            best_memory ? best_memory.trim() : '',
+            describe_me ? describe_me.trim() : '',
+            advice ? advice.trim() : ''
+        );
+
+        res.redirect(`/profile/${username}/slambook`);
+    } catch (err) {
+        console.error('Slam Book sign error:', err);
+        res.status(500).render('error', { title: 'Error', message: 'Failed to save Slam Book signature.' });
+    }
+});
+
 module.exports = router;

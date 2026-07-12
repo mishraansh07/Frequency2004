@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/retro.css">
+  <style>
+    body {
+      background: #7FB3D5; /* Notebook-like soft blue theme background */
+    }
+    .slambook-cover {
+      background: #8e44ad; /* Retro purple book cover */
+      border: 6px outset #9b59b6;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+      margin-top: 20px;
+    }
+    .slambook-paper {
+      background: #fff;
+      background-image: linear-gradient(#e6f2ff 1.5px, transparent 1.5px);
+      background-size: 100% 24px;
+      border: 1px solid #ddd;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      padding: 30px 30px 30px 60px; /* Red margin line spacing */
+      position: relative;
+      font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+      line-height: 24px;
+      color: #0d3b66;
+    }
+    /* Red notebook margin line */
+    .slambook-paper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 45px;
+      width: 2px;
+      background: #ff6b6b;
+      border-right: 1px solid #ff6b6b;
+    }
+    .slambook-title {
+      font-size: 26px;
+      font-weight: bold;
+      text-align: center;
+      color: #8e44ad;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px #fff;
+    }
+    .slam-card {
+      margin-bottom: 25px;
+      border-bottom: 2px dashed #999;
+      padding-bottom: 20px;
+    }
+    .slam-q {
+      font-weight: bold;
+      color: #d35400;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .slam-a {
+      font-size: 14px;
+      color: #2c3e50;
+      margin-left: 15px;
+      font-style: italic;
+    }
+    .slam-form-label {
+      font-weight: bold;
+      color: #d35400;
+      font-size: 13px;
+      display: block;
+      margin-top: 10px;
+    }
+    .slam-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #3498db;
+      font-family: inherit;
+      font-size: 14px;
+      color: #2c3e50;
+      padding: 2px 5px;
+      outline: none;
+    }
+    .slam-input:focus {
+      border-bottom: 2px solid #2980b9;
+    }
+    .spiral-binding {
+      position: absolute;
+      left: 10px;
+      top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .spiral-loop {
+      width: 25px;
+      height: 12px;
+      background: linear-gradient(90deg, #d5dbdb 0%, #95a5a6 100%);
+      border-radius: 6px;
+      border: 1px solid #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="page-container" style="max-width: 800px;">
+    
+    <!-- Navigation Back Link -->
+    <div style="margin-top:10px;">
+      <a href="/profile/<%= profileUser.username %>" class="xp-btn" style="text-decoration:none;">⬅ Back to <%= profileUser.display_name %>'s Profile</a>
+    </div>
+
+    <div class="slambook-cover">
+      <div class="slambook-paper">
+        
+        <!-- Notebook Spiral Binding -->
+        <div class="spiral-binding">
+          <% for(let i=0; i<15; i++) { %>
+            <div class="spiral-loop"></div>
+          <% } %>
+        </div>
+
+        <div class="slambook-title">
+          📓 <%= profileUser.display_name %>'s Friendship Slam Book 📓
+        </div>
+
+        <p style="font-size: 13px; text-align: center; margin-bottom: 25px; color:#555;">
+          Remember the golden school days? Sign my slam book and let's lock our memories forever! 🔐💖
+        </p>
+
+        <!-- ═══ SIGN THE SLAM BOOK FORM (Only for logged-in friends) ═══ -->
+        <% if (!isOwner) { %>
+          <div style="background: #fdfefe; border: 2px dashed #3498db; padding: 15px; border-radius: 6px; margin-bottom: 30px;">
+            <h3 style="margin-top: 0; color: #2980b9; font-size:16px;">✍️ Sign / Update Your Entry</h3>
+            
+            <form action="/profile/<%= profileUser.username %>/slambook/sign" method="POST">
+              
+              <label class="slam-form-label">1. Who is your secret crush? 🤭</label>
+              <input type="text" name="crush" class="slam-input" value="<%= myEntry ? myEntry.crush : '' %>" placeholder="Classmate / Secret crush / No one..." required>
+
+              <label class="slam-form-label">2. What was your first impression of me? 👀</label>
+              <input type="text" name="first_impression" class="slam-input" value="<%= myEntry ? myEntry.first_impression : '' %>" placeholder="Very helpful / quiet / funny..." required>
+
+              <label class="slam-form-label">3. What is your favorite memory of us? 💖</label>
+              <input type="text" name="best_memory" class="slam-input" value="<%= myEntry ? myEntry.best_memory : '' %>" placeholder="Cybercafe chats / annual day / bunking classes..." required>
+
+              <label class="slam-form-label">4. Describe me in ONE word! ⭐️</label>
+              <input type="text" name="describe_me" class="slam-input" value="<%= myEntry ? myEntry.describe_me : '' %>" placeholder="Awesome / Rockstar / Nerd..." required>
+
+              <label class="slam-form-label">5. Any advice or tips for me? 💡</label>
+              <input type="text" name="advice" class="slam-input" value="<%= myEntry ? myEntry.advice : '' %>" placeholder="Stay awesome / study hard / clear your Winamp skin queue..." required>
+
+              <div style="text-align: right; margin-top: 15px;">
+                <button type="submit" class="xp-btn xp-btn--primary" style="font-family: inherit; font-size: 14px;">✍️ Sign Slam Book!</button>
+              </div>
+            </form>
+          </div>
+        <% } %>
+
+        <!-- ═══ READ ENTRIES SECTION ═══ -->
+        <div>
+          <h3 style="border-bottom: 2px solid #8e44ad; padding-bottom: 6px; color:#8e44ad; font-size:18px;">📖 Handwritten Signatures (<%= entries.length %>)</h3>
+          
+          <% if (entries && entries.length > 0) { %>
+            <% entries.forEach(e => { %>
+              <div class="slam-card">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                  <img src="<%= e.author_avatar %>" alt="" style="width:36px; height:36px; border-radius:50%; border:2px outset #ccc; background:#fff;">
+                  <div>
+                    <span style="font-weight:bold; font-size:14px; color:#2980b9;">
+                      <a href="/profile/<%= e.author_username %>" style="text-decoration:none; color:inherit;"><%= e.author_name %></a>
+                    </span>
+                    <span style="font-size:10px; color:#7f8c8d; margin-left:8px;">Signed on <%= new Date(e.created_at).toLocaleDateString() %></span>
+                  </div>
+                </div>
+
+                <div class="slam-q">Crush:</div>
+                <div class="slam-a">"<%= e.crush %>"</div>
+
+                <div class="slam-q">First Impression:</div>
+                <div class="slam-a">"<%= e.first_impression %>"</div>
+
+                <div class="slam-q">Favorite Memory:</div>
+                <div class="slam-a">"<%= e.best_memory %>"</div>
+
+                <div class="slam-q">Describe Me in One Word:</div>
+                <div class="slam-a" style="color: #27ae60; font-weight: bold;">"<%= e.describe_me %>"</div>
+
+                <div class="slam-q">Advice / Tips:</div>
+                <div class="slam-a">"<%= e.advice %>"</div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="text-muted text-center" style="font-style: italic; padding: 20px;">No one has signed this slam book yet. Be the first to leave a memory! ✍️</p>
+          <% } %>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <%- include('partials/taskbar') %>
+</body>
+</html>
