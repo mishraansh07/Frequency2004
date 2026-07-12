@@ -194,7 +194,7 @@ app.post('/radio/invite', (req, res) => {
     }
 
     const inviteLink = `/radio?room=${encodeURIComponent(room)}`;
-    const content = `🎧 Hey! Come join my Music Listening Party and chat with me! Click here: ${inviteLink}`;
+    const content = `Hey! Come join my Music Listening Party and chat with me! Click here: ${inviteLink}`;
 
     db.db.prepare(`
         INSERT INTO direct_messages (sender_id, recipient_id, content)
