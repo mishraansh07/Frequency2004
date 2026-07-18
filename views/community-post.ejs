@@ -5,18 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> — Frequency 2004 Social</title>
   <link rel="stylesheet" href="/css/retro.css">
-  <style>
-    body {
-      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
-    }
-  </style>
 </head>
 <body>
   <%- include('partials/navbar') %>
 
   <div class="page-container" style="max-width: 800px;">
     <div class="xp-window">
-      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+      <div class="xp-titlebar">
         <span class="xp-titlebar__title"><i class="i">&#xe54d;</i> Topic Discussion</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn xp-titlebar__btn--close" data-close-to="/communities/<%= community.id %>">✕</button>
@@ -29,11 +24,11 @@
         </div>
 
         <!-- The main Post -->
-        <div class="post-item" style="border: 2px solid #ED1A7B; background: #FFF0F5; padding: 16px; border-radius: 4px;">
+        <div class="post-item" style="border: 2px solid #3A6EA5; background: #F0F4F9; padding: 16px; border-radius: 4px;">
           <div style="display: flex; gap: 12px; align-items: flex-start;">
-            <img src="<%= post.author_avatar %>" alt="" style="width: 48px; height: 48px; border-radius: 4px; border: 1px solid #ED1A7B;">
+            <img src="<%= post.author_avatar %>" alt="" style="width: 48px; height: 48px; border-radius: 4px; border: 1px solid #3A6EA5;">
             <div>
-              <h2 style="color: #ED1A7B; font-size: 18px; margin: 0 0 6px 0;"><%= post.title || 'Untitled Post' %></h2>
+              <h2 style="color: var(--xp-blue); font-size: 18px; margin: 0 0 6px 0;"><%= post.title || 'Untitled Post' %></h2>
               <div class="post-item__meta" style="font-size: 11px; color: #666;">
                 Posted by <a href="/profile/<%= post.author_username %>" style="font-weight:bold;"><%= post.author_display_name %></a> 
                 on <%= formatDate(post.created_at) %>
@@ -51,7 +46,7 @@
           
           <% if (replies && replies.length > 0) { %>
             <% replies.forEach((reply, index) => { %>
-              <div class="reply-item" style="display: flex; gap: 10px; align-items: flex-start; background: #fcfcfc; border: 1px solid #eee; border-left: 4px solid #ED1A7B; padding: 10px; margin-bottom: 10px; border-radius: 2px;">
+              <div class="reply-item" style="display: flex; gap: 10px; align-items: flex-start; background: #fcfcfc; border: 1px solid #eee; border-left: 4px solid #3A6EA5; padding: 10px; margin-bottom: 10px; border-radius: 2px;">
                 <img src="<%= reply.author_avatar %>" alt="" style="width: 32px; height: 32px; border-radius: 4px;">
                 <div style="flex:1;">
                   <div class="reply-item__meta" style="font-size: 11px; color: #666; display: flex; justify-content: space-between;">
@@ -83,7 +78,7 @@
             </form>
           </div>
         <% } else if (currentUser && !isMember) { %>
-          <div class="outset-panel text-center text-small text-muted" style="padding: 10px; border-color: #ED1A7B;">
+          <div class="outset-panel text-center text-small text-muted" style="padding: 10px; border-color: #3A6EA5;">
             <i class="i">&#xe530;</i> You must join this community to write a reply.
           </div>
         <% } else { %>

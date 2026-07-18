@@ -5,25 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> — Frequency 2004 Social</title>
   <link rel="stylesheet" href="/css/retro.css">
-  <style>
-    body {
-      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
-    }
-  </style>
 </head>
 <body>
   <%- include('partials/navbar') %>
 
   <div class="page-container" style="max-width: 600px;">
     <div class="xp-window">
-      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+      <div class="xp-titlebar">
         <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Create a New Community</span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn xp-titlebar__btn--close" data-close-to="/communities">✕</button>
         </div>
       </div>
       <div class="xp-window__body" style="background: #fff;">
-        <h2 class="text-pink mb-sm text-pixel" style="font-size: 22px;">Start a New Group</h2>
+        <h2 class="text-blue mb-sm text-pixel" style="font-size: 22px;">Start a New Group</h2>
         <p class="text-small text-muted mb-md">Gather people who share your interests, school memories, or technical struggles!</p>
 
         <% if (error) { %>

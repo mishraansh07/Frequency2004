@@ -5,22 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> — Frequency 2004 Social</title>
   <link rel="stylesheet" href="/css/retro.css">
-  <style>
-    /* Orkut-inspired pink theme details */
-    body {
-      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
-    }
-  </style>
 </head>
 <body>
   <%- include('partials/navbar') %>
 
   <div class="page-container">
     <div class="xp-window">
-      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+      <div class="xp-titlebar">
         <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Communities</span>
         <div class="xp-titlebar__buttons">
-          <button class="xp-titlebar__btn xp-titlebar__btn--close" style="background: linear-gradient(180deg, #E0734C 0%, #C0513A 100%);" data-close-to="/home">✕</button>
+          <button class="xp-titlebar__btn xp-titlebar__btn--close" data-close-to="/home">✕</button>
         </div>
       </div>
       
@@ -31,22 +25,22 @@
             <%= cat.category %>
           </a>
         <% }) %>
-        <a href="/communities/create" style="margin-left: auto; color: var(--orkut-pink); font-weight: bold;"><i class="i">&#xe726;</i> Create Community</a>
+        <a href="/communities/create" style="margin-left: auto; font-weight: bold;"><i class="i">&#xe726;</i> Create Community</a>
       </div>
 
       <div class="xp-window__body" style="background: #fff;">
-        <div class="section-header section-header--pink">
+        <div class="section-header">
           <i class="i">&#xea60;</i> Browse Communities <%= selectedCategory ? `in "${selectedCategory}"` : '' %>
         </div>
 
         <% if (communities && communities.length > 0) { %>
           <ul class="community-list">
             <% communities.forEach(c => { %>
-              <li style="padding: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f0ccd7;">
+              <li style="padding: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #C0C0C0;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <img src="<%= c.avatar_url %>" alt="" class="community-list__avatar" style="border-radius: 4px; width: 50px; height: 50px;">
                   <div>
-                    <a href="/communities/<%= c.id %>" class="community-list__name" style="font-size: 14px; font-weight: bold; color: #ED1A7B;"><%= c.name %></a>
+                    <a href="/communities/<%= c.id %>" class="community-list__name" style="font-size: 14px; font-weight: bold;"><%= c.name %></a>
                     <div class="community-list__meta" style="color: #666; font-size: 11px; margin-top: 2px;">
                       Category: <strong><%= c.category %></strong> | Members: <strong><%= c.member_count %></strong>
                     </div>

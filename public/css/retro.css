@@ -220,11 +220,7 @@ a:active { color: var(--accent-red); }
   background: linear-gradient(180deg, #5599FF 0%, #3070DD 100%);
 }
 .xp-titlebar__btn--close {
-  background: linear-gradient(180deg, #E0734C 0%, #C0513A 100%);
-  border-color: rgba(255,255,255,0.4);
-}
-.xp-titlebar__btn--close:hover {
-  background: linear-gradient(180deg, #FF8866 0%, #DD6644 100%);
+  display: none !important;
 }
 
 /* ─── Window Body ───────────────────────────────────────── */
@@ -425,8 +421,9 @@ a:active { color: var(--accent-red); }
 }
 
 .retro-navbar__brand {
-  font-family: 'VT323', monospace;
-  font-size: 26px;
+  font-family: var(--font-pixel);
+  font-size: 22px;
+  font-weight: bold;
   color: #FFD700;
   text-decoration: none !important;
   text-shadow: 2px 2px 0 #000, -1px -1px 0 #000;
@@ -455,6 +452,7 @@ a:active { color: var(--accent-red); }
   background: rgba(255,255,255,0.15);
   border-color: rgba(255,255,255,0.3);
   color: #FFD700;
+  text-shadow: 1px 1px 1px #000;
 }
 
 .retro-navbar__search {

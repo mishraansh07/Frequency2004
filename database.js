@@ -451,73 +451,78 @@ function seedData() {
   console.log('[database]   10 communities (6 standard + 4 MusicZones) + memberships created');
 
   // ─── Community Posts + Replies ───────────────────────
+  // Helper to get past ISO strings for SQLite DATETIME fields
+  const getPastDate = (minsAgo) => {
+    return new Date(Date.now() - minsAgo * 60000).toISOString().replace('T', ' ').substring(0, 19);
+  };
+
   // Capture lastInsertRowid after each post to reference it in replies
-  const insPost  = db.prepare(`INSERT INTO community_posts(community_id,author_id,title,content) VALUES(?,?,?,?)`);
-  const insReply = db.prepare(`INSERT INTO community_replies(post_id,author_id,content) VALUES(?,?,?)`);
-  const ap = (c,u,t,b) => insPost.run(c,u,t,b).lastInsertRowid;
-  const ar = (p,u,b)   => insReply.run(p,u,b);
+  const insPost  = db.prepare(`INSERT INTO community_posts(community_id,author_id,title,content,created_at) VALUES(?,?,?,?,?)`);
+  const insReply = db.prepare(`INSERT INTO community_replies(post_id,author_id,content,created_at) VALUES(?,?,?,?)`);
+  const ap = (c,u,t,b,m) => insPost.run(c,u,t,b,getPastDate(m)).lastInsertRowid;
+  const ar = (p,u,b,m)   => insReply.run(p,u,b,getPastDate(m));
 
   // Community 1: Bollywood
-  const b1 = ap(1,1,'Welcome to Bollywood Music Lovers!','I created this community for sharing our love of Bollywood. Drop your top 5 songs of 2003 below!');
-  const b2 = ap(1,4,'Best Bollywood song of 2003??','Kal Ho Naa Ho title track is the BEST this year. What do you think?');
-  const b3 = ap(1,12,'Shankar-Ehsaan-Loy appreciation','Dil Chahta Hai, Kal Ho Naa Ho, Bunty Aur Babli... every album is a banger!!');
-  ar(b1,12,'The FM stations keep playing their songs all day and I never get tired of it!');
-  ar(b1, 4,'Kal Ho Naa Ho forever!! SRK is unbeatable.');
-  ar(b2,12,'Kajra Re is also stuck in my head 24/7 lol.');
-  ar(b2, 6,'I have a 320kbps version of the full album if anyone wants it. DM me on Yahoo!');
+  const b1 = ap(1,1,'Welcome to Bollywood Music Lovers!','I created this community for sharing our love of Bollywood. Drop your top 5 songs of 2003 below!', 1440); // 1 day ago
+  const b2 = ap(1,4,'Best Bollywood song of 2003??','Kal Ho Naa Ho title track is the BEST this year. What do you think?', 720); // 12 hours ago
+  const b3 = ap(1,12,'Shankar-Ehsaan-Loy appreciation','Dil Chahta Hai, Kal Ho Naa Ho, Bunty Aur Babli... every album is a banger!!', 360); // 6 hours ago
+  ar(b1,12,'The FM stations keep playing their songs all day and I never get tired of it!', 1380); // 23 hours ago
+  ar(b1, 4,'Kal Ho Naa Ho forever!! SRK is unbeatable.', 1320); // 22 hours ago
+  ar(b2,12,'Kajra Re is also stuck in my head 24/7 lol.', 680); // 11 hours 20 mins ago
+  ar(b2, 6,'I have a 320kbps version of the full album if anyone wants it. DM me on Yahoo!', 600); // 10 hours ago
 
   // Community 2: School Days
-  const s1 = ap(2,9,'Things only 90s kids remember','SLAM BOOKS!! Remember filling them for all your friends?? I still have mine from 8th class!');
-  const s2 = ap(2,8,'PT period was the best period!!','No books, no homework, just playing in the ground!');
-  ar(s1, 5,'OMG SLAM BOOKS YES!! My favorite color answer was always PINK.');
-  ar(s1, 8,'Remember those friendship bands?? We used to make them in art class on Friendship Day.');
-  ar(s2, 4,'Dude the best was tiffin sharing. My mom made the best parathas and everyone wanted to trade.');
+  const s1 = ap(2,9,'Things only 90s kids remember','SLAM BOOKS!! Remember filling them for all your friends?? I still have mine from 8th class!', 2880); // 2 days ago
+  const s2 = ap(2,8,'PT period was the best period!!','No books, no homework, just playing in the ground!', 1440); // 1 day ago
+  ar(s1, 5,'OMG SLAM BOOKS YES!! My favorite color answer was always PINK.', 2800);
+  ar(s1, 8,'Remember those friendship bands?? We used to make them in art class on Friendship Day.', 2700);
+  ar(s2, 4,'Dude the best was tiffin sharing. My mom made the best parathas and everyone wanted to trade.', 1300);
 
   // Community 3: Dial-Up
-  const d1 = ap(3,7,'BSNL broadband launch date confirmed??','I heard BSNL is launching broadband next month!! 256 kbps for Rs. 500/month!! NO MORE DIAL-UP!!');
-  const d2 = ap(3,13,'Tips to speed up dial-up','Close all background programs. Disable images in browser. Download files at night.');
-  ar(d1, 7,'FINALLY!! No more download resume issues at 3 AM!!');
-  ar(d2, 9,'DISABLE IMAGES?? But how will I see the cool profile pictures on Orkut??');
-  ar(d2, 11,'Pro tip: download between 2-5 AM. Fastest speeds because everyone is sleeping.');
+  const d1 = ap(3,7,'BSNL broadband launch date confirmed??','I heard BSNL is launching broadband next month!! 256 kbps for Rs. 500/month!! NO MORE DIAL-UP!!', 4320); // 3 days ago
+  const d2 = ap(3,13,'Tips to speed up dial-up','Close all background programs. Disable images in browser. Download files at night.', 2880); // 2 days ago
+  ar(d1, 7,'FINALLY!! No more download resume issues at 3 AM!!', 4200);
+  ar(d2, 9,'DISABLE IMAGES?? But how will I see the cool profile pictures on Orkut??', 2800);
+  ar(d2, 11,'Pro tip: download between 2-5 AM. Fastest speeds because everyone is sleeping.', 2700);
 
   // Community 4: Nokia
-  const n1 = ap(4,11,'Post your Snake high scores!!','My current high score is 9999 (maxed it out). I play during every boring class. What is yours??');
-  const n2 = ap(4,8,'Best self-composed ringtone?','I spent 3 hours composing Kal Ho Naa Ho on my Nokia. It sounds 80% like the original!');
-  ar(n1, 8,'My score is 7832. How do you get 9999?? Are you playing during EVERY class??');
-  ar(n1, 11,'I got 8500 once but my friend called and I lost focus. Phone calls ruin everything.');
+  const n1 = ap(4,11,'Post your Snake high scores!!','My current high score is 9999 (maxed it out). I play during every boring class. What is yours??', 1440);
+  const n2 = ap(4,8,'Best self-composed ringtone?','I spent 3 hours composing Kal Ho Naa Ho on my Nokia. It sounds 80% like the original!', 720);
+  ar(n1, 8,'My score is 7832. How do you get 9999?? Are you playing during EVERY class??', 1380);
+  ar(n1, 11,'I got 8500 once but my friend called and I lost focus. Phone calls ruin everything.', 1300);
 
   // Community 5: Games
-  const g1 = ap(5,13,'NFS II SE or Road Rash - which is better??','ULTIMATE debate. NFS II SE has better graphics. Road Rash has the thrill of hitting people with clubs lol.');
-  const g2 = ap(5, 10,'Dave is the most underrated game ever','Everyone talks about Mario and Contra but NO ONE talks about Dangerous Dave!!');
-  const g3 = ap(5, 1,'Contra: Up Up Down Down Left Right Left Right B A','If you know this code, you are a real gamer. 30 lives! We used to play 2-player at my friends house every Sunday.');
-  ar(g1, 4,'ROAD RASH any day!! The feeling of kicking someone off their bike at 200 km/h is unmatched.');
-  ar(g1, 8,'NFS II SE! That Monolithic Studios track with the McLaren F1 is the GOAT racing experience.');
-  ar(g3,13,'The Konami Code!! Essential knowledge. Without 30 lives that game is impossible.');
-  ar(g3, 10,'I once completed Contra without the code. Took 3 weeks of practice. My proudest achievement.');
+  const g1 = ap(5,13,'NFS II SE or Road Rash - which is better??','ULTIMATE debate. NFS II SE has better graphics. Road Rash has the thrill of hitting people with clubs lol.', 1440);
+  const g2 = ap(5, 10,'Dave is the most underrated game ever','Everyone talks about Mario and Contra but NO ONE talks about Dangerous Dave!!', 1200);
+  const g3 = ap(5, 1,'Contra: Up Up Down Down Left Right Left Right B A','If you know this code, you are a real gamer. 30 lives! We used to play 2-player at my friends house every Sunday.', 720);
+  ar(g1, 4,'ROAD RASH any day!! The feeling of kicking someone off their bike at 200 km/h is unmatched.', 1380);
+  ar(g1, 8,'NFS II SE! That Monolithic Studios track with the McLaren F1 is the GOAT racing experience.', 1320);
+  ar(g3,13,'The Konami Code!! Essential knowledge. Without 30 lives that game is impossible.', 660);
+  ar(g3, 10,'I once completed Contra without the code. Took 3 weeks of practice. My proudest achievement.', 600);
 
   // Community 6: FM Radio
-  const f1 = ap(6,1,'Song request thread!','Post your song requests here! Most requested so far: Kal Ho Naa Ho. Keep them coming!');
-  const f2 = ap(6,12,'The midnight show is the best!','Does anyone else stay up late to listen?? Slow romantic songs + no ads = perfection.');
-  ar(f1,12,'Please play Tere Bina by A.R. Rahman!! I love that song so much.');
-  ar(f1, 9,'Can you play some sad songs at night?? Tujhe Bhula Diya and Aadat pls!!');
-  ar(f1, 5,'Play some Backstreet Boys too!! Not everything has to be Bollywood.');
+  const f1 = ap(6,1,'Song request thread!','Post your song requests here! Most requested so far: Kal Ho Naa Ho. Keep them coming!', 1440);
+  const f2 = ap(6,12,'The midnight show is the best!','Does anyone else stay up late to listen?? Slow romantic songs + no ads = perfection.', 720);
+  ar(f1,12,'Please play Tere Bina by A.R. Rahman!! I love that song so much.', 1380);
+  ar(f1, 9,'Can you play some sad songs at night?? Tujhe Bhula Diya and Aadat pls!!', 1300);
+  ar(f1, 5,'Play some Backstreet Boys too!! Not everything has to be Bollywood.', 1200);
   console.log('[database]   Community posts + replies created');
 
   // ─── Scraps ──────────────────────────────────────────
-  const insScrap = db.prepare(`INSERT INTO scraps(author_id,recipient_id,content) VALUES(?,?,?)`);
+  const insScrap = db.prepare(`INSERT INTO scraps(author_id,recipient_id,content,created_at) VALUES(?,?,?,?)`);
   db.transaction(() => {
-    insScrap.run(4, 1,'bro this site is AMAZING!! you built this whole thing?? add me on Yahoo Messenger lets chat!!');
-    insScrap.run(5, 1,'heyyy!! your profile looks so cool!! can you teach me how to code too?? pls pls pls!!');
-    insScrap.run(13,1,'nice work on Frequency 2004! The retro XP theme is a nice touch. Did you use EJS for the templates?');
-    insScrap.run(12,1,'I am your biggest fan!! This website is so cool. Please add a Bollywood songs section!!');
-    insScrap.run(4, 5,'hey pixel princess!! love ur new profile style!! the pink theme is SO pretty!');
-    insScrap.run(5, 4,'aww thank you!! I spent 3 hours on the custom CSS hehe. How did you find this site??');
-    insScrap.run(6, 4,'PixelPrincess can you burn me a CD of your fav songs?? I can pay 20 rupees!!');
-    insScrap.run(7, 6,'bro I have been disconnected 5 times today. MOM KEEPS PICKING UP THE PHONE!!!!');
-    insScrap.run(11,12,'bollywood queen do an antakshari with me!! I bet I know more SRK songs than you!!');
-    insScrap.run(12,11,'CHALLENGE ACCEPTED!! Meet me at the cybercafe at 5pm!!');
-    insScrap.run(10,13,'bro your pc build sounds epic. How did you get the GeForce MX 440 so cheap from Nehru Place??');
-    insScrap.run(13,10,'haha the shopkeeper gave me wholesale price. Go early morning — that is the trick!');
+    insScrap.run(4, 1,'bro this site is AMAZING!! you built this whole thing?? add me on Yahoo Messenger lets chat!!', getPastDate(7200)); // 5 days ago
+    insScrap.run(5, 1,'heyyy!! your profile looks so cool!! can you teach me how to code too?? pls pls pls!!', getPastDate(5760)); // 4 days ago
+    insScrap.run(13,1,'nice work on Frequency 2004! The retro XP theme is a nice touch. Did you use EJS for the templates?', getPastDate(4320)); // 3 days ago
+    insScrap.run(12,1,'I am your biggest fan!! This website is so cool. Please add a Bollywood songs section!!', getPastDate(2880)); // 2 days ago
+    insScrap.run(4, 5,'hey pixel princess!! love ur new profile style!! the pink theme is SO pretty!', getPastDate(1440)); // 1 day ago
+    insScrap.run(5, 4,'aww thank you!! I spent 3 hours on the custom CSS hehe. How did you find this site??', getPastDate(1380));
+    insScrap.run(6, 4,'PixelPrincess can you burn me a CD of your fav songs?? I can pay 20 rupees!!', getPastDate(1200));
+    insScrap.run(7, 6,'bro I have been disconnected 5 times today. MOM KEEPS PICKING UP THE PHONE!!!!', getPastDate(960));
+    insScrap.run(11,12,'bollywood queen do an antakshari with me!! I bet I know more SRK songs than you!!', getPastDate(720));
+    insScrap.run(12,11,'CHALLENGE ACCEPTED!! Meet me at the cybercafe at 5pm!!', getPastDate(660));
+    insScrap.run(10,13,'bro your pc build sounds epic. How did you get the GeForce MX 440 so cheap from Nehru Place??', getPastDate(360));
+    insScrap.run(13,10,'haha the shopkeeper gave me wholesale price. Go early morning — that is the trick!', getPastDate(300));
   })();
   console.log('[database]   Scraps created');
 
@@ -531,23 +536,23 @@ function seedData() {
   console.log('[database]   Testimonials created');
 
   // ─── Shoutbox ────────────────────────────────────────
-  const insShout = db.prepare(`INSERT INTO shoutbox_messages(user_id,content) VALUES(?,?)`);
+  const insShout = db.prepare(`INSERT INTO shoutbox_messages(user_id,content,created_at) VALUES(?,?,?)`);
   db.transaction(() => {
-    insShout.run(4, 'A/S/L? lol old school but had to do it');
-    insShout.run(7, 'lol dial-up disconnected again :( this is the 5th time today. MOM!!');
-    insShout.run(6, 'anyone recording songs from the radio?? I need the new Atif Aslam song!!');
-    insShout.run(7, 'brb, someone picked up the phone line again. My downloading speed just died.');
-    insShout.run(10, 'Winamp really whips the llamas ass!! Best media player ever made fight me.');
-    insShout.run(9, 'omg this song reminds me of school days!! 10th class memories hitting different.');
-    insShout.run(11, 'send me the ringtone pls!! what are the keystrokes for Kal Ho Naa Ho?');
-    insShout.run(8, 'yahoo messenger anyone?? my ID is sunny_boy_jpr');
-    insShout.run(5, 'hiiii everyone!! just updated my profile!! come see my new pink theme!!');
-    insShout.run(12,'Kajra Re Kajra Re... cant stop singing this song!!');
-    insShout.run(13,'just compiled my first C++ program without errors!! cout << "hello world"');
-    insShout.run(4, 'who wants to play counter strike at cybercafe this weekend??');
-    insShout.run(11, 'new snake high score: 9247!! come at me!!');
-    insShout.run(9, 'friendship day coming soon!! making friendship bands for everyone!!');
-    insShout.run(1, 'Welcome to Frequency 2004 everyone!! Hope you enjoy the site. Drop me a scrap!');
+    insShout.run(4, 'A/S/L? lol old school but had to do it', getPastDate(120));
+    insShout.run(7, 'lol dial-up disconnected again :( this is the 5th time today. MOM!!', getPastDate(110));
+    insShout.run(6, 'anyone recording songs from the radio?? I need the new Atif Aslam song!!', getPastDate(100));
+    insShout.run(7, 'brb, someone picked up the phone line again. My downloading speed just died.', getPastDate(90));
+    insShout.run(10, 'Winamp really whips the llamas ass!! Best media player ever made fight me.', getPastDate(80));
+    insShout.run(9, 'omg this song reminds me of school days!! 10th class memories hitting different.', getPastDate(70));
+    insShout.run(11, 'send me the ringtone pls!! what are the keystrokes for Kal Ho Naa Ho?', getPastDate(60));
+    insShout.run(8, 'yahoo messenger anyone?? my ID is sunny_boy_jpr', getPastDate(50));
+    insShout.run(5, 'hiiii everyone!! just updated my profile!! come see my new pink theme!!', getPastDate(40));
+    insShout.run(12,'Kajra Re Kajra Re... cant stop singing this song!!', getPastDate(30));
+    insShout.run(13,'just compiled my first C++ program without errors!! cout << "hello world"', getPastDate(20));
+    insShout.run(4, 'who wants to play counter strike at cybercafe this weekend??', getPastDate(15));
+    insShout.run(11, 'new snake high score: 9247!! come at me!!', getPastDate(10));
+    insShout.run(9, 'friendship day coming soon!! making friendship bands for everyone!!', getPastDate(5));
+    insShout.run(1, 'Welcome to Frequency 2004 everyone!! Hope you enjoy the site. Drop me a scrap!', getPastDate(2));
   })();
   console.log('[database]   Shoutbox messages created');
 

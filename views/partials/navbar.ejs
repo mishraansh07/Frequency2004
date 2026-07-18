@@ -30,7 +30,7 @@
 
   <div class="retro-navbar__links">
     <% if (currentUser) { %>
-      <span style="color:#FFD700;font-size:11px;">Hi, <%= currentUser.display_name %>!</span>
+      <span style="color:#FFD700;font-size:11px;text-shadow: 1px 1px 1px #000;font-weight:bold;">Hi, <%= currentUser.display_name %>!</span>
       <a href="/logout" style="color:#FF9999;"><i class="i">&#xe530;</i> Logout</a>
     <% } else { %>
       <a href="/login"><i class="i">&#xe530;</i> Login</a>

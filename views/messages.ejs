@@ -168,6 +168,7 @@
 
   <script>
     let activeFriendId = null;
+    let activeFriendDisplayName = "";
     let lastMessageId = 0;
     let pollInterval = null;
     const currentUserId = <%= currentUser.id %>;
@@ -200,6 +201,7 @@
       fetch(`/messages/chat/${friendId}`)
         .then(res => res.json())
         .then(data => {
+          activeFriendDisplayName = data.friend.display_name;
           document.getElementById('chat-window-header').innerHTML = `<i class="i">&#xe54d;</i> Chat with ${data.friend.display_name} — [${data.friend.username}]`;
           const log = document.getElementById('chat-log');
           log.innerHTML = '';
@@ -246,10 +248,7 @@
         .then(res => res.json())
         .then(data => {
           if (data.messages && data.messages.length > 0) {
-            // Get active conversation friend metadata from header name
-            const displayTitle = document.getElementById('chat-window-header').innerHTML;
-            const friendName = displayTitle.replace('<i class="i">&#xe54d;</i> Chat with ', '').split(' — ')[0];
-            const tempFriend = { display_name: friendName };
+            const tempFriend = { display_name: activeFriendDisplayName };
 
             data.messages.forEach(msg => {
               appendMessage(msg, tempFriend);

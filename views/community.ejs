@@ -5,18 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= community.name %> — Frequency 2004 Social</title>
   <link rel="stylesheet" href="/css/retro.css">
-  <style>
-    body {
-      background: linear-gradient(180deg, #F5D5DE 0%, #FFE0F0 40%, #FFF0F5 100%);
-    }
-  </style>
 </head>
 <body>
   <%- include('partials/navbar') %>
 
   <div class="page-container">
     <div class="xp-window">
-      <div class="xp-titlebar" style="background: linear-gradient(180deg, #ED1A7B 0%, #C43B6D 100%); border-color: #A01050;">
+      <div class="xp-titlebar">
         <span class="xp-titlebar__title"><i class="i">&#xea60;</i> Community — <%= community.name %></span>
         <div class="xp-titlebar__buttons">
           <button class="xp-titlebar__btn xp-titlebar__btn--close" data-close-to="/communities">✕</button>
@@ -25,10 +20,10 @@
       <div class="xp-window__body" style="background: #fff;">
         
         <!-- Community Banner Details -->
-        <div class="profile-header" style="background: #FFF0F5; border-color: #ED1A7B;">
+        <div class="profile-header">
           <img src="<%= community.avatar_url %>" alt="" class="profile-avatar" style="border-radius: 4px;">
           <div class="profile-info">
-            <h1 style="color: #ED1A7B;"><%= community.name %></h1>
+            <h1><%= community.name %></h1>
             <div class="profile-stats">
               <span>Category: <strong><%= community.category %></strong></span>
               <span>Members: <strong><%= memberCount %></strong></span>
@@ -60,7 +55,7 @@
 
             <!-- Community Details Edit Panel (Hidden by default) -->
             <% if (currentUser && currentUser.id === community.owner_id) { %>
-              <div id="community-edit-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #ED1A7B; background:#FFF0F5;">
+              <div id="community-edit-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #3A6EA5; background:#F0F4F9;">
                 <legend><i class="i">&#xe3c9;</i> Edit Community Details</legend>
                 <form method="POST" action="/communities/<%= community.id %>/edit">
                   <div class="form-group mb-sm">
@@ -87,7 +82,7 @@
 
             <!-- Community Avatar Picker Panel (Hidden by default) -->
             <% if (currentUser && currentUser.id === community.owner_id) { %>
-              <div id="community-avatar-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #ED1A7B; background:#FFF0F5;">
+              <div id="community-avatar-panel" class="xp-fieldset" style="display:none; margin-top: 15px; border-color: #3A6EA5; background:#F0F4F9;">
                 <legend><i class="i">&#xe3b0;</i> Select Community Avatar</legend>
                 <form method="POST" action="/communities/<%= community.id %>/avatar" enctype="multipart/form-data">
                   <div class="d-flex gap-md" style="flex-wrap:wrap; padding:10px; background:#fff; border:2px inset #999; border-radius:4px; max-height:220px; overflow-y:auto; margin-bottom:10px;">
@@ -105,7 +100,7 @@
                       comPresets.forEach(p => { 
                     %>
                       <label style="display:flex; flex-direction:column; align-items:center; cursor:pointer; gap:4px; font-size:11px;">
-                        <img src="<%= p.path %>" alt="" style="width:50px; height:50px; border:2px outset #ccc; padding:2px; background:#fff; <%= community.avatar_url === p.path ? 'border-color:#ED1A7B; box-shadow:0 0 4px #ED1A7B;' : '' %>">
+                        <img src="<%= p.path %>" alt="" style="width:50px; height:50px; border:2px outset #ccc; padding:2px; background:#fff; <%= community.avatar_url === p.path ? 'border-color:#3A6EA5; box-shadow:0 0 4px #3A6EA5;' : '' %>">
                         <span style="font-weight:<%= community.avatar_url === p.path ? 'bold' : 'normal' %>;"><%= p.label %></span>
                         <input type="radio" name="avatar_url" value="<%= p.path %>" <%= community.avatar_url === p.path ? 'checked' : '' %> style="margin-top:2px;">
                       </label>
@@ -295,14 +290,14 @@
 
           <!-- Right: Members Sidebar -->
           <div class="layout-two-col__sidebar" style="width: 240px;">
-            <div class="outset-panel" style="background: #FFF0F5; border-color: #ED1A7B;">
-              <div class="section-header section-header--pink"><i class="i">&#xea60;</i> Members (<%= memberCount %>)</div>
+            <div class="outset-panel">
+              <div class="section-header"><i class="i">&#xea60;</i> Members (<%= memberCount %>)</div>
               
               <div class="top8-grid" style="grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 4px;">
                 <% members.forEach(member => { %>
-                  <div class="top8-card" style="padding: 4px; background: #fff; border-color: #f0ccd7;">
+                  <div class="top8-card" style="padding: 4px; background: #fff; border-color: #C0C0C0;">
                     <img src="<%= member.avatar_url %>" alt="" style="width: 40px; height: 40px; border-radius: 4px;">
-                    <a href="/profile/<%= member.username %>" style="font-size: 10px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ED1A7B;">
+                    <a href="/profile/<%= member.username %>" style="font-size: 10px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                       <%= member.display_name %>
                     </a>
                     <span class="text-muted" style="font-size: 9px; display: block;"><%= member.role %></span>
