@@ -42,8 +42,11 @@
           <button class="xp-titlebar__btn xp-titlebar__btn--close" data-close-to="/home">✕</button>
         </div>
       </div>
-
       <div class="xp-window__body profile-content">
+        <!-- Geocities 1999 Era specific components -->
+        <div class="era-1999-only geocities-construction-banner">
+          <div class="construction-text">⚠️ SITE UNDER CONSTRUCTION - BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 ⚠️</div>
+        </div>
 
         <!-- ══ PROFILE HEADER ══ -->
         <div class="profile-header">
@@ -64,6 +67,17 @@
               <% } %>
             </h1>
             <div class="profile-headline"><%= profileUser.headline %></div>
+
+            <div class="profile-stats">
+              <span>Mood: <strong><%= profileUser.mood %></strong></span>
+              <span>Views: 
+                <span class="era-1999-only-inline geocities-counter">
+                  <span class="digit">0</span><span class="digit">0</span><span class="digit">1</span><span class="digit">3</span><span class="digit">3</span><span class="digit">7</span>
+                </span>
+                <strong class="era-not-1999"><%= profileUser.profile_views %></strong>
+              </span>
+              <span>Last Login: <strong><%= formatDate(profileUser.last_login || profileUser.created_at) %></strong></span>
+            </div>
 
             <div class="profile-stats">
               <span><i class="i">&#xe547;</i> <strong><%= profileUser.location || 'Somewhere on the internet' %></strong></span>

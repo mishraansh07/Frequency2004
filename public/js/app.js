@@ -6,7 +6,58 @@
  * ============================================================
  */
 
+// ─── Immediate Theme Restoration to prevent FOUC ──────────
+(function() {
+  const savedYear = localStorage.getItem('frequency-year') || '2004';
+  document.documentElement.className = 'theme-' + savedYear;
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
+  // ─── Web Year Time Machine ──────────────────────────
+  const eraSlider = document.getElementById('era-tuner-slider');
+  const eraDisplay = document.getElementById('era-tuner-display');
+  const eras = ['1999', '2004', '2007', '2009'];
+
+  if (eraSlider && eraDisplay) {
+    const savedYear = localStorage.getItem('frequency-year') || '2004';
+    const initialIndex = eras.indexOf(savedYear);
+    eraSlider.value = initialIndex !== -1 ? initialIndex : 1;
+    eraDisplay.textContent = savedYear;
+
+    eraSlider.addEventListener('input', (e) => {
+      const idx = e.target.value;
+      const targetYear = eras[idx];
+      
+      if (localStorage.getItem('frequency-year') === targetYear) return;
+
+      // Trigger TV glitch static transition
+      const glitchOverlay = document.getElementById('tv-glitch-overlay');
+      if (glitchOverlay) {
+        glitchOverlay.className = 'tv-glitch-active';
+        if (typeof playGlitchSound === 'function') {
+          playGlitchSound();
+        }
+
+        setTimeout(() => {
+          // Peak of transition: swap styles
+          document.documentElement.className = 'theme-' + targetYear;
+          eraDisplay.textContent = targetYear;
+          localStorage.setItem('frequency-year', targetYear);
+        }, 200);
+
+        setTimeout(() => {
+          // End transition
+          glitchOverlay.className = 'tv-glitch-hidden';
+        }, 450);
+      } else {
+        // Fallback
+        document.documentElement.className = 'theme-' + targetYear;
+        eraDisplay.textContent = targetYear;
+        localStorage.setItem('frequency-year', targetYear);
+      }
+    });
+  }
+
   // ─── Taskbar Clock ──────────────────────────────────
   const clockEl = document.getElementById('taskbar-clock');
   if (clockEl) {

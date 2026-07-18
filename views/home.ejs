@@ -17,10 +17,19 @@
   <%- include('partials/navbar') %>
 
   <div class="page-container">
+    <!-- Geocities 1999 Era specific components -->
+    <div class="era-1999-only geocities-construction-banner">
+      <div class="construction-text">⚠️ SITE UNDER CONSTRUCTION - BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 ⚠️</div>
+    </div>
+
     <!-- ═══ WELCOME BANNER ═══ -->
     <div class="dashboard-welcome">
       <h2>~*~ Welcome back, <%= currentUser.display_name %>! ~*~</h2>
-      <p>Mood: <%= currentUser.mood %> | Last seen: Just now! | Profile views: <strong><%= currentUser.profile_views %></strong>
+      <p>Mood: <%= currentUser.mood %> | Last seen: Just now! | Profile views: 
+        <span class="era-1999-only-inline geocities-counter">
+          <span class="digit">0</span><span class="digit">0</span><span class="digit">1</span><span class="digit">3</span><span class="digit">3</span><span class="digit">7</span>
+        </span>
+        <strong class="era-not-1999"><%= currentUser.profile_views %></strong>
         <% if (currentUser.profile_id) { %> | Your ID: <strong style="background:#2980b9;color:#fff;padding:1px 6px;border-radius:3px;">#<%= currentUser.profile_id %></strong><% } %>
       </p>
     </div>

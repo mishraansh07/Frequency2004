@@ -6,12 +6,22 @@
     🪟 start
   </a>
 
+  <!-- Persistent Era dial (slider) -->
+  <div class="xp-taskbar__tuner">
+    <span class="tuner-label">📶 TIME TUNER:</span>
+    <input type="range" id="era-tuner-slider" min="0" max="3" step="1" value="1">
+    <span class="tuner-display" id="era-tuner-display">2004</span>
+  </div>
+
   <div class="xp-taskbar__tray">
     <span>🔊</span>
     <span><i class="i">&#xe41f;</i></span>
     <span class="xp-taskbar__clock" id="taskbar-clock">12:00 AM</span>
   </div>
 </div>
+
+<!-- Fullscreen TV Static Glitch Overlay -->
+<div id="tv-glitch-overlay" class="tv-glitch-hidden"></div>
 
 <!-- Floating Friend Request Popups Overlay -->
 <% if (locals.currentUser && locals.globalPendingRequests && locals.globalPendingRequests.length > 0) { %>
